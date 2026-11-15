@@ -1,0 +1,703 @@
+/* ==========================================================================
+   dashboard.module.css — Expansive iOS Dark Member Dashboard & Profile
+   ========================================================================== */
+
+.page {
+  min-height: 100vh;
+  padding: 85px max(24px, 3.5vw) 120px;
+  background: #000000;
+  color: #ffffff;
+  position: relative;
+  z-index: 1;
+}
+
+.container {
+  width: 100%;
+  max-width: min(1560px, calc(100vw - 48px));
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* ==========================================================================
+   01. Top Profile Card (Full Width & Expansive)
+   ========================================================================== */
+
+.profileCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 34px 40px;
+  background: rgba(22, 22, 26, 0.88);
+  border: 1px solid rgba(84, 84, 88, 0.38);
+  border-radius: 22px;
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.7);
+  transition: border-color 0.2s ease;
+}
+
+.profileCard:hover {
+  border-color: rgba(10, 132, 255, 0.35);
+}
+
+.profileMain {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex: 1;
+  min-width: 0;
+}
+
+.profileAvatar {
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2c2c2e 0%, #1c1c1e 100%);
+  border: 2px solid rgba(84, 84, 88, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-brand), var(--font-system), sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: #ffffff;
+  flex-shrink: 0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.profileAvatar:hover {
+  transform: scale(1.03);
+  border-color: #0a84ff;
+}
+
+.profileInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.nameRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.profileName {
+  margin: 0;
+  font-family: var(--font-brand), var(--font-system), sans-serif;
+  font-size: clamp(26px, 3.2vw, 36px);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: #ffffff;
+}
+
+.statusIndicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #30d158;
+  background: rgba(48, 209, 88, 0.12);
+  border: 1px solid rgba(48, 209, 88, 0.3);
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #30d158;
+  box-shadow: 0 0 6px #30d158;
+}
+
+.profileDetails {
+  margin: 0;
+  color: rgba(235, 235, 245, 0.65);
+  font-size: 14.5px;
+}
+
+.techTagsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+  align-items: center;
+}
+
+.techTag {
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(118, 118, 128, 0.16);
+  border: 1px solid rgba(84, 84, 88, 0.35);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: rgba(235, 235, 245, 0.8);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.techTag:hover {
+  background: rgba(10, 132, 255, 0.2);
+  border-color: #0a84ff;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.techTagActive {
+  background: #0a84ff;
+  border-color: #0a84ff;
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 2px 10px rgba(10, 132, 255, 0.3);
+}
+
+.tagFilterHint {
+  font-size: 11px;
+  color: rgba(235, 235, 245, 0.45);
+  font-style: italic;
+  margin-left: 4px;
+}
+
+.profileActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.shareBtn {
+  height: 42px;
+  padding: 0 18px;
+  border-radius: 999px;
+  background: rgba(118, 118, 128, 0.18);
+  border: 1px solid rgba(84, 84, 88, 0.4);
+  color: rgba(235, 235, 245, 0.85);
+  font-family: var(--font-system), sans-serif;
+  font-size: 13.5px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.shareBtn:hover {
+  background: rgba(118, 118, 128, 0.3);
+  color: #ffffff;
+}
+
+.editProfileBtn {
+  height: 42px;
+  padding: 0 24px;
+  border-radius: 999px;
+  background: #0a84ff;
+  color: #ffffff;
+  font-family: var(--font-system), sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 18px rgba(10, 132, 255, 0.35);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.editProfileBtn:hover {
+  background: #0071e3;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 22px rgba(10, 132, 255, 0.45);
+}
+
+/* ==========================================================================
+   02. Tag Filter Notification Banner
+   ========================================================================== */
+
+.filterBanner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  border-radius: 14px;
+  background: rgba(10, 132, 255, 0.12);
+  border: 1px solid rgba(10, 132, 255, 0.3);
+  color: rgba(235, 235, 245, 0.9);
+  font-size: 13.5px;
+}
+
+.clearFilterBtn {
+  background: none;
+  border: none;
+  color: #0a84ff;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 13px;
+}
+
+/* ==========================================================================
+   03. Expansive 2-Column Grid
+   ========================================================================== */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+}
+
+.card {
+  background: rgba(22, 22, 26, 0.88);
+  border: 1px solid rgba(84, 84, 88, 0.38);
+  border-radius: 22px;
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  padding: 28px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 0 12px 36px -10px rgba(0, 0, 0, 0.6);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 18px 44px -10px rgba(0, 0, 0, 0.75);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.cardTitle {
+  margin: 0;
+  font-family: var(--font-brand), var(--font-system), sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: #ffffff;
+}
+
+.cardHeaderActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.quickAddBtn {
+  font-size: 12px;
+  font-weight: 600;
+  color: #0a84ff;
+  background: rgba(10, 132, 255, 0.12);
+  border: 1px solid rgba(10, 132, 255, 0.3);
+  padding: 3px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.quickAddBtn:hover {
+  background: #0a84ff;
+  color: #ffffff;
+}
+
+.cardLink {
+  color: #0a84ff;
+  font-size: 13.5px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: opacity 0.15s ease;
+}
+
+.cardLink:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+.cardBio {
+  margin: 0;
+  color: rgba(235, 235, 245, 0.75);
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+
+/* ── Interactive Metrics Row ─────────────────────────────────────────────── */
+
+.metricsRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  height: 100%;
+}
+
+.metricCol {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 16px 12px;
+  border-radius: 16px;
+  background: rgba(30, 30, 34, 0.5);
+  border: 1px solid rgba(84, 84, 88, 0.3);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.metricCol:hover {
+  background: rgba(10, 132, 255, 0.1);
+  border-color: rgba(10, 132, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.metricLabel {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(235, 235, 245, 0.5);
+  margin-bottom: 6px;
+}
+
+.metricValue {
+  font-family: var(--font-brand), var(--font-system), sans-serif;
+  font-size: clamp(28px, 3.2vw, 42px);
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.metricHint {
+  font-size: 10.5px;
+  color: #0a84ff;
+  margin-top: 6px;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+/* ── Interactive List Items (Projects / Certs / Research / Blogs) ────────── */
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.listItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  background: rgba(28, 28, 32, 0.5);
+  border: 1px solid rgba(84, 84, 88, 0.28);
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.listItem:hover {
+  background: rgba(44, 44, 52, 0.65);
+  border-color: rgba(10, 132, 255, 0.4);
+  transform: translateX(2px);
+}
+
+.itemTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+
+.itemName {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.itemBadge {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: rgba(235, 235, 245, 0.6);
+  background: rgba(118, 118, 128, 0.18);
+  border: 1px solid rgba(84, 84, 88, 0.3);
+  padding: 3px 8px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.itemYear {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: rgba(235, 235, 245, 0.45);
+  flex-shrink: 0;
+}
+
+.itemActionIcon {
+  color: #0a84ff;
+  font-size: 12.5px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  text-decoration: none;
+  transition: opacity 0.15s ease;
+}
+
+.itemActionIcon:hover {
+  opacity: 0.8;
+}
+
+/* ==========================================================================
+   04. Unified Frosted Modal Dialog System
+   ========================================================================== */
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.78);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.modalDialog {
+  width: 100%;
+  max-width: 560px;
+  background: rgba(26, 26, 30, 0.96);
+  border: 1px solid rgba(84, 84, 88, 0.5);
+  border-radius: 22px;
+  padding: 28px 32px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modalTitleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.modalCategoryBadge {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #0a84ff;
+  letter-spacing: 0.08em;
+}
+
+.modalTitle {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+}
+
+.modalCloseBtn {
+  background: none;
+  border: none;
+  color: rgba(235, 235, 245, 0.6);
+  font-size: 24px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 4px;
+  transition: color 0.15s ease;
+}
+
+.modalCloseBtn:hover {
+  color: #ffffff;
+}
+
+.modalBody {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.modalDesc {
+  margin: 0;
+  font-size: 14.5px;
+  color: rgba(235, 235, 245, 0.75);
+  line-height: 1.6;
+}
+
+.modalMetaGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 12px;
+  background: rgba(18, 18, 22, 0.7);
+  border: 1px solid rgba(84, 84, 88, 0.3);
+}
+
+.metaField {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.metaFieldLabel {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: rgba(235, 235, 245, 0.45);
+  text-transform: uppercase;
+}
+
+.metaFieldValue {
+  font-size: 13px;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.modalActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.modalSecondaryBtn {
+  padding: 9px 18px;
+  border-radius: 999px;
+  background: rgba(118, 118, 128, 0.18);
+  border: 1px solid rgba(84, 84, 88, 0.4);
+  color: rgba(235, 235, 245, 0.85);
+  font-size: 13.5px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.modalPrimaryBtn {
+  padding: 9px 22px;
+  border-radius: 999px;
+  background: #0a84ff;
+  border: none;
+  color: #ffffff;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 3px 12px rgba(10, 132, 255, 0.35);
+}
+
+.modalPrimaryBtn:hover {
+  background: #0071e3;
+}
+
+/* Points Breakdown Specific */
+.breakdownList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.breakdownRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: rgba(18, 18, 22, 0.7);
+  border: 1px solid rgba(84, 84, 88, 0.3);
+}
+
+.breakdownSource {
+  font-size: 13.5px;
+  color: #ffffff;
+}
+
+.breakdownPoints {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: #0a84ff;
+}
+
+/* Toast Message */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(28, 28, 32, 0.92);
+  border: 1px solid rgba(84, 84, 88, 0.5);
+  backdrop-filter: blur(25px);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 10px 22px;
+  border-radius: 999px;
+  z-index: 120;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+}
+
+/* Responsive */
+@media (max-width: 1040px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profileCard {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 28px 24px;
+  }
+
+  .profileActions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 600px) {
+  .profileMain {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .metricsRow {
+    grid-template-columns: 1fr;
+  }
+}

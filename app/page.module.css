@@ -1,0 +1,231 @@
+/* ==========================================================================
+   page.module.css — Shared iOS Dark Layout for Subpages
+   ========================================================================== */
+
+.page {
+  min-height: 75vh;
+  position: relative;
+  z-index: 1;
+}
+
+.list {
+  max-width: var(--max);
+  margin: auto;
+  padding: 60px max(24px, 3vw) 90px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  align-items: center;
+  gap: 25px;
+  padding: 24px 16px;
+  border-bottom: 1px solid rgba(84, 84, 88, 0.45);
+  border-radius: 14px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.row:hover {
+  background: rgba(118, 118, 128, 0.08);
+  padding-left: 20px;
+}
+
+.row h2 {
+  margin: 0 0 5px;
+  font-family: var(--font-system), sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+}
+
+.row p {
+  margin: 0;
+  color: rgba(235, 235, 245, 0.6);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.number {
+  color: #5ac8fa;
+  font: 11px var(--font-mono);
+  letter-spacing: 0.05em;
+}
+
+/* ==========================================================================
+   Authentication & Access Control Styles (iOS Grouped Sheet)
+   ========================================================================== */
+
+.lockedNotice {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 18px 22px;
+  margin-bottom: 32px;
+  border-radius: 16px;
+  background: rgba(255, 159, 10, 0.1);
+  border: 1px solid rgba(255, 159, 10, 0.3);
+  color: #ededee;
+}
+
+.lockIcon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.lockedNotice strong {
+  display: block;
+  font-size: 13.5px;
+  color: #ff9f0a;
+  margin-bottom: 4px;
+}
+
+.lockedNotice p {
+  margin: 0;
+  font-size: 12.5px;
+  color: rgba(235, 235, 245, 0.65);
+}
+
+.lockedNotice code {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+}
+
+.authTabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.tabBtn {
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: rgba(118, 118, 128, 0.18);
+  border: 1px solid rgba(84, 84, 88, 0.45);
+  color: rgba(235, 235, 245, 0.6);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tabBtn:hover {
+  background: rgba(118, 118, 128, 0.3);
+  color: #ffffff;
+}
+
+.tabBtnActive {
+  background: #0a84ff;
+  border-color: #0a84ff;
+  color: #ffffff;
+}
+
+.authCard {
+  max-width: 500px;
+  padding: 34px;
+  border-radius: 24px;
+  background: rgba(28, 28, 30, 0.85);
+  border: 1px solid rgba(84, 84, 88, 0.55);
+  box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+}
+
+.authCard h3 {
+  margin: 0 0 10px;
+  font-family: var(--font-system), sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+}
+
+.authCard p {
+  color: rgba(235, 235, 245, 0.6);
+  font-size: 13px;
+  line-height: 1.55;
+  margin: 0 0 22px;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.fieldGroup label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: rgba(235, 235, 245, 0.6);
+  letter-spacing: 0.03em;
+}
+
+.fieldGroup input {
+  height: 46px;
+  padding: 0 16px;
+  border-radius: 12px;
+  background: rgba(18, 18, 20, 0.85);
+  border: 1px solid rgba(84, 84, 88, 0.5);
+  color: #ffffff;
+  font-family: var(--font-system), sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.fieldGroup input:focus {
+  border-color: #0a84ff;
+  box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.25);
+  background: rgba(28, 28, 30, 0.95);
+}
+
+.formActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(84, 84, 88, 0.35);
+}
+
+.helperText {
+  margin-top: 18px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: rgba(235, 235, 245, 0.35);
+  line-height: 1.5;
+}
+
+.inviteDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+  color: rgba(235, 235, 245, 0.4);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+@media (max-width: 600px) {
+  .list {
+    padding: 45px 18px;
+  }
+
+  .row {
+    grid-template-columns: 40px 1fr;
+    gap: 15px;
+  }
+
+  .row .button {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .authCard {
+    padding: 24px 18px;
+  }
+}

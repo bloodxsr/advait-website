@@ -1,0 +1,443 @@
+/* ==========================================================================
+   Header.module.css — iOS Navigation Bar
+   ========================================================================== */
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  width: 100%;
+  height: 56px;
+  background: rgba(0, 0, 0, 0.72);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  backdrop-filter: blur(40px) saturate(180%);
+  border-top: 1px solid transparent;
+  border-left: 1px solid transparent;
+  border-right: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  border-radius: 0;
+  box-sizing: border-box;
+
+  transition:
+    width 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    top 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    height 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    border-radius 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    border-color 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    background 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    box-shadow 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* iOS Dynamic Island / pill mode on scroll */
+.scrolled {
+  top: 14px;
+  width: min(360px, calc(100% - 24px));
+  height: 46px;
+  border-radius: 999px;
+  background: rgba(28, 28, 30, 0.88);
+  border-color: rgba(84, 84, 88, 0.5);
+  box-shadow:
+    0 2px 20px rgba(0, 0, 0, 0.5),
+    0 8px 40px rgba(0, 0, 0, 0.35),
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.12);
+  -webkit-backdrop-filter: blur(50px) saturate(200%);
+  backdrop-filter: blur(50px) saturate(200%);
+}
+
+.inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  width: 100%;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 24px;
+  box-sizing: border-box;
+  transition: padding 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.scrolled .inner {
+  padding: 0 8px 0 16px;
+  max-width: 100%;
+}
+
+/* Brand — SF Pro feel */
+.brand {
+  font-family: var(--font-brand), var(--font-system), sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: opacity 0.2s ease, font-size 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.scrolled .brand { font-size: 15.5px; }
+.brand:hover { opacity: 0.75; }
+
+/* Descriptor fades out */
+.descriptor {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(235, 235, 245, 0.5);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.scrolled .descriptor {
+  opacity: 0;
+  transform: translateX(-50%) scale(0.9);
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+/* Menu Button — iOS "more" pill */
+.menuBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 30px;
+  padding: 0 11px;
+  border-radius: 999px;
+  font-family: var(--font-system), sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(235, 235, 245, 0.8);
+  background: rgba(118, 118, 128, 0.24);
+  border: 1px solid rgba(84, 84, 88, 0.5);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.menuBtn:hover {
+  background: rgba(118, 118, 128, 0.36);
+  color: #ffffff;
+}
+
+.menuBtnActive {
+  background: rgba(118, 118, 128, 0.42);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.menuBars {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5px;
+  width: 11px;
+  height: 9px;
+}
+
+.bar1, .bar2 {
+  display: block;
+  width: 100%;
+  height: 1.5px;
+  background: currentColor;
+  border-radius: 1px;
+  transition: transform 0.2s ease;
+}
+
+.barOpen1 {
+  display: block;
+  width: 100%;
+  height: 1.5px;
+  background: currentColor;
+  border-radius: 1px;
+  transform: translateY(2px) rotate(45deg);
+}
+
+.barOpen2 {
+  display: block;
+  width: 100%;
+  height: 1.5px;
+  background: currentColor;
+  border-radius: 1px;
+  transform: translateY(-2px) rotate(-45deg);
+}
+
+.menuLabel { letter-spacing: -0.01em; }
+
+/* iOS Sign in button — ghost */
+.signInBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  padding: 0 13px;
+  border-radius: 999px;
+  font-family: var(--font-system), sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #0a84ff;
+  background: rgba(10, 132, 255, 0.1);
+  border: 1px solid rgba(10, 132, 255, 0.25);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.signInBtn:hover {
+  background: rgba(10, 132, 255, 0.18);
+  color: #ffffff;
+}
+
+/* iOS Join button — solid blue */
+.joinBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  padding: 0 14px;
+  border-radius: 999px;
+  font-family: var(--font-system), sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  background: #0a84ff;
+  color: #ffffff;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.scrolled .joinBtn { display: none; }
+
+.joinBtn:hover {
+  background: #0071e3;
+  transform: scale(0.97);
+}
+
+/* Sign out */
+.signOutBtn {
+  display: inline-flex;
+  align-items: center;
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-family: var(--font-system), sans-serif;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #ff453a;
+  background: rgba(255, 69, 58, 0.1);
+  border: 1px solid rgba(255, 69, 58, 0.22);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.signOutBtn:hover {
+  background: rgba(255, 69, 58, 0.18);
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   iOS Dropdown Sheet
+   ========================================================================== */
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 24px;
+  width: 300px;
+  background: rgba(28, 28, 30, 0.95);
+  -webkit-backdrop-filter: blur(50px) saturate(200%);
+  backdrop-filter: blur(50px) saturate(200%);
+  border: 1px solid rgba(84, 84, 88, 0.6);
+  border-radius: 20px;
+  padding: 12px;
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.6),
+    0 16px 56px rgba(0, 0, 0, 0.5),
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.1);
+  box-sizing: border-box;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px) scale(0.96);
+  transform-origin: top right;
+  transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  pointer-events: none;
+}
+
+.scrolled .dropdown {
+  right: auto;
+  left: 50%;
+  transform: translateX(-50%) translateY(-6px) scale(0.96);
+  transform-origin: top center;
+}
+
+.dropdownOpen {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.scrolled .dropdownOpen {
+  transform: translateX(-50%) translateY(0) scale(1);
+}
+
+/* Dropdown header */
+.dropdownHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 8px 10px;
+  border-bottom: 1px solid rgba(84, 84, 88, 0.5);
+  margin-bottom: 6px;
+}
+
+.dropdownStatus {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.dotPublic {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(235, 235, 245, 0.4);
+}
+
+.dotActive {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #30d158;
+  box-shadow: 0 0 7px #30d158;
+}
+
+.dropdownTitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+.dropdownBadge {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: rgba(235, 235, 245, 0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Menu links — iOS grouped list style */
+.menuLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: 12px;
+  text-decoration: none;
+  color: rgba(235, 235, 245, 0.85);
+  transition: all 0.15s ease;
+}
+
+.menuItem:hover {
+  background: rgba(118, 118, 128, 0.22);
+  color: #ffffff;
+}
+
+.menuItemActive {
+  background: rgba(118, 118, 128, 0.28);
+  color: #ffffff;
+}
+
+.itemNumber {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: rgba(235, 235, 245, 0.3);
+  min-width: 16px;
+}
+
+.itemLabel {
+  font-size: 13px;
+  font-weight: 500;
+  color: inherit;
+  flex: 1;
+}
+
+.itemTag {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: rgba(235, 235, 245, 0.35);
+  background: rgba(118, 118, 128, 0.2);
+  padding: 2px 7px;
+  border-radius: 6px;
+}
+
+.itemArrow {
+  font-size: 11px;
+  color: rgba(235, 235, 245, 0.3);
+  transition: all 0.15s ease;
+}
+
+.menuItem:hover .itemArrow {
+  color: rgba(235, 235, 245, 0.7);
+  transform: translate(1px, -1px);
+}
+
+/* Footer */
+.dropdownFooter {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(84, 84, 88, 0.45);
+}
+
+.dropdownActionBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  height: 36px;
+  border-radius: 12px;
+  font-family: var(--font-system), sans-serif;
+  font-size: 12.5px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  background: rgba(118, 118, 128, 0.18);
+  border: 1px solid rgba(84, 84, 88, 0.45);
+  color: rgba(235, 235, 245, 0.75);
+  transition: all 0.15s ease;
+}
+
+.dropdownActionBtn:hover {
+  background: rgba(118, 118, 128, 0.3);
+  color: #ffffff;
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .descriptor { display: none; }
+  .scrolled { width: calc(100% - 20px); }
+
+  .dropdown {
+    right: 10px;
+    width: calc(100vw - 28px);
+    max-width: 300px;
+  }
+}

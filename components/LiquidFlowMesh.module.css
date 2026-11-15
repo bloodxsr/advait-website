@@ -1,0 +1,38 @@
+/* ==========================================================================
+   LiquidFlowMesh.module.css — 60fps Dynamic Liquid Water Color Mesh
+   ========================================================================== */
+
+.flowWrapper {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+  background: transparent;
+}
+
+.flowCanvas {
+  position: absolute;
+  inset: -10vh -10vw;
+  width: 120vw;
+  height: 120vh;
+  filter: blur(55px) saturate(180%);
+  -webkit-filter: blur(55px) saturate(180%);
+  opacity: 0.85;
+  will-change: transform, filter;
+  transform: translateZ(0);
+}
+
+.liquidAura {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    transparent 20%,
+    rgba(0, 0, 0, 0.4) 65%,
+    rgba(0, 0, 0, 0.85) 100%
+  );
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+

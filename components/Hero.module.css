@@ -1,0 +1,161 @@
+/* ==========================================================================
+   Hero.module.css — Apple VisionOS / Clean Dark Minimalist Hero
+   ========================================================================== */
+
+.hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 85vh;
+  padding: 140px 24px 60px;
+  text-align: center;
+  background: transparent;
+  z-index: 2;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  width: min(860px, 100%);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tagPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: rgba(28, 28, 30, 0.7);
+  border: 1px solid rgba(84, 84, 88, 0.45);
+  color: rgba(235, 235, 245, 0.75);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.liveDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #0a84ff;
+  box-shadow: 0 0 8px #0a84ff;
+}
+
+.title {
+  margin: 0 0 24px;
+  color: #ffffff;
+  font-family: var(--font-brand), var(--font-system), sans-serif;
+  font-size: clamp(54px, 11vw, 120px);
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: 0.24em;
+  text-indent: 0.24em;
+  text-transform: uppercase;
+}
+
+.subtitle {
+  max-width: 620px;
+  margin: 0 0 38px;
+  color: rgba(235, 235, 245, 0.68);
+  font-size: clamp(16px, 2.2vw, 19px);
+  line-height: 1.6;
+  letter-spacing: -0.015em;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+
+.streamPills {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-top: 24px;
+  border-top: 1px solid rgba(84, 84, 88, 0.3);
+}
+
+.streamTag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: rgba(235, 235, 245, 0.5);
+  letter-spacing: 0.02em;
+}
+
+.dotSep {
+  color: rgba(84, 84, 88, 0.6);
+  font-size: 12px;
+}
+
+.cue {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-top: 50px;
+  color: rgba(235, 235, 245, 0.4);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.cueArrow {
+  font-size: 14px;
+  animation: floatDown 2s infinite ease-in-out;
+}
+
+@keyframes floatDown {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(5px); }
+}
+
+.cue:hover {
+  color: #0a84ff;
+}
+
+@media (max-width: 600px) {
+  .hero {
+    padding-top: 110px;
+    padding-bottom: 40px;
+    min-height: 75vh;
+  }
+
+  .title {
+    font-size: 44px;
+    letter-spacing: 0.18em;
+    text-indent: 0.18em;
+  }
+
+  .actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .actions a {
+    width: 100%;
+  }
+
+  .streamPills {
+    gap: 8px;
+  }
+}

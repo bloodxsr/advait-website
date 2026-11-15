@@ -1,0 +1,318 @@
+:root {
+  /* ── iOS Dark Semantic Colors ─────────────────────────── */
+  --bg: #000000;
+  --bg-secondary: #1c1c1e;
+  --bg-tertiary: #2c2c2e;
+  --bg-grouped: #000000;
+  --bg-grouped-secondary: #1c1c1e;
+
+  /* Labels */
+  --text: #ffffff;
+  --text-secondary: rgba(235, 235, 245, 0.6);
+  --text-tertiary: rgba(235, 235, 245, 0.3);
+  --text-quaternary: rgba(235, 235, 245, 0.18);
+
+  /* Fills */
+  --fill: rgba(120, 120, 128, 0.36);
+  --fill-secondary: rgba(120, 120, 128, 0.32);
+  --fill-tertiary: rgba(118, 118, 128, 0.24);
+  --fill-quaternary: rgba(116, 116, 128, 0.18);
+
+  /* Separators */
+  --line: rgba(84, 84, 88, 0.65);
+  --line-opaque: #38383a;
+
+  /* iOS System Colors */
+  --ios-blue:   #0a84ff;
+  --ios-orange: #ff9f0a;
+  --ios-green:  #30d158;
+  --ios-red:    #ff453a;
+  --ios-yellow: #ffd60a;
+  --ios-purple: #bf5af2;
+  --ios-pink:   #ff375f;
+  --ios-cyan:   #5ac8fa;
+  --ios-teal:   #64d2ff;
+  --ios-indigo: #5e5ce6;
+
+  /* Legacy aliases kept for compat */
+  --muted: rgba(235, 235, 245, 0.6);
+  --faint: rgba(235, 235, 245, 0.3);
+  --cyan: #5ac8fa;
+  --violet: #bf5af2;
+  --ember: #ff9f0a;
+  --panel: #1c1c1e;
+
+  /* ── iOS Typography ───────────────────────────────────── */
+  --font-system: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif;
+  --font-mono: "SF Mono", ui-monospace, "Cascadia Code", "Fira Code", monospace;
+
+  /* Layout */
+  --max: 1540px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px / 1.6 var(--font-system);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+a { color: inherit; text-decoration: none; }
+button { font: inherit; cursor: pointer; }
+
+/* ── iOS Material Utility Classes ───────────────────────── */
+.ios-material-thin {
+  background: rgba(28, 28, 30, 0.72);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  backdrop-filter: blur(40px) saturate(180%);
+}
+
+.ios-material-regular {
+  background: rgba(44, 44, 46, 0.78);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  backdrop-filter: blur(30px) saturate(180%);
+}
+
+/* ── Old site-header (compat) ────────────────────────────── */
+.site-header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  height: 66px;
+  padding: 0 max(24px, calc((100vw - var(--max)) / 2));
+  border-bottom: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(40px) saturate(180%);
+}
+
+.brand {
+  font: 700 17px var(--font-system);
+  letter-spacing: -0.02em;
+}
+
+.brand-note {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  color: var(--text-secondary);
+  font: 10px var(--font-mono);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.main-nav {
+  display: flex;
+  gap: 26px;
+  margin-left: auto;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.main-nav a:hover, .main-nav .active { color: var(--text); }
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ── Buttons ─────────────────────────────────────────────── */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 20px;
+  border: none;
+  border-radius: 999px;
+  font: 500 15px var(--font-system);
+  transition: all 0.22s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.button-small {
+  min-height: 34px;
+  padding: 0 14px;
+  font-size: 13px;
+}
+
+/* iOS filled blue button */
+.button-light {
+  background: var(--ios-blue);
+  color: #ffffff;
+}
+
+.button-light:hover {
+  background: #0071e3;
+  transform: scale(0.98);
+}
+
+/* iOS outlined */
+.button-outline {
+  background: var(--fill-secondary);
+  border: 1px solid var(--line);
+  color: var(--text);
+}
+
+.button-outline:hover {
+  background: var(--fill);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* iOS quiet */
+.button-quiet {
+  background: var(--fill-tertiary);
+  border: 1px solid var(--line);
+  color: var(--text-secondary);
+}
+
+.button-quiet:hover {
+  background: var(--fill-secondary);
+  color: var(--text);
+}
+
+/* ── iOS Section / Layout ────────────────────────────────── */
+.section {
+  max-width: var(--max);
+  margin: auto;
+  padding: 90px max(24px, 3vw);
+}
+
+/* ── Typography Utilities ────────────────────────────────── */
+.eyebrow, .card-label, .footer-label {
+  margin: 0;
+  color: var(--text-secondary);
+  font: 600 11px var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.accent-cyan    { color: var(--ios-cyan); }
+.accent-violet  { color: var(--ios-purple); }
+.accent-ember   { color: var(--ios-orange); }
+
+.text-link {
+  color: var(--ios-blue);
+  font: 13px var(--font-system);
+}
+.text-link:hover { opacity: 0.75; }
+
+.version, .mono-muted {
+  color: var(--text-tertiary);
+  font: 11px var(--font-mono);
+}
+
+.version {
+  padding: 4px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+
+/* ── Footer (original compat) ────────────────────────────── */
+.site-footer {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 60px;
+  padding: 62px max(24px, calc((100vw - var(--max)) / 2));
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--line);
+}
+
+.site-footer p {
+  max-width: 300px;
+  margin: 12px 0 0;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.status-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-left: 5px;
+  border-radius: 50%;
+  background: var(--ios-green);
+  box-shadow: 0 0 8px var(--ios-green);
+}
+
+.footer-links {
+  display: flex;
+  justify-content: flex-end;
+  gap: 70px;
+}
+
+.footer-links div {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  color: var(--text-secondary);
+  font: 12px var(--font-system);
+}
+
+.footer-links a:hover { color: var(--text); }
+
+.footer-bottom {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  color: var(--text-tertiary);
+  font: 11px var(--font-mono);
+}
+
+/* ── iOS List / Table styles ─────────────────────────────── */
+.ios-list {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+
+.ios-list-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  transition: background 0.15s ease;
+}
+
+.ios-list-item:last-child { border-bottom: none; }
+.ios-list-item:hover { background: var(--fill-quaternary); }
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 800px) {
+  .site-header { gap: 16px; }
+  .brand-note, .main-nav { display: none; }
+  .header-actions { margin-left: auto; }
+  .site-footer { display: block; padding: 48px 18px; }
+  .footer-links { justify-content: flex-start; gap: 40px; margin: 40px 0; }
+}
+
+@media (max-width: 520px) {
+  .site-header { height: 58px; padding: 0 18px; }
+  .version { display: none; }
+  .section { padding: 65px 18px; }
+  .footer-bottom { display: block; }
+  .footer-bottom span + span { display: block; margin-top: 10px; }
+}

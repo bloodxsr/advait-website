@@ -1,0 +1,1 @@
+.intro{max-width:760px;padding:132px max(22px,calc((100vw - var(--max))/2)) 55px;border-bottom:1px solid var(--rule)}.intro h1{margin:18px 0 12px;font:500 clamp(43px,7vw,80px)/1 var(--font-space);letter-spacing:-.06em}.intro>p:not(.eyebrow){max-width:570px;color:var(--muted);font-size:16px;margin-bottom:25px}@media(max-width:520px){.intro{padding:105px 18px 45px}}

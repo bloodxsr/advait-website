@@ -1,0 +1,250 @@
+/* ==========================================================================
+   login.module.css — iOS-style Sign In Sheet
+   ========================================================================== */
+
+.container {
+  min-height: calc(100vh - 120px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 20px 60px;
+  position: relative;
+  z-index: 1;
+}
+
+/* iOS sheet card */
+.card {
+  width: 100%;
+  max-width: 390px;
+  background: rgba(28, 28, 30, 0.88);
+  -webkit-backdrop-filter: blur(50px) saturate(200%);
+  backdrop-filter: blur(50px) saturate(200%);
+  border: 1px solid rgba(84, 84, 88, 0.6);
+  border-radius: 24px;
+  padding: 36px 30px;
+  box-shadow:
+    0 2px 20px rgba(0, 0, 0, 0.5),
+    0 20px 60px rgba(0, 0, 0, 0.6),
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.1);
+  box-sizing: border-box;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.brand {
+  display: inline-block;
+  font-family: var(--font-brand), var(--font-system), sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: #ffffff;
+  text-decoration: none;
+  margin-bottom: 14px;
+  transition: opacity 0.2s ease;
+}
+
+.brand:hover { opacity: 0.75; }
+
+.title {
+  margin: 0 0 6px;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: #ffffff;
+}
+
+.subtitle {
+  margin: 0;
+  color: rgba(235, 235, 245, 0.55);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+/* Lock notice */
+.notice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  background: rgba(255, 69, 58, 0.1);
+  border: 1px solid rgba(255, 69, 58, 0.25);
+  color: rgba(235, 235, 245, 0.85);
+  font-size: 12.5px;
+}
+
+/* OAuth Stack */
+.oauthStack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.oauthBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  height: 44px;
+  background: rgba(118, 118, 128, 0.2);
+  border: 1px solid rgba(84, 84, 88, 0.55);
+  border-radius: 14px;
+  color: #ffffff;
+  font-family: var(--font-system), sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.oauthBtn:hover {
+  background: rgba(118, 118, 128, 0.32);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.oauthBtn:active { transform: scale(0.98); }
+.oauthBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.oauthIcon { flex-shrink: 0; }
+
+/* Divider */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.dividerLine {
+  flex: 1;
+  height: 1px;
+  background: rgba(84, 84, 88, 0.55);
+}
+
+.dividerText {
+  font-size: 11px;
+  color: rgba(235, 235, 245, 0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+/* Form */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+
+.labelRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.label {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(235, 235, 245, 0.75);
+}
+
+.forgotLink {
+  font-size: 12px;
+  color: #0a84ff;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.forgotLink:hover { opacity: 0.75; }
+
+/* iOS input field */
+.input {
+  height: 46px;
+  padding: 0 14px;
+  border-radius: 12px;
+  background: rgba(118, 118, 128, 0.18);
+  border: 1px solid rgba(84, 84, 88, 0.5);
+  color: #ffffff;
+  font-family: var(--font-system), sans-serif;
+  font-size: 15px;
+  outline: none;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+.input:focus {
+  border-color: #0a84ff;
+  background: rgba(10, 132, 255, 0.08);
+  box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.2);
+}
+
+.input::placeholder { color: rgba(235, 235, 245, 0.25); }
+
+/* iOS CTA button — solid blue */
+.submitBtn {
+  margin-top: 4px;
+  height: 50px;
+  border-radius: 14px;
+  background: #0a84ff;
+  color: #ffffff;
+  font-family: var(--font-system), sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.submitBtn:hover {
+  background: #0071e3;
+  transform: scale(0.99);
+}
+
+.submitBtn:active { transform: scale(0.97); }
+
+.submitBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Footer note */
+.footerNote {
+  margin-top: 22px;
+  text-align: center;
+  font-size: 12.5px;
+  color: rgba(235, 235, 245, 0.45);
+}
+
+.footerLink {
+  color: #0a84ff;
+  font-weight: 500;
+}
+
+.footerLink:hover { opacity: 0.75; }
+
+.backHome {
+  display: block;
+  text-align: center;
+  margin-top: 14px;
+  color: rgba(235, 235, 245, 0.3);
+  font-size: 12px;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.backHome:hover { color: rgba(235, 235, 245, 0.7); }

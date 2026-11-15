@@ -1,0 +1,104 @@
+/* ==========================================================================
+   AmbientBackground.module.css — iOS Dark Background
+   ========================================================================== */
+
+.container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  overflow: hidden;
+  background: #000000;
+}
+
+/* Pure iOS black base */
+.baseCanvas {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, #0a0a0f 0%, #000000 60%);
+}
+
+/* Very soft iOS ambient top glow — barely visible */
+.topSpotlight {
+  position: absolute;
+  top: -180px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70vw;
+  max-width: 900px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at 50% 30%,
+    rgba(255, 255, 255, 0.03) 0%,
+    rgba(255, 255, 255, 0.01) 50%,
+    transparent 75%
+  );
+  filter: blur(80px);
+  pointer-events: none;
+}
+
+/* iOS hairline top separator */
+.horizonBeam {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(600px, 70vw);
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.12) 50%,
+    transparent 100%
+  );
+}
+
+/* Precision grid — finer, more iOS-subdued */
+.gridMask {
+  position: absolute;
+  inset: 0;
+  -webkit-mask-image: radial-gradient(
+    ellipse 80% 55% at 50% 25%,
+    black 15%,
+    rgba(0, 0, 0, 0.35) 55%,
+    transparent 80%
+  );
+  mask-image: radial-gradient(
+    ellipse 80% 55% at 50% 25%,
+    black 15%,
+    rgba(0, 0, 0, 0.35) 55%,
+    transparent 80%
+  );
+}
+
+.gridPattern {
+  position: absolute;
+  inset: -64px 0;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+
+/* Barely-there dots */
+.starsPattern {
+  position: absolute;
+  inset: -40px 0;
+  opacity: 0.1;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.4) 0.5px, transparent 0.6px);
+  background-size: 48px 48px;
+}
+
+/* iOS-style deep vignette */
+.vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 50% 50%,
+    transparent 40%,
+    rgba(0, 0, 0, 0.45) 80%,
+    rgba(0, 0, 0, 0.9) 100%
+  );
+  pointer-events: none;
+}
