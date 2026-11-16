@@ -42,7 +42,7 @@ const DEFAULT_RESOURCES: ResourceItem[] = [
     title: "Stanford CS231n: Deep Learning for Computer Vision",
     desc: "Comprehensive neural network foundations, backpropagation calculus, and deep generative vision pipelines.",
     recommender: "Lyra Chen",
-    topic: "AI / ML",
+    topic: "AI",
     url: "https://cs231n.stanford.edu/",
   },
   {
@@ -50,7 +50,7 @@ const DEFAULT_RESOURCES: ResourceItem[] = [
     title: "Crafting Interpreters & Compiler Engineering",
     desc: "A hands-on journey through scanning, parsing, bytecode VMs, and garbage collection mechanisms.",
     recommender: "Mira Chen",
-    topic: "Compilers",
+    topic: "Research",
     url: "https://craftinginterpreters.com/",
   },
   {
@@ -58,7 +58,7 @@ const DEFAULT_RESOURCES: ResourceItem[] = [
     title: "Zero-Knowledge Proofs: MOOC & Cryptographic Foundations",
     desc: "Modern zk-SNARK constructions, arithmetic circuits, and cryptographic verifier protocols.",
     recommender: "Siddharth Rao",
-    topic: "Security",
+    topic: "Research",
     url: "https://zk-learning.org/",
   },
   {
@@ -68,6 +68,22 @@ const DEFAULT_RESOURCES: ResourceItem[] = [
     recommender: "Bivash Kumar",
     topic: "Systems",
     url: "https://pages.cs.wisc.edu/~remzi/OSTEP/",
+  },
+  {
+    id: "7",
+    title: "Refactoring UI & Systems Design",
+    desc: "Practical UI/UX design heuristics for developers building polished developer tools and software interfaces.",
+    recommender: "Isha Verma",
+    topic: "Design",
+    url: "https://www.refactoringui.com/",
+  },
+  {
+    id: "8",
+    title: "The Architecture of Open Source Applications (AOSA)",
+    desc: "In-depth case studies on real-world open source systems, from git to LLVM and nginx.",
+    recommender: "Ananya Sharma",
+    topic: "Open Source",
+    url: "https://aosabook.org/",
   },
 ];
 
@@ -89,13 +105,22 @@ const DEFAULT_SUBMISSIONS: SubmissionItem[] = [
   {
     id: "sub-3",
     title: "WebGPU Explainer & WGSL Fundamentals",
-    topic: "AI / ML",
+    topic: "AI",
     date: "Oct 15, 2026",
     status: "Approved",
   },
 ];
 
-const TOPICS = ["All", "Systems", "AI / ML", "Architecture", "Compilers", "Security"];
+const TOPICS = [
+  "All",
+  "AI",
+  "Systems",
+  "Research",
+  "Design",
+  "Architecture",
+  "Community",
+  "Open Source",
+];
 
 export default function ResourcesPage() {
   const [activeTopic, setActiveTopic] = useState("All");
@@ -217,7 +242,7 @@ export default function ResourcesPage() {
               ref={searchInputRef}
               type="text"
               className={styles.searchInput}
-              placeholder="Search resources by title, topic, or recommender…"
+              placeholder="Search entries, authors, tags..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />

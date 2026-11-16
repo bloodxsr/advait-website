@@ -13,11 +13,63 @@
 
 .container {
   width: 100%;
-  max-width: min(1560px, calc(100vw - 48px));
+  max-width: 1680px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 28px;
+}
+
+/* ==========================================================================
+   00. Section Customizer Bar (Attachment 1)
+   ========================================================================== */
+.sectionCustomizerBar {
+  background: rgba(22, 22, 26, 0.7);
+  border: 1px dashed rgba(84, 84, 88, 0.45);
+  border-radius: 16px;
+  padding: 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.customizerTitle {
+  margin: 0;
+  font-size: 13.5px;
+  color: rgba(235, 235, 245, 0.65);
+}
+
+.customizerChecks {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.checkboxLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #ffffff;
+  transition: opacity 0.15s ease;
+}
+
+.checkboxLabel:hover {
+  opacity: 0.85;
+}
+
+.checkboxInput {
+  width: 17px;
+  height: 17px;
+  border-radius: 4px;
+  accent-color: #0a84ff;
+  cursor: pointer;
 }
 
 /* ==========================================================================

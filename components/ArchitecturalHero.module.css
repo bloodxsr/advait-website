@@ -1,0 +1,266 @@
+/* ==========================================================================
+   ArchitecturalHero.module.css — Swiss Architectural Editorial Hero
+   Inspired by Creative Reference Library (CRL) brutalist editorial aesthetic
+   ========================================================================== */
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  background: #96958f;
+  color: #000000;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 85px max(24px, 3.5vw) 40px;
+  overflow: hidden;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+/* ── Monumental Giant Background Typography ──────────────────────────────── */
+.monumentalLayer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+  opacity: 0.95;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.giantLetterTrack {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: stretch;
+  justify-content: space-between;
+  padding: 0 1vw;
+}
+
+.giantLetter {
+  font-family: var(--font-space), var(--font-brand), sans-serif;
+  font-weight: 900;
+  font-size: clamp(140px, 24vw, 380px);
+  line-height: 0.85;
+  color: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: -0.06em;
+  transform-origin: center;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── Foreground Swiss Editorial Grid ─────────────────────────────────────── */
+.editorialGrid {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  min-height: calc(100vh - 125px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 36px;
+}
+
+/* ── Top Row ─────────────────────────────────────────────────────────────── */
+.topRow {
+  display: grid;
+  grid-template-columns: 1.2fr 1.8fr;
+  gap: 36px;
+  padding-top: 14px;
+}
+
+.identityBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.brandLabel {
+  font-family: var(--font-space), var(--font-brand), sans-serif;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #000000;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.registered {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.brandDesc {
+  margin: 0;
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.7);
+  max-width: 380px;
+  line-height: 1.5;
+}
+
+.manifestoText {
+  margin: 0;
+  font-size: 13.5px;
+  color: #000000;
+  line-height: 1.6;
+  max-width: 680px;
+}
+
+.sectionIndexNum {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  margin-right: 6px;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+/* ── Middle Typographic Banner (Iconic /V.01 & (2026)) ───────────────────── */
+.middleBanner {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 1.2fr;
+  align-items: baseline;
+  gap: 20px;
+  padding: 40px 0;
+}
+
+.midBrand {
+  font-family: var(--font-space), var(--font-brand), sans-serif;
+  font-size: clamp(32px, 5.2vw, 68px);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: #000000;
+  line-height: 1;
+}
+
+.midVersion {
+  font-family: var(--font-space), var(--font-brand), sans-serif;
+  font-size: clamp(48px, 8.5vw, 120px);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  color: #000000;
+  line-height: 1;
+  font-style: italic;
+}
+
+.midYear {
+  font-family: var(--font-space), var(--font-brand), sans-serif;
+  font-size: clamp(48px, 8.5vw, 120px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: #000000;
+  line-height: 1;
+  text-align: right;
+}
+
+/* ── Bottom Row (Directory & Scope) ──────────────────────────────────────── */
+.bottomRow {
+  display: grid;
+  grid-template-columns: 1.2fr 1.6fr 0.8fr;
+  gap: 36px;
+  align-items: flex-end;
+  padding-bottom: 10px;
+}
+
+.directoryList {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.dirItem {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: #000000;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+  width: fit-content;
+}
+
+.dirItem:hover {
+  transform: translateX(4px);
+  color: #ffffff;
+  background: #000000;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.dirNum {
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.dirItem:hover .dirNum {
+  color: #ffffff;
+}
+
+.scopeText {
+  margin: 0;
+  font-size: 13px;
+  color: #000000;
+  line-height: 1.6;
+  max-width: 580px;
+}
+
+.statusCol {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.scrollHint {
+  color: #000000;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.scrollHint:hover {
+  transform: translateY(2px);
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .topRow {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .middleBanner {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 24px 0;
+  }
+
+  .midYear {
+    text-align: left;
+  }
+
+  .bottomRow {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .statusCol {
+    align-items: flex-start;
+    text-align: left;
+  }
+}
+
