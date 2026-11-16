@@ -18,6 +18,141 @@ interface Builder {
   badge: string;
 }
 
+interface CriteriaRule {
+  id: string;
+  category: string;
+  scope: string;
+  standard: string;
+  points: string;
+  divisions: string[];
+  multiplier?: string;
+  type: "engineering" | "research" | "community";
+}
+
+interface TierThreshold {
+  tier: string;
+  pts: string;
+  privileges: string;
+  badge: string;
+  count: string;
+}
+
+const CRITERIA_RULES: CriteriaRule[] = [
+  {
+    id: "ARCH-01",
+    category: "Core Engine & Systems Architecture",
+    scope: "Autonomous swarm engines, consensus protocols, WebGPU/HLSL compute shaders, or low-latency WASM compiler runtimes.",
+    standard: "Verified AST pass, sub-millisecond latency benchmark diff, >=90% test coverage, and 2 Division Lead approvals.",
+    points: "+150 – 300 pts",
+    divisions: ["RED", "GameVeda"],
+    multiplier: "1.5× for zero-dependency kernels",
+    type: "engineering",
+  },
+  {
+    id: "FEAT-02",
+    category: "Feature Module & API Integration",
+    scope: "New distributed services, client SDK integrations, shader pass implementations, or procedural generation modules.",
+    standard: "Full typed interface contract, unit + integration suites passing, comprehensive RFC documentation.",
+    points: "+80 – 150 pts",
+    divisions: ["RED", "OPS", "GameVeda", "Creatives"],
+    type: "engineering",
+  },
+  {
+    id: "PERF-03",
+    category: "Kernel Latency & Memory Optimization",
+    scope: "Hot-path optimizations, memory leak remediations, WebAssembly bundle tree-shaking, and GPU compute pass tuning.",
+    standard: "Flamegraph or benchmark differential attached in PR demonstrating >=15% latency or memory reduction.",
+    points: "+60 – 120 pts",
+    divisions: ["RED", "GameVeda"],
+    multiplier: "1.25× if verifiable flamegraph provided",
+    type: "engineering",
+  },
+  {
+    id: "BUG-04",
+    category: "Security & Vulnerability Remediation",
+    scope: "Critical vulnerability patching, concurrent race condition resolution, or formal fuzz test suite generation.",
+    standard: "Reproducible failing unit test case included and resolved; vulnerability disclosure protocol followed.",
+    points: "+40 – 80 pts",
+    divisions: ["ALL DIVISIONS"],
+    type: "engineering",
+  },
+  {
+    id: "RES-05",
+    category: "Deep Technical Research Dossier",
+    scope: "Authored whitepaper, algorithmic proofs, cryptographic verification schemas, or Research Vault syllabi.",
+    standard: "Peer-reviewed by RED Research Council; published in Research Vault or Hall of Flames selected archive.",
+    points: "+100 – 200 pts",
+    divisions: ["RED", "Creatives"],
+    multiplier: "2.0× for novel mathematical proof",
+    type: "research",
+  },
+  {
+    id: "SALON-06",
+    category: "Salon & Technical Workshop Leadership",
+    scope: "Hosting an Architecture Salon, conducting live distributed systems code teardown, or hackathon mentorship.",
+    standard: "EVED session telemetry logged, recorded talk archived in Vault, positive attendee score >=4.6.",
+    points: "+75 – 120 pts",
+    divisions: ["EVED", "RED"],
+    type: "community",
+  },
+  {
+    id: "OPS-07",
+    category: "Treasury, CI/CD & Ops Infrastructure",
+    scope: "Automated developer grant distribution smart contracts, self-hosted GitHub Runner farms, or container pipelines.",
+    standard: "Deployed to production cluster with zero uptime regressions; security audited and reproducible.",
+    points: "+50 – 100 pts",
+    divisions: ["OPS"],
+    type: "community",
+  },
+  {
+    id: "REV-08",
+    category: "Peer Code Review & Technical Audit",
+    scope: "In-depth line-by-line review on open collective PRs, identifying subtle edge cases or architectural bottlenecks.",
+    standard: "Meaningful constructive review with suggested diffs, benchmark verifications, or security analysis (capped at 5/week).",
+    points: "+20 – 40 pts",
+    divisions: ["ALL DIVISIONS"],
+    type: "community",
+  },
+];
+
+const TIER_THRESHOLDS: TierThreshold[] = [
+  {
+    tier: "TOP ARCHITECT / RESEARCHER",
+    pts: "3,000+ PTS",
+    privileges: "Grant allocation voting rights, advisory council seat, priority cluster compute access.",
+    badge: "TIER 01",
+    count: "Top 2% Builders",
+  },
+  {
+    tier: "CORE BUILDER",
+    pts: "2,000 – 2,999 PTS",
+    privileges: "Direct repository commit rights, RFC authorship privilege, hardware & compute grants.",
+    badge: "TIER 02",
+    count: "Top 8% Builders",
+  },
+  {
+    tier: "DIVISION LEAD",
+    pts: "1,500 – 1,999 PTS",
+    privileges: "Review sign-off authority for division repositories, salon curation lead.",
+    badge: "TIER 03",
+    count: "Division Officers",
+  },
+  {
+    tier: "ACTIVE CONTRIBUTOR",
+    pts: "500 – 1,499 PTS",
+    privileges: "Verified builder dossier in Hall of Builders, early access to internal alpha releases.",
+    badge: "TIER 04",
+    count: "Core Community",
+  },
+  {
+    tier: "INITIATE BUILDER",
+    pts: "100 – 499 PTS",
+    privileges: "First merged pull request badge, collective Discord/Matrix engineering channel access.",
+    badge: "TIER 05",
+    count: "New Entrants",
+  },
+];
+
 const BUILDERS: Builder[] = [
   {
     rank: "01",
@@ -154,6 +289,9 @@ const BUILDERS: Builder[] = [
 export default function HallOfBuildersPage() {
   const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState<"all" | "cycle" | "prs">("all");
+  const [criteriaFilter, setCriteriaFilter] = useState<
+    "all" | "engineering" | "research" | "community"
+  >("all");
 
   const filteredBuilders = useMemo(() => {
     return BUILDERS.filter((b) => {
@@ -170,6 +308,11 @@ export default function HallOfBuildersPage() {
       );
     });
   }, [search]);
+
+  const filteredCriteria = useMemo(() => {
+    if (criteriaFilter === "all") return CRITERIA_RULES;
+    return CRITERIA_RULES.filter((c) => c.type === criteriaFilter);
+  }, [criteriaFilter]);
 
   return (
     <main className={styles.page}>
@@ -200,12 +343,19 @@ export default function HallOfBuildersPage() {
           </div>
 
           <div className={styles.headerSummaryRow}>
-            <p className={styles.headerSummary}>
-              <span className={styles.monoIndex}>{`{1}`}</span>
-              Developer meritocracy and verified open-source contributions. Karma points
-              are awarded for merged pull requests, low-latency kernel optimizations,
-              shader development, and verifiable peer reviews across the Advait collective.
-            </p>
+            <div className={styles.summaryLeftCol}>
+              <p className={styles.headerSummary}>
+                <span className={styles.monoIndex}>{`{1}`}</span>
+                Developer meritocracy and verified open-source contributions. Karma points
+                are awarded for merged pull requests, low-latency kernel optimizations,
+                shader development, and verifiable peer reviews across the Advait collective.
+              </p>
+              <div className={styles.headerJumpWrap}>
+                <a href="#criteria" className={styles.jumpCriteriaLink}>
+                  [03] VIEW EVALUATION CRITERIA &amp; POINT DISTRIBUTION TABLE ↓
+                </a>
+              </div>
+            </div>
             <div className={styles.statsRoster}>
               <div className={styles.statBox}>
                 <span className={styles.statNum}>120+</span>
@@ -255,9 +405,8 @@ export default function HallOfBuildersPage() {
                 role="tab"
                 aria-selected={activeTab === "all"}
                 onClick={() => setActiveTab("all")}
-                className={`${styles.tabBtn} ${
-                  activeTab === "all" ? styles.tabBtnActive : ""
-                }`}
+                className={`${styles.tabBtn} ${activeTab === "all" ? styles.tabBtnActive : ""
+                  }`}
               >
                 [ALL TIME]
               </button>
@@ -266,9 +415,8 @@ export default function HallOfBuildersPage() {
                 role="tab"
                 aria-selected={activeTab === "cycle"}
                 onClick={() => setActiveTab("cycle")}
-                className={`${styles.tabBtn} ${
-                  activeTab === "cycle" ? styles.tabBtnActive : ""
-                }`}
+                className={`${styles.tabBtn} ${activeTab === "cycle" ? styles.tabBtnActive : ""
+                  }`}
               >
                 [2026 CYCLE]
               </button>
@@ -277,9 +425,8 @@ export default function HallOfBuildersPage() {
                 role="tab"
                 aria-selected={activeTab === "prs"}
                 onClick={() => setActiveTab("prs")}
-                className={`${styles.tabBtn} ${
-                  activeTab === "prs" ? styles.tabBtnActive : ""
-                }`}
+                className={`${styles.tabBtn} ${activeTab === "prs" ? styles.tabBtnActive : ""
+                  }`}
               >
                 [MERGED PRS]
               </button>
@@ -360,22 +507,170 @@ export default function HallOfBuildersPage() {
           </div>
         </section>
 
-        {/* ── 03. Verification Criteria & Submit Dispatch ─────────────────────── */}
+        {/* ── 03. Evaluation Criteria & Point Distribution Table ──────────────── */}
+        <section
+          className={styles.criteriaSection}
+          id="criteria"
+          aria-label="Criteria and Point Distribution"
+        >
+          <div className={styles.criteriaHeaderBlock}>
+            <div className={styles.criteriaHeaderTop}>
+              <div className={styles.criteriaIndex}>
+                <span>[03]</span>
+                <span>CRITERIA &amp; POINT DISTRIBUTION SPECIFICATION</span>
+              </div>
+              <span className={styles.criteriaDocId}>DOC-REF / EVAL-2026-V1</span>
+            </div>
+
+            <div className={styles.criteriaTitleRow}>
+              <h2 className={styles.criteriaTitle}>HOW KARMA IS AWARDED</h2>
+              <p className={styles.criteriaSubtitle}>
+                Contributions are verified through cryptographic GitHub commits, automated AST analysis,
+                and peer reviews. Below is the standardized point distribution table and recognition tier
+                matrix across all divisions.
+              </p>
+            </div>
+
+            {/* Criteria Category Filter Tabs */}
+            <div className={styles.criteriaFilterTabs} role="tablist">
+              <button
+                type="button"
+                role="tab"
+                aria-selected={criteriaFilter === "all"}
+                onClick={() => setCriteriaFilter("all")}
+                className={`${styles.filterPill} ${
+                  criteriaFilter === "all" ? styles.filterPillActive : ""
+                }`}
+              >
+                [ALL CRITERIA]
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={criteriaFilter === "engineering"}
+                onClick={() => setCriteriaFilter("engineering")}
+                className={`${styles.filterPill} ${
+                  criteriaFilter === "engineering" ? styles.filterPillActive : ""
+                }`}
+              >
+                [SYSTEMS &amp; ENGINEERING]
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={criteriaFilter === "research"}
+                onClick={() => setCriteriaFilter("research")}
+                className={`${styles.filterPill} ${
+                  criteriaFilter === "research" ? styles.filterPillActive : ""
+                }`}
+              >
+                [RESEARCH &amp; PAPERS]
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={criteriaFilter === "community"}
+                onClick={() => setCriteriaFilter("community")}
+                className={`${styles.filterPill} ${
+                  criteriaFilter === "community" ? styles.filterPillActive : ""
+                }`}
+              >
+                [OPS, SALONS &amp; AUDITS]
+              </button>
+            </div>
+          </div>
+
+          {/* Table Container */}
+          <div className={styles.tableWrap}>
+            <table className={styles.criteriaTable}>
+              <thead>
+                <tr className={styles.critTheadRow}>
+                  <th className={styles.thCode}>CODE</th>
+                  <th className={styles.thType}>CONTRIBUTION CATEGORY &amp; SCOPE</th>
+                  <th className={styles.thStandard}>VERIFICATION CRITERIA &amp; BENCHMARKS</th>
+                  <th className={styles.thDiv}>DIVISIONS</th>
+                  <th className={styles.thPts}>KARMA WEIGHT</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredCriteria.map((c) => (
+                  <tr key={c.id} className={styles.critTableRow}>
+                    <td className={styles.tdCode}>
+                      <span className={styles.codeBadge}>[{c.id}]</span>
+                    </td>
+                    <td className={styles.tdType}>
+                      <span className={styles.critCategoryTitle}>{c.category}</span>
+                      <p className={styles.critScopeText}>{c.scope}</p>
+                    </td>
+                    <td className={styles.tdStandard}>
+                      <span className={styles.standardText}>{c.standard}</span>
+                      {c.multiplier && (
+                        <span className={styles.multiplierPill}>
+                          ★ {c.multiplier}
+                        </span>
+                      )}
+                    </td>
+                    <td className={styles.tdDiv}>
+                      <div className={styles.divBadgeList}>
+                        {c.divisions.map((d) => (
+                          <span key={d} className={styles.divTag}>
+                            {d}
+                          </span>
+                        ))}
+                      </div>
+                    </td>
+                    <td className={styles.tdPts}>
+                      <span className={styles.pointsPill}>{c.points}</span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Tier Thresholds & Rank Hierarchy Cards */}
+          <div className={styles.tiersContainer}>
+            <div className={styles.tiersHeader}>
+              <div className={styles.tiersIndexRow}>
+                <span className={styles.tiersIndex}>[03.1]</span>
+                <span className={styles.tiersIndexLabel}>RANK HIERARCHY MATRIX</span>
+              </div>
+              <h3 className={styles.tiersHeading}>RECOGNITION TIERS &amp; BUILDER PRIVILEGES</h3>
+            </div>
+            <div className={styles.tiersGrid}>
+              {TIER_THRESHOLDS.map((t) => (
+                <div key={t.badge} className={styles.tierCard}>
+                  <div className={styles.tierTop}>
+                    <span className={styles.tierBadgeTag}>[{t.badge}]</span>
+                    <span className={styles.tierPtsVal}>{t.pts}</span>
+                  </div>
+                  <h4 className={styles.tierTitle}>{t.tier}</h4>
+                  <p className={styles.tierPrivileges}>{t.privileges}</p>
+                  <div className={styles.tierFooter}>
+                    <span className={styles.tierCountTag}>SCOPE: {t.count}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── 04. Verification Workflow & Submit PR Dispatch ──────────────────── */}
         <section className={styles.infoSection}>
           <div className={styles.infoCard}>
             <div className={styles.infoLeft}>
               <div className={styles.infoIndex}>
-                <span>[03]</span>
-                <span>HOW KARMA POINTS ARE CALCULATED</span>
+                <span>[04]</span>
+                <span>SUBMITTING ARTIFACTS FOR EVALUATION</span>
               </div>
               <h3 className={styles.infoHeading}>
-                Cryptographically audited contributions.
+                Automated continuous evaluation via CI/CD.
               </h3>
               <p className={styles.infoDesc}>
-                Every PR merged into official Advait repositories triggers an automated
-                evaluation workflow. Karma is weighted by code complexity (AST node count,
-                WASM/WebGPU kernel benchmarks, documentation depth), test coverage,
-                and peer reviews from division leads.
+                Open a PR on any active Advait collective repository. Our automated
+                GitHub Actions bot analyzes AST diffs, test coverage, and benchmark
+                flamegraphs. Once merged by 2 division leads, karma points are immediately
+                credited to your handle in the Hall of Builders.
               </p>
             </div>
 
