@@ -21,8 +21,8 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
     document.body.setAttribute("data-intro-active", "true");
 
     // 01. Phase 1: Color filling animation from bottom (0%) to top (100%)
-    const startTime = performance.now() + 250;
-    const fillDuration = 3000;
+    const startTime = performance.now() + 150;
+    const fillDuration = 1200;
 
     const stepFill = (now: number) => {
       const elapsed = now - startTime;
@@ -39,25 +39,25 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
         // 02. Phase 2: Once filled, glide inward into tight horizontal lockup ADVAIT.
         setTimeout(() => {
           setAssembled(true);
-        }, 250);
+        }, 120);
 
-        // 03. Phase 3: Hold the assembled wordmark, then turn -90° & zoom in
+        // 03. Phase 3: Zoom In transition getting bigger & placing in the behind
         setTimeout(() => {
           setIsZooming(true);
           // Reveal landing page text concurrently with zoom-in
           document.body.removeAttribute("data-intro-active");
-        }, 5500);
+        }, 1100);
 
         // 04. Phase 4: Smooth transition out into the background vertical marquee
         setTimeout(() => {
           setIsExiting(true);
-        }, 7200);
+        }, 1800);
 
         // 05. Phase 5: Unmount intro overlay
         setTimeout(() => {
           setIsVisible(false);
           onComplete?.();
-        }, 8600);
+        }, 2450);
       }
     };
 
