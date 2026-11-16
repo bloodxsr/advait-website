@@ -88,35 +88,35 @@ export function PageLoader() {
     }
     prevPathname.current = pathname;
 
-    // Start deliberate between-pages preloader animation
+    // Snappy between-pages route transition (390ms total)
     setTargetRoute(pathname);
     setLoading(true);
     setIsExiting(false);
-    setProgress(18);
+    setProgress(25);
 
     const t1 = setTimeout(() => {
-      setProgress(48);
-    }, 250);
+      setProgress(65);
+    }, 50);
 
     const t2 = setTimeout(() => {
-      setProgress(78);
-    }, 550);
+      setProgress(90);
+    }, 120);
 
     const t3 = setTimeout(() => {
       setProgress(100);
-    }, 850);
+    }, 190);
 
     // Smooth exit dissolve
     const t4 = setTimeout(() => {
       setIsExiting(true);
-    }, 1150);
+    }, 270);
 
     // Unmount and cleanly hand off to destination page
     const t5 = setTimeout(() => {
       setLoading(false);
       setIsExiting(false);
       setProgress(0);
-    }, 1650);
+    }, 390);
 
     return () => {
       clearTimeout(t1);
@@ -155,7 +155,13 @@ export function PageLoader() {
 
         {/* Brand Row */}
         <div className={styles.brandRow}>
-          <div className={styles.brandTitle}>ADVAIT®</div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/brand/advait-logo.png"
+            alt="ADVAIT"
+            className={styles.loaderLogoImg}
+            decoding="async"
+          />
           <div className={styles.versionBadge}>/V.01</div>
         </div>
 

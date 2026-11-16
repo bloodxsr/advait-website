@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { StencilGlyph } from "./AdvaitGlyphs";
 import styles from "./AdvaitIntro.module.css";
 
@@ -9,62 +9,49 @@ interface AdvaitIntroProps {
 }
 
 export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
-  const [fillProgress, setFillProgress] = useState(0);
+  const [filled, setFilled] = useState(false);
   const [assembled, setAssembled] = useState(false);
   const [isZooming, setIsZooming] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
-  const animFrameRef = useRef<number | null>(null);
 
   useEffect(() => {
-    // 00. Set body attribute to ensure navbar & hero text are hidden during intro fill
+    // 00. Set body attribute to ensure navbar & hero text are hidden while intro plays
     document.body.setAttribute("data-intro-active", "true");
 
-    // 01. Phase 1: Color filling animation from bottom (0%) to top (100%)
-    const startTime = performance.now() + 150;
-    const fillDuration = 1200;
+    // 01. Start color fill wipe immediately
+    const t0 = setTimeout(() => {
+      setFilled(true);
+    }, 60);
 
-    const stepFill = (now: number) => {
-      const elapsed = now - startTime;
-      if (elapsed < 0) {
-        animFrameRef.current = requestAnimationFrame(stepFill);
-        return;
-      }
-      const progress = Math.min(1, elapsed / fillDuration);
-      setFillProgress(progress);
+    // 02. Glide dispersed glyphs into tight horizontal lockup
+    const t1 = setTimeout(() => {
+      setAssembled(true);
+    }, 450);
 
-      if (progress < 1) {
-        animFrameRef.current = requestAnimationFrame(stepFill);
-      } else {
-        // 02. Phase 2: Once filled, glide inward into tight horizontal lockup ADVAIT.
-        setTimeout(() => {
-          setAssembled(true);
-        }, 120);
+    // 03. Once filled & assembled, smoothly scale & dissolve into background
+    const t2 = setTimeout(() => {
+      setIsZooming(true);
+      document.body.removeAttribute("data-intro-active");
+    }, 1350);
 
-        // 03. Phase 3: Zoom In transition getting bigger & placing in the behind
-        setTimeout(() => {
-          setIsZooming(true);
-          // Reveal landing page text concurrently with zoom-in
-          document.body.removeAttribute("data-intro-active");
-        }, 1100);
+    // 04. Fade out overlay
+    const t3 = setTimeout(() => {
+      setIsExiting(true);
+    }, 1850);
 
-        // 04. Phase 4: Smooth transition out into the background vertical marquee
-        setTimeout(() => {
-          setIsExiting(true);
-        }, 1800);
-
-        // 05. Phase 5: Unmount intro overlay
-        setTimeout(() => {
-          setIsVisible(false);
-          onComplete?.();
-        }, 2450);
-      }
-    };
-
-    animFrameRef.current = requestAnimationFrame(stepFill);
+    // 05. Unmount overlay completely
+    const t4 = setTimeout(() => {
+      setIsVisible(false);
+      onComplete?.();
+    }, 2250);
 
     return () => {
-      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+      clearTimeout(t0);
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+      clearTimeout(t4);
       document.body.removeAttribute("data-intro-active");
     };
   }, [onComplete]);
@@ -76,7 +63,7 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
     setTimeout(() => {
       setIsVisible(false);
       onComplete?.();
-    }, 250);
+    }, 200);
   };
 
   if (!isVisible) return null;
@@ -88,8 +75,22 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
       role="banner"
       aria-label="Advait kinetic stencil introduction"
     >
+      {/* SVG Liquid Chromium, Rose Quartz & Electric Violet Gradient */}
+      <svg width="0" height="0" style={{ position: "absolute", pointerEvents: "none" }} aria-hidden="true">
+        <defs>
+          <linearGradient id="advait-chroma-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="25%" stopColor="#fbcfe8" />
+            <stop offset="50%" stopColor="#f472b6" />
+            <stop offset="75%" stopColor="#c084fc" />
+            <stop offset="90%" stopColor="#7c3aed" />
+            <stop offset="100%" stopColor="#ffffff" />
+          </linearGradient>
+        </defs>
+      </svg>
+
       <div className={styles.stage}>
-        {/* Kinetic Stencil Wordmark: Color Fill -> Horizontal Lockup -> Turn -90° & Zoom In into Scroll Animation */}
+        {/* Kinetic Stencil Wordmark: Color Fill -> Horizontal Lockup -> Dissolve into Background */}
         <div
           className={`${styles.lettersRow} ${
             isZooming ? styles.lettersRowZooming : ""
@@ -102,7 +103,8 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
           >
             <StencilGlyph
               glyph="A"
-              fillProgress={fillProgress}
+              filled={filled}
+              fillColor="url(#advait-chroma-grad)"
               className={styles.glyphSvg}
             />
           </div>
@@ -114,7 +116,8 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
           >
             <StencilGlyph
               glyph="D"
-              fillProgress={fillProgress}
+              filled={filled}
+              fillColor="url(#advait-chroma-grad)"
               className={styles.glyphSvg}
             />
           </div>
@@ -126,7 +129,8 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
           >
             <StencilGlyph
               glyph="V"
-              fillProgress={fillProgress}
+              filled={filled}
+              fillColor="url(#advait-chroma-grad)"
               className={styles.glyphSvg}
             />
           </div>
@@ -138,7 +142,8 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
           >
             <StencilGlyph
               glyph="A"
-              fillProgress={fillProgress}
+              filled={filled}
+              fillColor="url(#advait-chroma-grad)"
               className={styles.glyphSvg}
             />
           </div>
@@ -150,7 +155,8 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
           >
             <StencilGlyph
               glyph="I"
-              fillProgress={fillProgress}
+              filled={filled}
+              fillColor="url(#advait-chroma-grad)"
               className={styles.glyphSvgI}
             />
           </div>
@@ -162,7 +168,8 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
           >
             <StencilGlyph
               glyph="T"
-              fillProgress={fillProgress}
+              filled={filled}
+              fillColor="url(#advait-chroma-grad)"
               className={styles.glyphSvg}
             />
           </div>
@@ -174,7 +181,8 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
           >
             <StencilGlyph
               glyph="Dot"
-              fillProgress={fillProgress}
+              filled={filled}
+              fillColor="url(#advait-chroma-grad)"
               className={styles.glyphSvgDot}
             />
           </div>

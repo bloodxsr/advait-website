@@ -7,7 +7,17 @@
   position: relative;
   min-height: 100vh;
   width: 100%;
-  background: #96958f;
+  background:
+    /* Metallic Chromium / Cool Silver top specular */
+    radial-gradient(ellipse 95% 45% at 50% -5%, rgba(255, 255, 255, 0.09) 0%, rgba(226, 232, 240, 0.04) 30%, transparent 60%),
+    /* Subtle Light Pink ambient aura */
+    radial-gradient(circle at 18% 30%, rgba(244, 114, 182, 0.07) 0%, transparent 45%),
+    /* Electric Purple volumetric core */
+    radial-gradient(ellipse 85% 55% at 50% 20%, rgba(147, 51, 234, 0.16) 0%, transparent 70%),
+    /* Cool Chromium silver reflection at bottom-right */
+    radial-gradient(circle at 85% 80%, rgba(203, 213, 225, 0.05) 0%, transparent 45%),
+    /* Obsidian Black bedrock */
+    #070709;
   color: #ffffff;
   display: flex;
   flex-direction: column;
@@ -29,6 +39,16 @@
   z-index: 1;
   overflow: hidden;
   user-select: none;
+  contain: paint layout;
+  background: radial-gradient(ellipse 65% 85% at 50% 50%, rgba(147, 51, 234, 0.12) 0%, rgba(244, 114, 182, 0.03) 38%, transparent 72%);
+}
+
+.defsSvg {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  opacity: 0;
 }
 
 .marqueeTrack {
@@ -36,6 +56,8 @@
   flex-direction: column;
   align-items: center;
   will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
   animation: scrollDownMarquee 48s linear infinite;
 }
 
@@ -63,9 +85,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transform: rotate(-90deg);
+  transform: rotate(-90deg) translateZ(0);
   margin-bottom: clamp(40px, 6vh, 84px);
   flex-shrink: 0;
+  contain: layout paint;
 }
 
 .marqueeLetterI {
@@ -74,17 +97,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transform: rotate(-90deg);
+  transform: rotate(-90deg) translateZ(0);
   margin-bottom: clamp(40px, 6vh, 84px);
   flex-shrink: 0;
+  contain: layout paint;
 }
 
-/* Pitch black monumental stencil glyphs in the back */
+/* Monumental liquid chromium, pink & electric purple stencil glyphs in the back with soft neon bloom */
 .marqueeSvg {
   width: 100%;
   height: 100%;
-  fill: #000000;
   display: block;
+  opacity: 0.84;
+  filter: drop-shadow(0 0 16px rgba(168, 85, 247, 0.45));
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 /* ── Foreground Swiss Editorial Grid (All pure white typography) ────────── */
@@ -101,124 +128,83 @@
   transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ── Top Row ─────────────────────────────────────────────────────────────── */
-.topRow {
-  display: grid;
-  grid-template-columns: 1.2fr 1.8fr;
-  gap: 36px;
-  padding-top: 14px;
-  animation: revealContent 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
-}
-
-.identityBlock {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.brandRow {
-  display: flex;
-  align-items: baseline;
-  gap: 6px;
-  color: #ffffff;
-}
-
-.brandTitle {
-  font-family: var(--font-space), var(--font-brand), sans-serif;
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: #ffffff;
-}
-
-.registered {
-  font-family: var(--font-space), var(--font-brand), sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-  color: #ffffff;
-}
-
-.brandDesc {
-  margin: 0;
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.82);
-  max-width: 380px;
-  line-height: 1.5;
-}
-
-.manifestoText {
-  margin: 0;
-  font-size: 13.5px;
-  color: #ffffff;
-  line-height: 1.6;
-  max-width: 680px;
-}
-
 .sectionIndexNum {
   font-family: var(--font-mono);
-  font-weight: 600;
-  margin-right: 6px;
-  color: rgba(255, 255, 255, 0.65);
+  font-size: clamp(12.5px, 1vw, 14px);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  margin-right: 10px;
+  color: #f472b6;
+  text-transform: uppercase;
 }
 
-/* ── Middle Typographic Banner (Pure White ADVAIT ®, /V.01 & (2026)) ─────── */
+/* ── Middle Typographic Banner (Centered ADVAIT in Tiny5 Duo Text) ───────── */
 .middleBanner {
-  display: grid;
-  grid-template-columns: 1.3fr 1fr 1fr;
-  align-items: baseline;
-  gap: 20px;
-  padding: 30px 0;
+  display: inline-flex;
+  align-self: center;
+  width: fit-content;
+  max-width: 95vw;
+  justify-content: center;
+  align-items: center;
+  padding: clamp(12px, 1.8vw, 22px) clamp(24px, 3.2vw, 44px);
+  margin-top: auto;
+  margin-bottom: auto;
+  background: rgba(8, 8, 14, 0.46);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: clamp(14px, 2vw, 22px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.14);
   animation: revealContent 1.0s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
 }
 
-.midBrandWrap {
+/* Tiny5 Duo Text ("ADVAIT") */
+.midDuoWrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.midDuoText {
+  font-family: var(--font-tiny5), 'Tiny5', monospace, sans-serif;
+  font-size: clamp(56px, 12vw, 160px);
+  font-weight: 400;
+  line-height: 0.92;
+  letter-spacing: clamp(0.04em, 0.06em, 0.08em);
   display: inline-flex;
   align-items: baseline;
-  gap: 8px;
-  color: #ffffff;
+  justify-content: center;
+  text-rendering: geometricPrecision;
+  image-rendering: pixelated;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
 }
 
-.midBrand {
-  font-family: var(--font-space), var(--font-brand), sans-serif;
-  font-size: clamp(38px, 6.2vw, 84px);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  color: #ffffff;
-  line-height: 1;
+.midDuoText:hover {
+  transform: scale(1.025);
 }
 
-.midRegistered {
-  font-family: var(--font-space), var(--font-brand), sans-serif;
-  font-size: clamp(16px, 2.2vw, 28px);
-  font-weight: 800;
-  color: #ffffff;
+/* Tone 1: Chromium / Liquid Platinum Silver ("AD") */
+.duoSilver {
+  background: linear-gradient(180deg, #ffffff 10%, #f1f5f9 45%, #cbd5e1 75%, #94a3b8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 24px rgba(255, 255, 255, 0.38)) drop-shadow(0 0 45px rgba(192, 132, 252, 0.25));
 }
 
-.midVersion {
-  font-family: var(--font-space), var(--font-brand), sans-serif;
-  font-size: clamp(48px, 8.5vw, 120px);
-  font-weight: 800;
-  letter-spacing: -0.05em;
-  color: #ffffff;
-  line-height: 1;
-  font-style: italic;
+/* Tone 2: Electric Neon Purple / Light Pink ("VAIT") */
+.duoPurple {
+  background: linear-gradient(180deg, #ffffff 10%, #fbcfe8 25%, #c084fc 60%, #9333ea 95%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 28px rgba(168, 85, 247, 0.75)) drop-shadow(0 0 52px rgba(244, 114, 182, 0.4));
 }
 
-.midYear {
-  font-family: var(--font-space), var(--font-brand), sans-serif;
-  font-size: clamp(48px, 8.5vw, 120px);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  color: #ffffff;
-  line-height: 1;
-  text-align: right;
-}
-
-/* ── Bottom Row (Directory & Scope) ──────────────────────────────────────── */
+/* ── Bottom Row (Directory, Vision Scope & Redirects) ─────────────────────── */
 .bottomRow {
   display: grid;
-  grid-template-columns: 1.2fr 1.6fr 0.8fr;
-  gap: 36px;
+  grid-template-columns: 1fr 1.85fr 0.75fr;
+  gap: clamp(20px, 2.5vw, 36px);
   align-items: flex-end;
   padding-bottom: 10px;
   animation: revealContent 1.0s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
@@ -229,6 +215,7 @@
     opacity: 0;
     transform: translate3d(0, 28px, 0);
   }
+
   100% {
     opacity: 1;
     transform: translate3d(0, 0, 0);
@@ -239,6 +226,13 @@
   display: flex;
   flex-direction: column;
   gap: 7px;
+  background: rgba(8, 8, 12, 0.55);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 14px;
+  padding: 16px 20px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 .dirItem {
@@ -256,49 +250,66 @@
 .dirItem:hover {
   transform: translateX(4px);
   color: #000000;
-  background: #ffffff;
-  padding: 2px 6px;
+  background: linear-gradient(180deg, #ffffff 0%, #e4e4e7 100%);
+  box-shadow: 0 0 16px rgba(168, 85, 247, 0.5), inset 0 1px 0 #ffffff;
+  padding: 2px 8px;
   border-radius: 4px;
 }
 
 .dirNum {
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.65);
+  color: #f472b6;
 }
 
 .dirItem:hover .dirNum {
   color: #000000;
 }
 
+/* Our Vision Scope - Increased Prominence & Readability */
 .scopeText {
   margin: 0;
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.88);
-  line-height: 1.6;
-  max-width: 580px;
+  font-size: clamp(14.5px, 1.15vw, 16.5px);
+  color: rgba(255, 255, 255, 0.95);
+  line-height: 1.68;
+  max-width: 680px;
+  background: rgba(8, 8, 12, 0.55);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 16px;
+  padding: clamp(20px, 2.2vw, 28px) clamp(24px, 2.5vw, 32px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
+/* Compact Redirects & Status Column */
 .statusCol {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   text-align: right;
-  gap: 16px;
+  gap: 12px;
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 10px;
   color: rgba(255, 255, 255, 0.7);
+  background: rgba(8, 8, 12, 0.55);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 14px;
+  padding: 12px 16px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 .socialBlock {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 6px;
+  gap: 4px;
 }
 
 .socialLabel {
   font-family: var(--font-mono);
-  font-size: 9.5px;
+  font-size: 8.5px;
   font-weight: 700;
   letter-spacing: 0.08em;
   color: rgba(255, 255, 255, 0.6);
@@ -309,21 +320,21 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 3px;
+  gap: 2px;
 }
 
 .socialLink {
   font-family: var(--font-mono);
-  font-size: 11.5px;
+  font-size: 10px;
   font-weight: 600;
   color: #ffffff;
   text-decoration: none;
-  padding: 2px 6px;
+  padding: 1px 4px;
   border-radius: 3px;
   transition: all 0.15s ease;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 3px;
 }
 
 .socialLink:hover {
@@ -336,15 +347,18 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 6px;
+  gap: 3px;
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.65);
 }
 
 .scrollHint {
   color: #ffffff;
   font-weight: 600;
+  font-size: 9.5px;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 3px;
   cursor: pointer;
   transition: transform 0.2s ease;
 }
@@ -355,19 +369,13 @@
 
 /* ── Responsive ──────────────────────────────────────────────────────────── */
 @media (max-width: 900px) {
-  .topRow {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
   .middleBanner {
-    grid-template-columns: 1fr;
-    gap: 12px;
-    padding: 20px 0;
+    padding: 14px 18px;
+    text-align: center;
   }
 
-  .midYear {
-    text-align: left;
+  .midDuoWrap {
+    justify-content: center;
   }
 
   .bottomRow {

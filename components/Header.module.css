@@ -11,15 +11,16 @@
   z-index: 50;
   width: 100%;
   height: 56px;
-  background: rgba(18, 18, 20, 0.78);
+  background: rgba(8, 8, 8, 0.85);
   -webkit-backdrop-filter: blur(40px) saturate(180%);
   backdrop-filter: blur(40px) saturate(180%);
   border-top: 1px solid transparent;
   border-left: 1px solid transparent;
   border-right: 1px solid transparent;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid #27272a;
   border-radius: 0;
   box-sizing: border-box;
+  will-change: width, top, height, transform;
 
   transition:
     width 0.5s cubic-bezier(0.16, 1, 0.3, 1),
@@ -38,18 +39,20 @@
   pointer-events: none !important;
 }
 
-/* ── Dynamic Island Pill on Scroll (Kept 100% Intact with Swiss Aesthetics) ── */
+/* ── Dynamic Island Pill on Scroll (Vercel Chromium & Purple Sheen) ── */
 .scrolled {
   top: 14px;
   width: min(390px, calc(100% - 24px));
   height: 48px;
   border-radius: 999px;
-  background: rgba(18, 18, 20, 0.94);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(14, 14, 18, 0.92);
+  border: 1px solid rgba(192, 132, 252, 0.35);
   box-shadow:
-    0 4px 24px rgba(0, 0, 0, 0.55),
-    0 12px 48px -12px rgba(0, 0, 0, 0.7),
-    inset 0 0.5px 0 rgba(255, 255, 255, 0.18);
+    0 4px 24px rgba(0, 0, 0, 0.8),
+    0 12px 48px -12px rgba(0, 0, 0, 0.9),
+    inset 0 1px 0 rgba(255, 255, 255, 0.32),
+    0 0 22px -2px rgba(168, 85, 247, 0.45),
+    0 0 44px -6px rgba(124, 58, 237, 0.25);
   -webkit-backdrop-filter: blur(50px) saturate(200%);
   backdrop-filter: blur(50px) saturate(200%);
 }
@@ -75,31 +78,30 @@
 
 /* ── Brand Label ─────────────────────────────────────────────────────────── */
 .brand {
-  font-family: var(--font-space), var(--font-brand), sans-serif;
-  font-size: 16.5px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: #ffffff;
   display: inline-flex;
-  align-items: baseline;
-  gap: 3px;
+  align-items: center;
+  gap: 6px;
   white-space: nowrap;
   text-decoration: none;
-  transition: opacity 0.2s ease, font-size 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.2s ease;
 }
 
-.brandRegistered {
-  font-size: 11px;
-  font-weight: 700;
-  opacity: 0.8;
+.brandLogoImg {
+  height: 28px;
+  width: auto;
+  max-width: 100px;
+  object-fit: contain;
+  display: block;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-.scrolled .brand {
-  font-size: 15px;
+.brand:hover .brandLogoImg {
+  opacity: 0.85;
+  transform: scale(1.02);
 }
 
-.brand:hover {
-  opacity: 0.8;
+.scrolled .brandLogoImg {
+  height: 24px;
 }
 
 /* ── Descriptor Tagline ──────────────────────────────────────────────────── */
@@ -107,7 +109,7 @@
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  color: rgba(235, 235, 245, 0.55);
+  color: #a1a1aa;
   font-family: var(--font-mono);
   font-size: 10.5px;
   letter-spacing: 0.06em;
@@ -150,15 +152,15 @@
 }
 
 .menuBtn:hover {
-  background: #ffffff;
-  border-color: #ffffff;
-  color: #000000;
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #ffffff;
 }
 
 .menuBtnActive {
-  background: #ffffff;
-  border-color: #ffffff;
-  color: #000000;
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.6);
+  color: #ffffff;
 }
 
 .menuBars {
@@ -255,9 +257,8 @@
 }
 
 .joinBtn:hover {
-  background: #000000;
-  color: #ffffff;
-  border-color: #ffffff;
+  background: rgba(255, 255, 255, 0.85);
+  transform: translateY(-1px);
 }
 
 /* Sign Out Button */
@@ -293,11 +294,12 @@
   top: calc(100% + 10px);
   right: 28px;
   width: min(400px, calc(100vw - 32px));
-  background: #0d0d0e;
-  border: 1px solid rgba(255, 255, 255, 0.24);
+  background: rgba(18, 18, 20, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 6px;
   padding: 16px 14px;
-  box-shadow: 0 24px 64px -10px rgba(0, 0, 0, 0.85);
+  box-shadow: 0 24px 64px -10px rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(28px);
   box-sizing: border-box;
 
   opacity: 0;
@@ -387,23 +389,29 @@
 }
 
 .menuItem:hover {
-  background: #ffffff;
-  border-color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
-.menuItem:hover .itemNumber,
-.menuItem:hover .itemLabel,
-.menuItem:hover .itemTag,
-.menuItem:hover .itemArrow {
-  color: #000000;
+.menuItem:hover .itemNumber {
+  color: var(--brand-pink);
+}
+
+.menuItem:hover .itemLabel {
+  color: #ffffff;
+}
+
+.menuItem:hover .itemTag {
+  color: #d4d4d8;
 }
 
 .menuItem:hover .itemArrow {
+  color: #c084fc;
   transform: translate(3px, -3px);
 }
 
 .menuItemActive {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.06);
   border-color: rgba(255, 255, 255, 0.25);
 }
 

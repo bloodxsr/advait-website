@@ -5,22 +5,26 @@ import Lenis from "lenis";
 
 export function SmoothScroll() {
   useEffect(() => {
-    // Initialize Lenis for smooth momentum scrolling
+    // Ultra-snappy modern Lenis configuration (eliminates sluggish momentum lag)
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: 0.6,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: "vertical",
       gestureOrientation: "vertical",
       smoothWheel: true,
-      touchMultiplier: 1.5,
+      wheelMultiplier: 1.0,
+      touchMultiplier: 1.0,
+      syncTouch: false,
     });
+
+    let rafId: number;
 
     function raf(time: number) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      rafId = requestAnimationFrame(raf);
     }
 
-    const rafId = requestAnimationFrame(raf);
+    rafId = requestAnimationFrame(raf);
 
     return () => {
       cancelAnimationFrame(rafId);

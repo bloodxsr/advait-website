@@ -7,21 +7,27 @@
   position: fixed;
   inset: 0;
   z-index: 999999;
-  background: #96958f;
-  color: #000000;
+  background:
+    radial-gradient(ellipse 95% 45% at 50% 10%, rgba(255, 255, 255, 0.09) 0%, rgba(226, 232, 240, 0.04) 30%, transparent 55%),
+    radial-gradient(circle at 25% 35%, rgba(244, 114, 182, 0.08) 0%, transparent 45%),
+    radial-gradient(circle at 50% 45%, rgba(168, 85, 247, 0.16) 0%, transparent 60%),
+    radial-gradient(circle at 65% 55%, rgba(124, 58, 237, 0.14) 0%, transparent 55%),
+    #060608;
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   user-select: none;
   cursor: pointer;
-  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .overlayExiting {
   opacity: 0;
   pointer-events: none;
-  transform: scale(1.05);
+  transform: scale(1.04);
 }
 
 .stage {
@@ -42,16 +48,18 @@
   height: clamp(38px, 6vw, 72px);
   gap: clamp(4px, 0.6vw, 10px);
   transform-origin: center center;
-  will-change: transform, opacity;
+  will-change: transform, opacity, filter;
   transition:
-    transform 1.1s cubic-bezier(0.16, 1, 0.3, 1),
-    opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+    filter 0.6s ease;
 }
 
-/* Phase 3: The entire wordmark turns anti-clockwise 90° and zooms in into the background */
+/* Phase 2: Forward zoom & dissolve into the hero (no rotation) */
 .lettersRowZooming {
-  transform: rotate(-90deg) scale(8.5);
+  transform: scale(1.6);
   opacity: 0;
+  filter: blur(10px);
   pointer-events: none;
 }
 
@@ -60,12 +68,11 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  color: #000000;
+  color: #ffffff;
+  filter: drop-shadow(0 0 16px rgba(168, 85, 247, 0.45));
   transform-origin: center center;
-  will-change: transform, opacity;
-  transition:
-    transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
-    opacity 0.5s ease;
+  will-change: transform;
+  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .glyphSvg {
@@ -85,36 +92,36 @@
 
 /* Phase 1: Dispersed spread positions (compact and 100% visible across screen) */
 .spreadA1 {
-  transform: translate3d(-24vw, 0, 0) rotate(0deg);
+  transform: translate3d(-24vw, 0, 0);
 }
 
 .spreadD {
-  transform: translate3d(-15vw, 0, 0) rotate(0deg);
+  transform: translate3d(-15vw, 0, 0);
 }
 
 .spreadV {
-  transform: translate3d(-6vw, 0, 0) rotate(0deg);
+  transform: translate3d(-6vw, 0, 0);
 }
 
 .spreadA2 {
-  transform: translate3d(4vw, 0, 0) rotate(0deg);
+  transform: translate3d(4vw, 0, 0);
 }
 
 .spreadI {
-  transform: translate3d(12vw, 0, 0) rotate(0deg);
+  transform: translate3d(12vw, 0, 0);
 }
 
 .spreadT {
-  transform: translate3d(20vw, 0, 0) rotate(0deg);
+  transform: translate3d(20vw, 0, 0);
 }
 
 .spreadDot {
-  transform: translate3d(25vw, 0, 0) rotate(0deg);
+  transform: translate3d(25vw, 0, 0);
 }
 
 /* Phase 2: Assembled Horizontal Lockup */
 .assembled {
-  transform: translate3d(0, 0, 0) rotate(0deg);
+  transform: translate3d(0, 0, 0);
 }
 
 

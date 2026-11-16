@@ -86,15 +86,21 @@ export function Header() {
       className={`${styles.header} ${scrolled ? styles.scrolled : ""}`}
     >
       <div className={styles.inner}>
-        {/* Brand — Swiss Stencil Branding */}
+        {/* Brand — Signature Advait Liquid Logo */}
         <Link
           className={styles.brand}
           href="/"
           aria-label="Advait Home"
           onClick={() => setMenuOpen(false)}
         >
-          <span>ADVAIT</span>
-          <span className={styles.brandRegistered}>®</span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/brand/advait-logo.png"
+            alt="ADVAIT"
+            className={styles.brandLogoImg}
+            decoding="async"
+            fetchPriority="high"
+          />
         </Link>
 
         {/* Center Tagline (fades out smoothly as capsule shrinks) */}

@@ -6,23 +6,17 @@ import styles from "./AmbientBackground.module.css";
 export function AmbientBackground() {
   const gridRef = useRef<HTMLDivElement>(null);
   const starsRef = useRef<HTMLDivElement>(null);
-  const glowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    let animId: number;
+    let animId: number | null = null;
     let targetScrollY = 0;
     let currentScrollY = 0;
+    let isTicking = false;
 
-    const onScroll = () => {
-      targetScrollY = window.scrollY;
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-
-    const loop = (time: number) => {
+    const render = () => {
       // Smooth interpolation for subtle parallax depth
-      currentScrollY += (targetScrollY - currentScrollY) * 0.1;
+      const diff = targetScrollY - currentScrollY;
+      currentScrollY += diff * 0.12;
 
       // Subtle parallax on the technical grid (moves at 0.15x speed)
       if (gridRef.current) {
@@ -36,33 +30,40 @@ export function AmbientBackground() {
         starsRef.current.style.transform = `translate3d(0, ${-starOffset}px, 0)`;
       }
 
-      // Very subtle ambient top glow drift
-      if (glowRef.current) {
-        const tSec = time * 0.001;
-        const subtleGlowOffset = Math.sin(tSec * 0.3) * 15;
-        const scrollFade = Math.max(0, 1 - currentScrollY / 900);
-        glowRef.current.style.transform = `translate3d(calc(-50% + ${subtleGlowOffset}px), 0, 0)`;
-        glowRef.current.style.opacity = `${0.65 * scrollFade}`;
+      // If still interpolating, keep ticking. Otherwise sleep to save CPU.
+      if (Math.abs(diff) > 0.3) {
+        animId = requestAnimationFrame(render);
+      } else {
+        isTicking = false;
+        animId = null;
       }
-
-      animId = requestAnimationFrame(loop);
     };
 
-    animId = requestAnimationFrame(loop);
+    const onScroll = () => {
+      targetScrollY = window.scrollY;
+      if (!isTicking) {
+        isTicking = true;
+        animId = requestAnimationFrame(render);
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    // Initial render
+    onScroll();
 
     return () => {
-      cancelAnimationFrame(animId);
+      if (animId !== null) cancelAnimationFrame(animId);
       window.removeEventListener("scroll", onScroll);
     };
   }, []);
 
   return (
     <div className={styles.container} aria-hidden="true">
-      {/* Deep Black Canvas Base */}
+      {/* Deep Obsidian Canvas Base */}
       <div className={styles.baseCanvas} />
 
       {/* Subtle Top Ambient Spotlight (Monochrome / Celestial) */}
-      <div ref={glowRef} className={styles.topSpotlight} />
+      <div className={styles.topSpotlight} />
 
       {/* Subtle Horizon Line Beam */}
       <div className={styles.horizonBeam} />

@@ -326,36 +326,6 @@ export default function TeamPage() {
         </section>
 
         {/* ── 03. Connect / Stewardship Inquiries ─────────────────────────────── */}
-        <section className={styles.section} aria-label="Join Stewardship">
-          <div className={styles.sectionHeader}>
-            <div className={styles.sectionIndex}>
-              <span>[03]</span>
-              <span>ELECTIONS &amp; JOINING STEWARDSHIP</span>
-            </div>
-            <span className={styles.sectionMeta}>Spring 2026 Cohort</span>
-          </div>
-
-          <div className={styles.joinCard}>
-            <div className={styles.joinLeft}>
-              <h3 className={styles.joinTitle}>
-                Want to lead a working group or propose a new division?
-              </h3>
-              <p className={styles.joinDesc}>
-                Advait holds open division reviews and working group nominations
-                every semester. Contributor voting is weighted by verified code
-                contributions, workshop moderation, and technical output.
-              </p>
-            </div>
-            <div className={styles.joinActions}>
-              <Link href="/projects" className={styles.primaryActionBtn}>
-                Explore Active Projects →
-              </Link>
-              <Link href="/" className={styles.secondaryActionBtn}>
-                ← Back to Home
-              </Link>
-            </div>
-          </div>
-        </section>
       </div>
     </main>
   );

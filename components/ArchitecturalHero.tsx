@@ -27,86 +27,102 @@ export function ArchitecturalHero() {
         <div className={styles.marqueeTrack}>
           {/* Group 1 */}
           <div className={styles.marqueeGroup}>
-            {SET_ITEMS.map((item) => (
-              <div
-                key={`g1-${item.id}`}
-                className={
-                  item.glyph === "I"
-                    ? styles.marqueeLetterI
-                    : styles.marqueeLetter
-                }
-              >
-                <svg
-                  viewBox={GLYPH_VIEWBOX[item.glyph]}
-                  className={styles.marqueeSvg}
-                  preserveAspectRatio="xMidYMid meet"
+            {SET_ITEMS.map((item) => {
+              const fillId = `g1-fill-${item.id}`;
+              return (
+                <div
+                  key={`g1-${item.id}`}
+                  className={
+                    item.glyph === "I"
+                      ? styles.marqueeLetterI
+                      : styles.marqueeLetter
+                  }
                 >
-                  <path d={GLYPH_PATHS[item.glyph]} />
-                </svg>
-              </div>
-            ))}
+                  <svg
+                    viewBox={GLYPH_VIEWBOX[item.glyph]}
+                    className={styles.marqueeSvg}
+                    preserveAspectRatio="xMidYMid meet"
+                  >
+                    <defs>
+                      <linearGradient id={fillId} x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#ffffff" stopOpacity="0.92" />
+                        <stop offset="12%" stopColor="#e9d5ff" stopOpacity="0.90" />
+                        <stop offset="28%" stopColor="#c084fc" stopOpacity="0.90" />
+                        <stop offset="42%" stopColor="#f472b6" stopOpacity="0.88" />
+                        <stop offset="58%" stopColor="#7c3aed" stopOpacity="0.90" />
+                        <stop offset="72%" stopColor="#ffffff" stopOpacity="0.88" />
+                        <stop offset="84%" stopColor="#a855f7" stopOpacity="0.88" />
+                        <stop offset="94%" stopColor="#fbcfe8" stopOpacity="0.85" />
+                        <stop offset="100%" stopColor="#18072e" stopOpacity="0.90" />
+                      </linearGradient>
+                    </defs>
+                    <path
+                      d={GLYPH_PATHS[item.glyph]}
+                      fill={`url(#${fillId})`}
+                      stroke="rgba(192, 132, 252, 0.3)"
+                      strokeWidth="0.6"
+                    />
+                  </svg>
+                </div>
+              );
+            })}
           </div>
 
           {/* Group 2 (100% pixel-identical copy for seamless continuous infinite loop) */}
           <div className={styles.marqueeGroup} aria-hidden="true">
-            {SET_ITEMS.map((item) => (
-              <div
-                key={`g2-${item.id}`}
-                className={
-                  item.glyph === "I"
-                    ? styles.marqueeLetterI
-                    : styles.marqueeLetter
-                }
-              >
-                <svg
-                  viewBox={GLYPH_VIEWBOX[item.glyph]}
-                  className={styles.marqueeSvg}
-                  preserveAspectRatio="xMidYMid meet"
+            {SET_ITEMS.map((item) => {
+              const fillId = `g2-fill-${item.id}`;
+              return (
+                <div
+                  key={`g2-${item.id}`}
+                  className={
+                    item.glyph === "I"
+                      ? styles.marqueeLetterI
+                      : styles.marqueeLetter
+                  }
                 >
-                  <path d={GLYPH_PATHS[item.glyph]} />
-                </svg>
-              </div>
-            ))}
+                  <svg
+                    viewBox={GLYPH_VIEWBOX[item.glyph]}
+                    className={styles.marqueeSvg}
+                    preserveAspectRatio="xMidYMid meet"
+                  >
+                    <defs>
+                      <linearGradient id={fillId} x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#ffffff" stopOpacity="0.92" />
+                        <stop offset="12%" stopColor="#e9d5ff" stopOpacity="0.90" />
+                        <stop offset="28%" stopColor="#c084fc" stopOpacity="0.90" />
+                        <stop offset="42%" stopColor="#f472b6" stopOpacity="0.88" />
+                        <stop offset="58%" stopColor="#7c3aed" stopOpacity="0.90" />
+                        <stop offset="72%" stopColor="#ffffff" stopOpacity="0.88" />
+                        <stop offset="84%" stopColor="#a855f7" stopOpacity="0.88" />
+                        <stop offset="94%" stopColor="#fbcfe8" stopOpacity="0.85" />
+                        <stop offset="100%" stopColor="#18072e" stopOpacity="0.90" />
+                      </linearGradient>
+                    </defs>
+                    <path
+                      d={GLYPH_PATHS[item.glyph]}
+                      fill={`url(#${fillId})`}
+                      stroke="rgba(192, 132, 252, 0.3)"
+                      strokeWidth="0.6"
+                    />
+                  </svg>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
 
       {/* ── Foreground Swiss Editorial Grid ───────────────────────────────── */}
       <div className={styles.editorialGrid}>
-        {/* Top Row: Identity & Primary Manifesto */}
-        <div className={styles.topRow}>
-          <div className={styles.identityBlock}>
-            <div className={styles.brandRow}>
-              <span className={styles.brandTitle}>ADVAIT</span>
-              <span className={styles.registered}>®</span>
-            </div>
-            <p className={styles.brandDesc}>
-              Association of Developers and Visionaries in AI &amp; Tech. An
-              independent collective building open architectures, autonomous
-              systems, and enduring research.
-            </p>
-          </div>
-
-          <div className={styles.manifestoText}>
-            <span className={styles.sectionIndexNum}>{`{1}`}</span>
-            ADVAIT® is an independent collective of developers and visionaries in
-            AI &amp; Tech, built from work that has proven its value through
-            continued execution. Spanning multiple divisions — RED (Research &amp;
-            Engineering), OPS (Outreach &amp; Sponsorships), EVED (Events &amp;
-            Ventures), Creatives, and GameVeda — the collective reflects a
-            disciplined approach to building: selected for longevity and craft over
-            volume or trend.
-          </div>
-        </div>
-
-        {/* Middle Typographic Banner (Iconic ADVAIT ®, /V.01 & (2026)) ──────── */}
+        {/* Middle Typographic Banner (Centered ADVAIT in Tiny5 Duo Text) ───── */}
         <div className={styles.middleBanner}>
-          <div className={styles.midBrandWrap}>
-            <span className={styles.midBrand}>ADVAIT</span>
-            <span className={styles.midRegistered}>®</span>
+          <div className={styles.midDuoWrap} aria-label="ADVAIT">
+            <span className={styles.midDuoText}>
+              <span className={styles.duoSilver}>AD</span>
+              <span className={styles.duoPurple}>VAIT</span>
+            </span>
           </div>
-          <div className={styles.midVersion}>/V.01</div>
-          <div className={styles.midYear}>(2026)</div>
         </div>
 
         {/* Bottom Row: Directory Index & Artifacts Scope */}
@@ -133,9 +149,9 @@ export function ArchitecturalHero() {
             </Link>
           </nav>
 
-          {/* Center Column: Scope Description */}
+          {/* Center Column: Our Vision */}
           <p className={styles.scopeText}>
-            <span className={styles.sectionIndexNum}>{`{2}`}</span>
+            <span className={styles.sectionIndexNum}>[OUR VISION]</span>
             The collective spans a range of outputs, from autonomous multi-agent
             orchestration (AetherSwarm Engine) to client-side neural radiance
             renderers (LatentMesh) and ZK-SNARK compile-time verifiers. Together,
@@ -197,7 +213,7 @@ export function ArchitecturalHero() {
             </div>
 
             <div className={styles.statusSub}>
-              <span>DIR / 2026</span>
+              <span>DIR / COLLECTIVE</span>
               <span>AUTONOMOUS SYSTEMS</span>
               <span onClick={scrollToContent} className={styles.scrollHint}>
                 Scroll to explore ↓

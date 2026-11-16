@@ -27,20 +27,23 @@ interface GlyphProps {
 
 export function StencilGlyph({
   glyph,
+  filled = true,
   fillProgress,
   className,
   style,
   fillColor = "currentColor",
 }: {
   glyph: keyof typeof GLYPH_PATHS;
+  filled?: boolean;
   fillProgress?: number;
   className?: string;
   style?: React.CSSProperties;
   fillColor?: string;
+  animated?: boolean;
 }) {
   const path = GLYPH_PATHS[glyph];
   const viewBox = GLYPH_VIEWBOX[glyph];
-  const fillPct = typeof fillProgress === "number" ? Math.max(0, Math.min(1, fillProgress)) : 1;
+  const fillPct = typeof fillProgress === "number" ? Math.max(0, Math.min(1, fillProgress)) : filled ? 1 : 0;
 
   return (
     <div
@@ -66,30 +69,28 @@ export function StencilGlyph({
         <path d={path} />
       </svg>
 
-      {/* 02. Solid Color Fill Layer (wiping up from bottom 0% to top 100%) */}
-      {fillPct > 0 && (
-        <div
+      {/* 02. Solid Color Fill Layer with smooth GPU-accelerated CSS transition */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          clipPath: fillPct >= 1 ? "inset(0% 0 0 0)" : `inset(${((1 - fillPct) * 100).toFixed(1)}% 0 0 0)`,
+          transition: "clip-path 0.9s cubic-bezier(0.16, 1, 0.3, 1)",
+          pointerEvents: "none",
+        }}
+      >
+        <svg
+          viewBox={viewBox}
           style={{
-            position: "absolute",
-            inset: 0,
-            clipPath: `inset(${((1 - fillPct) * 100).toFixed(2)}% 0 0 0)`,
-            transition: "clip-path 0.05s linear",
-            pointerEvents: "none",
+            width: "100%",
+            height: "100%",
+            display: "block",
+            fill: fillColor,
           }}
         >
-          <svg
-            viewBox={viewBox}
-            style={{
-              width: "100%",
-              height: "100%",
-              display: "block",
-              fill: fillColor,
-            }}
-          >
-            <path d={path} />
-          </svg>
-        </div>
-      )}
+          <path d={path} />
+        </svg>
+      </div>
     </div>
   );
 }

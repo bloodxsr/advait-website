@@ -15,8 +15,14 @@ export function Footer() {
         <div className={styles.topSection}>
           <div className={styles.brandBlock}>
             <Link className={styles.brand} href="/" aria-label="Advait Home">
-              <span>ADVAIT</span>
-              <span className={styles.registered}>®</span>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/brand/advait-logo.png"
+                alt="ADVAIT"
+                className={styles.footerLogoImg}
+                loading="lazy"
+                decoding="async"
+              />
             </Link>
             <p className={styles.brandDesc}>
               Association of Developers and Visionaries in AI &amp; Tech. An

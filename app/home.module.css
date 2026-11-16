@@ -1,13 +1,13 @@
 /* ==========================================================================
-   home.module.css — Swiss Architectural Editorial Theme
-   Warm stone grey background (#96958f), carbon black typography (#000000),
-   monospaced indices, and clean architectural grid structure.
+   home.module.css — Pure Monochromatic Carbon & Titanium Theme
+   Clean carbon graphite base (#080808), titanium white typography (#ffffff),
+   hairline zinc borders, and precision architectural layout.
    ========================================================================== */
 
 .main {
   position: relative;
-  background: #96958f;
-  color: #000000;
+  background: transparent;
+  color: #ffffff;
   min-height: 100vh;
   overflow-x: hidden;
   user-select: text;
@@ -21,7 +21,7 @@
   max-width: min(1560px, calc(100vw - 48px));
   margin: 0 auto;
   padding: 100px 0;
-  border-top: 1px solid rgba(0, 0, 0, 0.25);
+  border-top: 1px solid #27272a;
   box-sizing: border-box;
 }
 
@@ -40,16 +40,20 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #000000;
+  color: #ffffff;
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
+.sectionIndex span:first-child {
+  color: #f472b6;
+}
+
 .sectionMeta {
   font-family: var(--font-mono);
   font-size: 12px;
-  color: rgba(0, 0, 0, 0.6);
+  color: #71717a;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -62,27 +66,34 @@
 }
 
 .divisionCard {
-  background: rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(0, 0, 0, 0.3);
+  background: rgba(16, 16, 21, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.10);
   border-radius: 12px;
   padding: 28px 24px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   min-height: 240px;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
   text-decoration: none;
-  color: #000000;
+  color: #ffffff;
   position: relative;
   overflow: hidden;
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.16),
+    0 12px 32px -8px rgba(0, 0, 0, 0.65);
 }
 
 .divisionCard:hover {
-  background: #000000;
+  background: rgba(22, 22, 29, 0.96);
   color: #ffffff;
-  transform: translateY(-3px);
-  box-shadow: 0 16px 32px -8px rgba(0, 0, 0, 0.35);
-  border-color: #000000;
+  transform: translateY(-4px);
+  border-color: rgba(192, 132, 252, 0.55);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.45),
+    0 0 22px 0 rgba(168, 85, 247, 0.45),
+    0 0 44px -4px rgba(124, 58, 237, 0.25),
+    0 20px 48px -12px rgba(0, 0, 0, 0.85);
 }
 
 .divisionCardTop {
@@ -99,22 +110,29 @@
   font-weight: 800;
   letter-spacing: -0.04em;
   line-height: 1;
+  color: #ffffff;
 }
 
 .divisionBadge {
   font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 600;
-  padding: 4px 8px;
+  padding: 4px 10px;
   border-radius: 4px;
-  border: 1px solid rgba(0, 0, 0, 0.3);
-  background: transparent;
-  color: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
+  color: #c084fc;
   letter-spacing: 0.04em;
 }
 
 .divisionCard:hover .divisionBadge {
-  border-color: rgba(255, 255, 255, 0.4);
+  border-color: rgba(192, 132, 252, 0.6);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.35),
+    0 0 16px rgba(168, 85, 247, 0.5);
+  background: rgba(168, 85, 247, 0.18);
+  color: #ffffff;
 }
 
 .divisionName {
@@ -129,12 +147,12 @@
 .divisionDesc {
   font-size: 13.5px;
   line-height: 1.55;
-  color: rgba(0, 0, 0, 0.7);
+  color: #a1a1aa;
   margin: 0 0 24px;
 }
 
 .divisionCard:hover .divisionDesc {
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .divisionArrow {
@@ -144,24 +162,30 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: inherit;
+  color: #c084fc;
   transition: transform 0.2s ease;
 }
 
 .divisionCard:hover .divisionArrow {
   transform: translateX(4px);
+  color: #ffffff;
 }
 
 /* ── Section 02: Contributor Leaderboard ─────────────────────────────────── */
 .leaderboardCard {
-  background: #000000;
+  background: rgba(14, 14, 19, 0.92);
   color: #ffffff;
   border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
   padding: 40px 44px;
   display: flex;
   flex-direction: column;
   gap: 32px;
-  box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.4);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.2),
+    0 24px 60px -12px rgba(0, 0, 0, 0.85),
+    0 0 32px -8px rgba(168, 85, 247, 0.15);
+  backdrop-filter: blur(20px);
 }
 
 .leaderboardHeader {
@@ -170,7 +194,7 @@
   align-items: flex-end;
   gap: 20px;
   padding-bottom: 24px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.10);
   flex-wrap: wrap;
 }
 
@@ -186,7 +210,7 @@
 .leaderboardSubtitle {
   font-family: var(--font-mono);
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.6);
+  color: #a1a1aa;
   margin: 4px 0 0;
 }
 
@@ -202,15 +226,19 @@
   justify-content: space-between;
   gap: 16px;
   padding: 16px 20px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 10px;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
 }
 
 .leaderboardRow:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.2),
+    0 0 16px -2px rgba(168, 85, 247, 0.2);
 }
 
 .leaderboardLeft {
@@ -224,8 +252,10 @@
   font-family: var(--font-mono);
   font-size: 15px;
   font-weight: 800;
-  color: #96958f;
-  background: rgba(255, 255, 255, 0.1);
+  color: #c084fc;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.22);
   padding: 4px 10px;
   border-radius: 6px;
   flex-shrink: 0;
@@ -241,7 +271,7 @@
 .rowPr {
   margin: 2px 0 0;
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.6);
+  color: #71717a;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -252,7 +282,7 @@
   font-family: var(--font-mono);
   font-size: 14.5px;
   font-weight: 700;
-  color: #30d158;
+  color: #c084fc;
   flex-shrink: 0;
 }
 
@@ -275,7 +305,7 @@
 }
 
 .leaderboardBtn:hover {
-  background: #e5e5e5;
+  background: rgba(255, 255, 255, 0.85);
   transform: translateY(-2px);
 }
 
@@ -291,15 +321,16 @@
   align-items: center;
   gap: 32px;
   padding: 30px 16px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-  transition: all 0.2s ease;
+  border-bottom: 1px solid #27272a;
+  transition: all 0.25s ease;
   text-decoration: none;
-  color: #000000;
+  color: #ffffff;
   border-radius: 8px;
 }
 
 .eventRow:hover {
-  background: rgba(0, 0, 0, 0.05);
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom-color: rgba(255, 255, 255, 0.3);
   padding-left: 24px;
   padding-right: 24px;
 }
@@ -315,14 +346,14 @@
   font-size: 44px;
   font-weight: 800;
   letter-spacing: -0.04em;
-  color: #000000;
+  color: #ffffff;
 }
 
 .eventMonth {
   font-family: var(--font-mono);
   font-size: 12px;
-  font-weight: 600;
-  color: rgba(0, 0, 0, 0.6);
+  font-weight: 700;
+  color: #c084fc;
   text-transform: uppercase;
   margin-top: 4px;
 }
@@ -337,7 +368,7 @@
   font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 600;
-  color: rgba(0, 0, 0, 0.55);
+  color: #c084fc;
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
@@ -348,12 +379,12 @@
   font-weight: 700;
   letter-spacing: -0.02em;
   margin: 0;
-  color: #000000;
+  color: #ffffff;
 }
 
 .eventDesc {
   font-size: 13.5px;
-  color: rgba(0, 0, 0, 0.65);
+  color: #a1a1aa;
   margin: 0;
   line-height: 1.5;
 }
@@ -362,10 +393,16 @@
   font-family: var(--font-mono);
   font-size: 12.5px;
   font-weight: 600;
-  color: #000000;
+  color: #ffffff;
   display: inline-flex;
   align-items: center;
   gap: 4px;
+  transition: transform 0.2s ease;
+}
+
+.eventRow:hover .eventLink {
+  transform: translateX(4px);
+  color: #ffffff;
 }
 
 /* ── Section 04: Connect ─────────────────────────────────────────────────── */
@@ -383,13 +420,13 @@
   letter-spacing: -0.04em;
   line-height: 1.05;
   margin: 0 0 18px;
-  color: #000000;
+  color: #ffffff;
 }
 
 .connectDesc {
   font-size: 16px;
   line-height: 1.6;
-  color: rgba(0, 0, 0, 0.7);
+  color: #a1a1aa;
   max-width: 540px;
   margin: 0;
 }
@@ -405,8 +442,8 @@
   font-family: var(--font-mono);
   font-size: 14px;
   font-weight: 600;
-  background: #000000;
-  color: #ffffff;
+  background: #ffffff;
+  color: #000000;
   padding: 16px 28px;
   border-radius: 8px;
   text-decoration: none;
@@ -417,7 +454,7 @@
 }
 
 .connectEmailBtn:hover {
-  background: #222222;
+  background: rgba(255, 255, 255, 0.85);
   transform: translateY(-2px);
 }
 
@@ -425,17 +462,19 @@
   font-family: var(--font-mono);
   font-size: 13.5px;
   font-weight: 600;
-  color: #000000;
+  color: #ffffff;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   gap: 6px;
   padding: 8px 0;
-  border-bottom: 1px solid #000000;
+  border-bottom: 1px solid #c084fc;
+  transition: opacity 0.2s ease, color 0.2s ease;
 }
 
 .connectSignInBtn:hover {
-  opacity: 0.7;
+  color: #c084fc;
+  opacity: 0.85;
 }
 
 /* ── Responsive ──────────────────────────────────────────────────────────── */
@@ -450,7 +489,7 @@
     padding: 20px 8px;
   }
 
-  .eventRow > :last-child {
+  .eventRow> :last-child {
     grid-column: 2;
   }
 

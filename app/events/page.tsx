@@ -198,12 +198,12 @@ export default function EventsPage() {
         filter === "all"
           ? true
           : filter === "upcoming"
-          ? item.status === "upcoming"
-          : filter === "past"
-          ? item.status === "past"
-          : filter === "news"
-          ? item.status === "news"
-          : true;
+            ? item.status === "upcoming"
+            : filter === "past"
+              ? item.status === "past"
+              : filter === "news"
+                ? item.status === "news"
+                : true;
 
       const q = search.toLowerCase().trim();
       const matchesSearch =
@@ -234,10 +234,6 @@ export default function EventsPage() {
             </div>
             <div className={styles.headerMeta}>
               <span>DIR / 2026</span>
-              <span>·</span>
-              <span>FREE &amp; OPEN ACCESS</span>
-              <span>·</span>
-              <span>INVERTED POLARITY</span>
             </div>
           </div>
 
@@ -367,9 +363,8 @@ export default function EventsPage() {
                 role="tab"
                 aria-selected={filter === "all"}
                 onClick={() => setFilter("all")}
-                className={`${styles.filterPill} ${
-                  filter === "all" ? styles.filterPillActive : ""
-                }`}
+                className={`${styles.filterPill} ${filter === "all" ? styles.filterPillActive : ""
+                  }`}
               >
                 [ALL GATHERINGS]
               </button>
@@ -378,9 +373,8 @@ export default function EventsPage() {
                 role="tab"
                 aria-selected={filter === "upcoming"}
                 onClick={() => setFilter("upcoming")}
-                className={`${styles.filterPill} ${
-                  filter === "upcoming" ? styles.filterPillActive : ""
-                }`}
+                className={`${styles.filterPill} ${filter === "upcoming" ? styles.filterPillActive : ""
+                  }`}
               >
                 [UPCOMING SALONS]
               </button>
@@ -389,9 +383,8 @@ export default function EventsPage() {
                 role="tab"
                 aria-selected={filter === "past"}
                 onClick={() => setFilter("past")}
-                className={`${styles.filterPill} ${
-                  filter === "past" ? styles.filterPillActive : ""
-                }`}
+                className={`${styles.filterPill} ${filter === "past" ? styles.filterPillActive : ""
+                  }`}
               >
                 [ARCHIVED REVIEWS]
               </button>
@@ -400,9 +393,8 @@ export default function EventsPage() {
                 role="tab"
                 aria-selected={filter === "news"}
                 onClick={() => setFilter("news")}
-                className={`${styles.filterPill} ${
-                  filter === "news" ? styles.filterPillActive : ""
-                }`}
+                className={`${styles.filterPill} ${filter === "news" ? styles.filterPillActive : ""
+                  }`}
               >
                 [DISPATCHES &amp; NEWS]
               </button>
@@ -411,9 +403,8 @@ export default function EventsPage() {
                 role="tab"
                 aria-selected={filter === "socials"}
                 onClick={() => setFilter("socials")}
-                className={`${styles.filterPill} ${
-                  filter === "socials" ? styles.filterPillActive : ""
-                }`}
+                className={`${styles.filterPill} ${filter === "socials" ? styles.filterPillActive : ""
+                  }`}
               >
                 [COMMUNITY &amp; SOCIALS]
               </button>
@@ -477,8 +468,8 @@ export default function EventsPage() {
                       {ev.status === "upcoming"
                         ? "● UPCOMING SESSION"
                         : ev.status === "past"
-                        ? "○ ARCHIVED PROCEEDINGS"
-                        : "◆ OFFICIAL DISPATCH"}
+                          ? "○ ARCHIVED PROCEEDINGS"
+                          : "◆ OFFICIAL DISPATCH"}
                     </span>
                     <span className={styles.cardAction}>
                       <span>{ev.actionText}</span>

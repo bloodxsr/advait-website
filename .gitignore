@@ -9,10 +9,12 @@
 
 # testing
 /coverage
+.nyc_output
 
 # next.js
 /.next/
 /out/
+.turbo/
 
 # production
 /build
@@ -24,6 +26,10 @@ dist/
 Thumbs.db
 desktop.ini
 *.lnk
+*.tmp
+*.bak
+*.cache
+.directory
 
 # debug logs
 npm-debug.log*
@@ -49,10 +55,12 @@ next-env.d.ts
 # IDEs & Editors
 .vscode/
 .idea/
+.obsidian/
 *.swp
 *.swo
 *.sublime-project
 *.sublime-workspace
+*.code-workspace
 
 # Local automation & media scrapers
 *.ps1
