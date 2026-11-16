@@ -43,27 +43,6 @@ const DIVISIONS = [
   },
 ];
 
-const LEADERBOARD_PREVIEW = [
-  {
-    rank: "#01",
-    name: "Devin Reyes",
-    pr: "↳ Added distributed node consensus in AetherSwarm Engine",
-    points: "3,840 pts",
-  },
-  {
-    rank: "#02",
-    name: "Lyra Chen",
-    pr: "↳ Optimized Gaussian splatting shader pipeline for WebGPU",
-    points: "3,120 pts",
-  },
-  {
-    rank: "#03",
-    name: "Siddharth Rao",
-    pr: "↳ ZK-SNARK proof verifier circuit integration for ONNX",
-    points: "2,790 pts",
-  },
-];
-
 const EVENTS_PREVIEW = [
   {
     day: "28",
@@ -137,57 +116,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 03. Section 02: Contributor Leaderboard ────────────────────────── */}
-      <section className={styles.section} aria-label="Leaderboard Preview">
-        <div className={styles.sectionHeader}>
-          <div className={styles.sectionIndex}>
-            <span>[02]</span>
-            <span>LEADERBOARD / VERIFIED CONTRIBUTE</span>
-          </div>
-          <span className={styles.sectionMeta}>Live Karma · Merged Pull Requests</span>
-        </div>
-
-        <div className={styles.leaderboardCard}>
-          <div className={styles.leaderboardHeader}>
-            <div>
-              <span className={styles.leaderboardSubtitle}>
-                Open Source Contributions / 2026 Season
-              </span>
-              <h2 className={styles.leaderboardTitle}>Developer Leaderboard</h2>
-            </div>
-            <Link href="/leaderboard" className={styles.leaderboardBtn}>
-              Full Leaderboard [100+] →
-            </Link>
-          </div>
-
-          <div className={styles.leaderboardList}>
-            {LEADERBOARD_PREVIEW.map((item) => (
-              <div key={item.rank} className={styles.leaderboardRow}>
-                <div className={styles.leaderboardLeft}>
-                  <span className={styles.rankBadge}>{item.rank}</span>
-                  <div>
-                    <span className={styles.rowName}>{item.name}</span>
-                    <p className={styles.rowPr}>{item.pr}</p>
-                  </div>
-                </div>
-                <span className={styles.rowPoints}>{item.points}</span>
-              </div>
-            ))}
-          </div>
-
-          <div className={styles.leaderboardFooter}>
-            <span className={styles.leaderboardSubtitle}>
-              Points update continuously based on GitHub activity and verified code audits.
-            </span>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 04. Section 03: Upcoming Events ─────────────────────────────────── */}
+      {/* ── 03. Section 02: Upcoming Events ─────────────────────────────────── */}
       <section className={styles.section} aria-label="Events Calendar">
         <div className={styles.sectionHeader}>
           <div className={styles.sectionIndex}>
-            <span>[03]</span>
+            <span>[02]</span>
             <span>SALONS &amp; CALENDAR / 2026</span>
           </div>
           <span className={styles.sectionMeta}>Free &amp; Open Access</span>
@@ -219,11 +152,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 05. Section 04: Connect Desk ────────────────────────────────────── */}
+      {/* ── 04. Section 03: Connect Desk ────────────────────────────────────── */}
       <section className={styles.section} aria-label="Connect Desk">
         <div className={styles.sectionHeader}>
           <div className={styles.sectionIndex}>
-            <span>[04]</span>
+            <span>[03]</span>
             <span>CONNECT / COMMUNICATIONS DESK</span>
           </div>
           <span className={styles.sectionMeta}>Advait Collective</span>
