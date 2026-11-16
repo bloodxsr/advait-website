@@ -7,21 +7,23 @@ import styles from "./Header.module.css";
 
 const publicLinks = [
   { href: "/projects", label: "Projects", tag: "Artifacts", num: "01" },
-  { href: "/hall-of-flames", label: "Hall of Flames", tag: "Archive", num: "02" },
+  { href: "/hall-of-builders", label: "Hall of Builders", tag: "Leaderboard", num: "02" },
   { href: "/team", label: "Meet our Team", tag: "Stewardship", num: "03" },
-  { href: "/events", label: "Events", tag: "Gatherings", num: "04" },
-  { href: "/resources", label: "Resources", tag: "Library", num: "05" },
+  { href: "/hall-of-flames", label: "Hall of Flames", tag: "Archive", num: "04" },
+  { href: "/events", label: "Events", tag: "Gatherings", num: "05" },
+  { href: "/resources", label: "Resources", tag: "Library", num: "06" },
 ];
 
 const allLinks = [
   { href: "/projects", label: "Projects", tag: "Artifacts", num: "01" },
-  { href: "/hall-of-flames", label: "Hall of Flames", tag: "Archive", num: "02" },
+  { href: "/hall-of-builders", label: "Hall of Builders", tag: "Leaderboard", num: "02" },
   { href: "/team", label: "Meet our Team", tag: "Stewardship", num: "03" },
-  { href: "/events", label: "Events", tag: "Gatherings", num: "04" },
-  { href: "/resources", label: "Resources", tag: "Library", num: "05" },
-  { href: "/dashboard", label: "Dashboard", tag: "Personal", num: "06" },
-  { href: "/social", label: "Social Links", tag: "Network", num: "07" },
-  { href: "/admin", label: "Admin Portal", tag: "Admin", num: "08" },
+  { href: "/hall-of-flames", label: "Hall of Flames", tag: "Archive", num: "04" },
+  { href: "/events", label: "Events", tag: "Gatherings", num: "05" },
+  { href: "/resources", label: "Resources", tag: "Library", num: "06" },
+  { href: "/dashboard", label: "Dashboard", tag: "Personal", num: "07" },
+  { href: "/social", label: "Social Links", tag: "Network", num: "08" },
+  { href: "/admin", label: "Admin Portal", tag: "Admin", num: "09" },
 ];
 
 export function Header() {
@@ -166,7 +168,7 @@ export function Header() {
             </span>
           </div>
           <span className={styles.dropdownBadge}>
-            {isLoggedIn ? "[VERIFIED]" : "[05 ROUTES]"}
+            {isLoggedIn ? "[VERIFIED]" : "[06 ROUTES]"}
           </span>
         </div>
 

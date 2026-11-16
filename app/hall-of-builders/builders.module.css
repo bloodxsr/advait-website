@@ -1,234 +1,304 @@
 /* ==========================================================================
-   builders.module.css — Hall of Builders (Leaderboards & Dev Contributions)
+   builders.module.css — Swiss Architectural Editorial Theme
+   Warm stone grey backdrop (#96958f), deep carbon black typography (#000000),
+   monospaced indices, and precision architectural leaderboard roster.
    ========================================================================== */
 
 .page {
   min-height: 100vh;
-  padding: 85px 24px 100px;
-  background: #000000;
-  color: #ffffff;
+  padding: 100px max(24px, 3.5vw) 120px;
+  background: #96958f;
+  color: #000000;
   position: relative;
   z-index: 1;
+  user-select: text;
 }
 
-/* ── Hero Header ─────────────────────────────────────────────────────────── */
-.hero {
-  max-width: var(--max);
-  margin: 0 auto 36px;
-  padding: 20px 0 10px;
-}
-
-.heroInner {
+.container {
+  width: 100%;
+  max-width: min(1560px, calc(100vw - 48px));
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 60px;
 }
 
-.eyebrow {
+/* ── 00. Monumental Swiss Header ─────────────────────────────────────────── */
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding-bottom: 50px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.28);
+}
+
+.headerTop {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.headerIndex {
   font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #0a84ff;
+  color: #000000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.headerMeta {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: rgba(0, 0, 0, 0.65);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.titleRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  padding: 10px 0 6px;
+}
+
+.titleWrap {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
 }
 
 .title {
   margin: 0;
-  font-family: var(--font-brand), var(--font-system), sans-serif;
-  font-size: clamp(34px, 5vw, 54px);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  color: #ffffff;
+  font-family: var(--font-space), var(--font-brand), sans-serif;
+  font-size: clamp(42px, 7vw, 96px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  color: #000000;
+  text-transform: uppercase;
 }
 
-.subtitle {
+.registered {
+  font-family: var(--font-space), var(--font-brand), sans-serif;
+  font-size: clamp(16px, 2.5vw, 32px);
+  font-weight: 800;
+  color: #000000;
+}
+
+.versionTag {
+  font-family: var(--font-space), var(--font-brand), sans-serif;
+  font-size: clamp(28px, 5vw, 68px);
+  font-weight: 800;
+  font-style: italic;
+  letter-spacing: -0.05em;
+  color: #000000;
+}
+
+.yearTag {
+  font-family: var(--font-space), var(--font-brand), sans-serif;
+  font-size: clamp(28px, 5vw, 68px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: #000000;
+}
+
+.headerSummaryRow {
+  display: grid;
+  grid-template-columns: 1.8fr 1.2fr;
+  gap: 40px;
+  align-items: flex-start;
+  padding-top: 14px;
+}
+
+.headerSummary {
   margin: 0;
-  color: rgba(235, 235, 245, 0.65);
-  font-size: 16px;
-  max-width: 680px;
-  line-height: 1.5;
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: rgba(0, 0, 0, 0.85);
+  max-width: 760px;
 }
 
-.heroActions {
+.monoIndex {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  margin-right: 8px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.statsRoster {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-top: 10px;
+  justify-content: flex-end;
+  gap: 16px;
   flex-wrap: wrap;
 }
 
-.backBtn {
-  padding: 8px 16px;
-  border-radius: 10px;
-  background: rgba(118, 118, 128, 0.16);
-  border: 1px solid rgba(84, 84, 88, 0.4);
-  color: rgba(235, 235, 245, 0.7);
-  font-size: 12.5px;
-  font-weight: 500;
-  text-decoration: none;
-  transition: all 0.15s ease;
-}
-
-.backBtn:hover {
-  background: rgba(118, 118, 128, 0.28);
-  color: #ffffff;
-}
-
-.contributeBtn {
-  padding: 8px 18px;
-  border-radius: 10px;
-  background: rgba(10, 132, 255, 0.15);
-  border: 1px solid rgba(10, 132, 255, 0.35);
-  color: #0a84ff;
-  font-size: 12.5px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.2s ease;
-}
-
-.contributeBtn:hover {
-  background: #0a84ff;
-  color: #ffffff;
-}
-
-/* ==========================================================================
-   Featured Card (Matching user sketch: "Hall of builders")
-   ========================================================================== */
-
-.featuredSection {
-  max-width: var(--max);
-  margin: 0 auto;
-}
-
-.featuredCard {
-  background: rgba(22, 22, 26, 0.85);
-  border: 1px solid rgba(84, 84, 88, 0.45);
-  border-radius: 24px;
-  padding: 32px 34px;
-  backdrop-filter: blur(35px);
-  -webkit-backdrop-filter: blur(35px);
-  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.7);
+.statBox {
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  padding: 12px 18px;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 6px;
+  min-width: 110px;
 }
 
-.cardTop {
+.statNum {
+  font-family: var(--font-space), var(--font-brand), sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  color: #000000;
+  line-height: 1;
+}
+
+.statLabel {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: rgba(0, 0, 0, 0.65);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 4px;
+}
+
+/* ── 01. Search & Filter Controls ────────────────────────────────────────── */
+.controlsSection {
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.controlsRow {
+  display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 20px;
   flex-wrap: wrap;
-  padding-bottom: 18px;
-  border-bottom: 1px solid rgba(84, 84, 88, 0.3);
 }
 
-.cardHeaderInfo {
+.searchWrap {
+  flex: 1;
+  min-width: 320px;
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 6px;
+  transition: all 0.2s ease;
 }
 
-.cardHeading {
-  margin: 0;
-  font-family: var(--font-brand), var(--font-system), sans-serif;
-  font-size: 26px;
+.searchWrap:focus-within {
+  border-color: #000000;
+  background: rgba(0, 0, 0, 0.07);
+}
+
+.searchPrompt {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
   font-weight: 700;
-  color: #ffffff;
-  letter-spacing: -0.02em;
+  color: #000000;
+  white-space: nowrap;
 }
 
-.cardLead {
-  margin: 0;
-  font-size: 14px;
-  color: rgba(235, 235, 245, 0.65);
+.searchInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: #000000;
+}
+
+.searchInput::placeholder {
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.clearSearchBtn {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  background: transparent;
+  border: none;
+  color: rgba(0, 0, 0, 0.65);
+  cursor: pointer;
+  padding: 2px 6px;
+}
+
+.clearSearchBtn:hover {
+  color: #000000;
 }
 
 .tabsRow {
   display: flex;
-  gap: 6px;
-  background: rgba(18, 18, 20, 0.6);
-  padding: 4px;
-  border-radius: 12px;
-  border: 1px solid rgba(84, 84, 88, 0.3);
+  align-items: center;
+  gap: 8px;
 }
 
 .tabBtn {
-  padding: 6px 14px;
-  border-radius: 8px;
-  background: transparent;
-  border: none;
-  color: rgba(235, 235, 245, 0.55);
-  font-size: 12.5px;
-  font-weight: 500;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 10px 16px;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  background: rgba(0, 0, 0, 0.03);
+  color: rgba(0, 0, 0, 0.7);
   cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.tabBtn:hover {
-  color: #ffffff;
-}
-
-.tabActive {
-  background: rgba(118, 118, 128, 0.25);
-  color: #0a84ff;
-  font-weight: 600;
-}
-
-/* Search bar */
-.searchBar {
-  position: relative;
-  display: flex;
-  align-items: center;
-  width: 100%;
-}
-
-.searchIcon {
-  position: absolute;
-  left: 16px;
-  color: rgba(235, 235, 245, 0.45);
-  pointer-events: none;
-}
-
-.searchInput {
-  width: 100%;
-  height: 46px;
-  padding: 0 44px 0 46px;
-  border-radius: 12px;
-  background: rgba(18, 18, 22, 0.85);
-  border: 1px solid rgba(84, 84, 88, 0.4);
-  color: #ffffff;
-  font-family: inherit;
-  font-size: 13.5px;
-  outline: none;
   transition: all 0.2s ease;
 }
 
-.searchInput::placeholder {
-  color: rgba(235, 235, 245, 0.45);
+.tabBtn:hover {
+  background: rgba(0, 0, 0, 0.08);
+  color: #000000;
 }
 
-.searchInput:focus {
-  border-color: #0a84ff;
-  box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.2);
-}
-
-.clearBtn {
-  position: absolute;
-  right: 12px;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: rgba(118, 118, 128, 0.3);
-  border: none;
+.tabBtnActive {
+  background: #000000;
   color: #ffffff;
-  font-size: 14px;
-  cursor: pointer;
+  border-color: #000000;
 }
 
-/* ── Ranked Builders List ────────────────────────────────────────────────── */
-.buildersList {
+.tabBtnActive:hover {
+  background: #000000;
+  color: #ffffff;
+}
+
+/* ── 02. Builders Roster (Leaderboard Grid) ───────────────────────────────── */
+.rosterSection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tableHeader {
+  display: grid;
+  grid-template-columns: 80px 280px 1fr 220px;
+  gap: 20px;
+  padding: 12px 20px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: rgba(0, 0, 0, 0.6);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+  text-transform: uppercase;
+}
+
+.rosterList {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -236,203 +306,382 @@
 
 .builderRow {
   display: grid;
-  grid-template-columns: 60px 1fr auto;
+  grid-template-columns: 80px 280px 1fr 220px;
   align-items: center;
   gap: 20px;
-  padding: 16px 20px;
-  background: rgba(18, 18, 20, 0.65);
-  border: 1px solid rgba(84, 84, 88, 0.3);
-  border-radius: 14px;
+  padding: 18px 20px;
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  border-radius: 6px;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  color: #000000;
 }
 
+/* Swiss Inversion on Hover */
 .builderRow:hover {
-  background: rgba(30, 30, 34, 0.8);
-  border-color: rgba(120, 120, 128, 0.55);
-  transform: translateY(-1px);
+  background: #000000;
+  border-color: #000000;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.3);
 }
 
+.builderRow:hover .rankBadge,
+.builderRow:hover .builderName,
+.builderRow:hover .handleTag,
+.builderRow:hover .roleSubtext,
+.builderRow:hover .prDescText,
+.builderRow:hover .repoBadge,
+.builderRow:hover .langBadge,
+.builderRow:hover .pointsNumber,
+.builderRow:hover .prsNumber,
+.builderRow:hover .builderBadge,
+.builderRow:hover .arrowIcon {
+  color: #ffffff;
+}
+
+.builderRow:hover .divPill {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+}
+
+.builderRow:hover .repoBadge {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Rank Column */
 .rankCol {
   display: flex;
   align-items: center;
+  gap: 6px;
 }
 
-.rankNum {
+.rankBadge {
+  font-family: var(--font-space), var(--font-brand), sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: #000000;
+}
+
+.podiumBadge {
   font-family: var(--font-mono);
-  font-size: 18px;
+  font-size: 9.5px;
   font-weight: 700;
-  color: #5ac8fa;
-  letter-spacing: -0.02em;
+  background: #000000;
+  color: #ffffff;
+  padding: 2px 5px;
+  border-radius: 3px;
 }
 
-.devCol {
+.builderRow:hover .podiumBadge {
+  background: #ffffff;
+  color: #000000;
+}
+
+/* Builder Dossier Column */
+.builderCol {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nameRow {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.builderName {
+  font-family: var(--font-space), var(--font-brand), sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  color: #000000;
+  letter-spacing: -0.01em;
+}
+
+.handleTag {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.divPill {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  color: #000000;
+}
+
+.roleSubtext {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+/* PR Deliverable Column */
+.prCol {
   display: flex;
   flex-direction: column;
   gap: 6px;
   min-width: 0;
 }
 
-.devNameRow {
+.prDescRow {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
 }
 
-.devName {
-  font-size: 15px;
-  font-weight: 600;
-  color: #ffffff;
-}
-
-.devHandle {
+.arrowIcon {
   font-family: var(--font-mono);
-  font-size: 12px;
-  color: rgba(235, 235, 245, 0.45);
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.5);
+  flex-shrink: 0;
 }
 
-.devBadge {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 600;
-  color: #30d158;
-  background: rgba(48, 209, 88, 0.14);
-  padding: 2px 7px;
-  border-radius: 4px;
+.prDescText {
+  font-size: 13px;
+  line-height: 1.45;
+  color: rgba(0, 0, 0, 0.85);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.recentPrRow {
+.repoMeta {
   display: flex;
   align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
-  font-size: 12.5px;
 }
 
-.gitIcon {
-  color: rgba(235, 235, 245, 0.4);
-  font-weight: 700;
-}
-
-.prDesc {
-  color: rgba(235, 235, 245, 0.7);
-}
-
-.repoTag {
+.repoBadge {
   font-family: var(--font-mono);
-  font-size: 11px;
-  color: #0a84ff;
-  background: rgba(10, 132, 255, 0.12);
-  padding: 2px 8px;
-  border-radius: 4px;
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  color: #000000;
 }
 
-.statsCol {
+.langBadge {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+/* Metrics Column */
+.metricsCol {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 3px;
-  flex-shrink: 0;
 }
 
-.pointsText {
-  font-family: var(--font-brand), var(--font-system), sans-serif;
-  font-size: 17px;
-  font-weight: 700;
-  color: #ffffff;
+.pointsNumber {
+  font-family: var(--font-space), var(--font-brand), sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #000000;
 }
 
-.prsCountText {
+.prsNumber {
   font-family: var(--font-mono);
   font-size: 11px;
-  color: rgba(235, 235, 245, 0.4);
+  color: rgba(0, 0, 0, 0.65);
 }
 
-/* ── Card Footer Action ──────────────────────────────────────────────────── */
-.cardFooter {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding-top: 16px;
-  border-top: 1px solid rgba(84, 84, 88, 0.3);
-  flex-wrap: wrap;
+.builderBadge {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: rgba(0, 0, 0, 0.5);
+  text-transform: uppercase;
 }
 
-.footerNote {
-  font-size: 12px;
-  color: rgba(235, 235, 245, 0.45);
-}
-
-.visitBtn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 24px;
-  border-radius: 12px;
-  background: #0a84ff;
-  border: none;
-  color: #ffffff;
-  font-size: 13.5px;
-  font-weight: 600;
-  text-decoration: none;
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 14px rgba(10, 132, 255, 0.3);
-}
-
-.visitBtn:hover {
-  background: #0071e3;
-  transform: translateY(-1px);
-}
-
-.empty {
-  padding: 40px;
-  text-align: center;
-  color: rgba(235, 235, 245, 0.5);
+/* Empty State */
+.emptyState {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+  padding: 60px 20px;
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px dashed rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+  text-align: center;
+}
+
+.emptyPrompt {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: #000000;
+}
+
+.emptyText {
+  margin: 0;
+  font-size: 13.5px;
+  color: rgba(0, 0, 0, 0.65);
 }
 
 .resetBtn {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 700;
   padding: 6px 14px;
-  border-radius: 8px;
-  background: rgba(118, 118, 128, 0.2);
-  border: 1px solid rgba(84, 84, 88, 0.4);
+  background: #000000;
   color: #ffffff;
-  font-size: 12px;
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
+  margin-top: 6px;
 }
 
-@media (max-width: 768px) {
-  .featuredCard {
-    padding: 22px 18px;
+/* ── 03. Info Section ────────────────────────────────────────────────────── */
+.infoSection {
+  margin-top: 20px;
+}
+
+.infoCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  padding: 36px 40px;
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.28);
+  border-radius: 6px;
+  flex-wrap: wrap;
+}
+
+.infoLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 780px;
+}
+
+.infoIndex {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #000000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.infoHeading {
+  margin: 0;
+  font-family: var(--font-space), var(--font-brand), sans-serif;
+  font-size: clamp(20px, 2.4vw, 28px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #000000;
+}
+
+.infoDesc {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.infoRight {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 220px;
+}
+
+.submitPrBtn {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 12px 20px;
+  background: #000000;
+  color: #ffffff;
+  border-radius: 4px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.submitPrBtn:hover {
+  background: #222222;
+  transform: translateY(-2px);
+}
+
+.exploreProjectsBtn {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 10px 16px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  color: #000000;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.exploreProjectsBtn:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+/* ── Responsiveness ──────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .tableHeader {
+    display: none;
   }
 
   .builderRow {
-    grid-template-columns: 40px 1fr;
-    gap: 12px;
-  }
-
-  .statsCol {
-    grid-column: 2;
+    grid-template-columns: 1fr;
+    gap: 14px;
     align-items: flex-start;
-    margin-top: 4px;
   }
 
-  .cardTop {
+  .metricsCol {
+    align-items: flex-start;
+  }
+
+  .headerSummaryRow {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .statsRoster {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding: 85px 16px 80px;
+  }
+
+  .titleRow {
     flex-direction: column;
-    align-items: flex-start;
+    gap: 8px;
   }
 
-  .cardFooter {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .visitBtn {
-    width: 100%;
+  .infoCard {
+    padding: 24px;
   }
 }

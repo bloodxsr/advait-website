@@ -119,15 +119,15 @@ export function ArchitecturalHero() {
             <Link href="/resources" className={styles.dirItem}>
               <span className={styles.dirNum}>[2]</span> Research vault &amp; papers ↗
             </Link>
+            <Link href="/hall-of-builders" className={styles.dirItem}>
+              <span className={styles.dirNum}>[3]</span> Hall of builders (Leaderboard) ↗
+            </Link>
             <Link href="/team" className={styles.dirItem}>
-              <span className={styles.dirNum}>[3]</span> Stewardship &amp; team roster ↗
+              <span className={styles.dirNum}>[4]</span> Stewardship &amp; team roster ↗
             </Link>
             <Link href="/events" className={styles.dirItem}>
-              <span className={styles.dirNum}>[4]</span> Salons, workshops &amp; events ↗
+              <span className={styles.dirNum}>[5]</span> Salons, workshops &amp; events ↗
             </Link>
-            <a href="#manifesto" className={styles.dirItem}>
-              <span className={styles.dirNum}>[5]</span> Collective working groups ↓
-            </a>
             <Link href="/hall-of-flames" className={styles.dirItem}>
               <span className={styles.dirNum}>[6]</span> Hall of flames selected work ↗
             </Link>
