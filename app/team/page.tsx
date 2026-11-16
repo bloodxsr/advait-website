@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import styles from "./team.module.css";
 
@@ -135,6 +135,70 @@ function TeamAvatar({
 }
 
 export default function TeamPage() {
+  const [members, setMembers] = useState<any[]>([]);
+  const [divisionsList, setDivisionsList] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const [memRes, divRes] = await Promise.all([
+          fetch("/api/members"),
+          fetch("/api/divisions"),
+        ]);
+        const memData = await memRes.json();
+        const divData = await divRes.json();
+
+        if (memData.members) setMembers(memData.members);
+        if (divData.divisions) setDivisionsList(divData.divisions);
+      } catch (err) {
+        console.error("Failed to load team data:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadData();
+  }, []);
+
+  // Leader from DB (or fallback to seeded admin)
+  const dbLeader = members.find((m) => m.isLeader || m.role === "admin");
+  const leaderObj = dbLeader
+    ? {
+        name: dbLeader.name,
+        initials: dbLeader.name.split(" ").map((w: string) => w[0]).join("").slice(0, 2).toUpperCase(),
+        role: "Club Leader",
+        titleBadge: "EXECUTIVE STEWARD",
+        yearDept: `${dbLeader.year || "Term"} · ${dbLeader.department || "AI & Distributed Systems"}`,
+        term: "Active Term 2026",
+        bio: dbLeader.bio || CLUB_LEADER.bio,
+        image: dbLeader.avatarUrl || CLUB_LEADER.image,
+        oversight: ["RED", "OPS", "EVED", "Creatives", "GameVeda"],
+      }
+    : CLUB_LEADER;
+
+  // Build division leaders: match real division lead from DB or division info
+  const leadersList = divisionsList.length > 0
+    ? divisionsList.map((div, i) => {
+        const leadUser = members.find(
+          (m) => m.divisionSlug === div.slug && (m.isDivisionLead || m.role === "user")
+        );
+        return {
+          id: div.id,
+          num: String(i + 1).padStart(2, "0"),
+          name: leadUser ? leadUser.name : `Lead · ${div.slug}`,
+          initials: leadUser
+            ? leadUser.name.split(" ").map((w: string) => w[0]).join("").slice(0, 2).toUpperCase()
+            : div.slug.slice(0, 2).toUpperCase(),
+          role: "Division Lead",
+          divisionCode: div.slug,
+          divisionName: div.name,
+          yearDept: leadUser?.year ? `${leadUser.year} · ${leadUser.department || "Engineering"}` : "Active Term · 2026",
+          desc: div.desc,
+          deliverable: `${div.slug} Core Artifact`,
+          image: leadUser?.avatarUrl || DIVISION_LEADERS[i % DIVISION_LEADERS.length]?.image,
+        };
+      })
+    : DIVISION_LEADERS;
   return (
     <main className={styles.page}>
       <div className={styles.container}>
@@ -204,9 +268,9 @@ export default function TeamPage() {
           <div className={styles.leaderCard}>
             <div className={styles.leaderMedia}>
               <TeamAvatar
-                src={CLUB_LEADER.image}
-                alt={CLUB_LEADER.name}
-                initials={CLUB_LEADER.initials}
+                src={leaderObj.image}
+                alt={leaderObj.name}
+                initials={leaderObj.initials}
                 className={styles.leaderAvatar}
               />
               <div className={styles.mediaMeta}>
@@ -220,23 +284,23 @@ export default function TeamPage() {
                 <div>
                   <div className={styles.badgeRow}>
                     <span className={styles.roleBadge}>
-                      {CLUB_LEADER.titleBadge}
+                      {leaderObj.titleBadge}
                     </span>
-                    <span className={styles.termBadge}>{CLUB_LEADER.term}</span>
+                    <span className={styles.termBadge}>{leaderObj.term}</span>
                   </div>
-                  <h2 className={styles.leaderName}>{CLUB_LEADER.name}</h2>
-                  <p className={styles.leaderDept}>{CLUB_LEADER.yearDept}</p>
+                  <h2 className={styles.leaderName}>{leaderObj.name}</h2>
+                  <p className={styles.leaderDept}>{leaderObj.yearDept}</p>
                 </div>
               </div>
 
-              <p className={styles.leaderBio}>{CLUB_LEADER.bio}</p>
+              <p className={styles.leaderBio}>{leaderObj.bio}</p>
 
               <div className={styles.oversightBlock}>
                 <span className={styles.oversightTitle}>
                   Divisions Under Oversight:
                 </span>
                 <div className={styles.oversightBadges}>
-                  {CLUB_LEADER.oversight.map((code) => (
+                  {leaderObj.oversight.map((code) => (
                     <span key={code} className={styles.oversightPill}>
                       [{code}]
                     </span>

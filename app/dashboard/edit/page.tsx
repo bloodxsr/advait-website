@@ -42,8 +42,42 @@ export default function EditProfilePage() {
   const [showAddCert, setShowAddCert] = useState(false);
 
   useEffect(() => {
-    const loaded = loadProfile();
-    setProfile(loaded);
+    let isMounted = true;
+    async function fetchMe() {
+      try {
+        const res = await fetch("/api/users/me");
+        if (res.ok) {
+          const data = await res.json();
+          const p = data.profile;
+          if (p && isMounted) {
+            setProfile((prev) => ({
+              ...prev,
+              name: p.name || prev.name,
+              email: p.email || prev.email,
+              headline: p.headline || prev.headline,
+              year: p.year || prev.year,
+              section: p.section || prev.section,
+              department: p.department || prev.department,
+              bio: p.bio || prev.bio,
+              techTags: p.techStack && p.techStack.length > 0 ? p.techStack : prev.techTags,
+              github: p.github || prev.github,
+              linkedin: p.linkedin || prev.linkedin,
+              portfolio: p.portfolio || prev.portfolio,
+            }));
+          }
+        } else {
+          const loaded = loadProfile();
+          if (isMounted) setProfile(loaded);
+        }
+      } catch {
+        const loaded = loadProfile();
+        if (isMounted) setProfile(loaded);
+      }
+    }
+    fetchMe();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const handleAddTag = (e: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent) => {
@@ -125,8 +159,28 @@ export default function EditProfilePage() {
     });
   };
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
+    try {
+      await fetch("/api/users/me", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: profile.name,
+          headline: profile.headline,
+          bio: profile.bio,
+          year: profile.year,
+          section: profile.section,
+          department: profile.department,
+          techStack: profile.techTags,
+          github: profile.github,
+          linkedin: profile.linkedin,
+          portfolio: profile.portfolio,
+        }),
+      });
+    } catch (err) {
+      console.error("Save error:", err);
+    }
     saveProfile(profile);
     setSaveSuccess(true);
     setTimeout(() => {
@@ -163,7 +217,7 @@ export default function EditProfilePage() {
               Cancel
             </Link>
             <button onClick={handleSave} className={styles.saveBtn}>
-              {saveSuccess ? "Saved! ✓" : "Save Changes"}
+              {saveSuccess ? "Saved" : "Save Changes"}
             </button>
           </div>
         </header>
@@ -614,7 +668,7 @@ export default function EditProfilePage() {
                   Cancel
                 </Link>
                 <button type="submit" className={styles.saveBtn}>
-                  {saveSuccess ? "Saved! ✓" : "Save Changes"}
+                  {saveSuccess ? "Saved" : "Save Changes"}
                 </button>
               </div>
             </div>

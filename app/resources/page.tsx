@@ -22,105 +22,6 @@ interface SubmissionItem {
   status: "Pending" | "Approved" | "Rejected";
 }
 
-const DEFAULT_RESOURCES: ResourceItem[] = [
-  {
-    id: "1",
-    num: "01",
-    title: "The Missing Semester of Your CS Education",
-    desc: "Crucial practical computing tools, shell automation, and systems debugging rarely taught in university courses.",
-    recommender: "Aditya Ray",
-    topic: "Systems",
-    url: "https://missing.csail.mit.edu/",
-  },
-  {
-    id: "2",
-    num: "02",
-    title: "Designing Data-Intensive Applications",
-    desc: "The definitive guide to distributed architectures, consensus algorithms, replication logs, and storage engines.",
-    recommender: "Devin Reyes",
-    topic: "Architecture",
-    url: "https://dataintensive.net/",
-  },
-  {
-    id: "3",
-    num: "03",
-    title: "Stanford CS231n: Deep Learning for Computer Vision",
-    desc: "Comprehensive neural network foundations, backpropagation calculus, and deep generative vision pipelines.",
-    recommender: "Lyra Chen",
-    topic: "AI",
-    url: "https://cs231n.stanford.edu/",
-  },
-  {
-    id: "4",
-    num: "04",
-    title: "Crafting Interpreters & Compiler Engineering",
-    desc: "A hands-on journey through scanning, parsing, AST generation, bytecode VMs, and garbage collection mechanisms.",
-    recommender: "Mira Chen",
-    topic: "Research",
-    url: "https://craftinginterpreters.com/",
-  },
-  {
-    id: "5",
-    num: "05",
-    title: "Zero-Knowledge Proofs: MOOC & Cryptographic Foundations",
-    desc: "Modern zk-SNARK constructions, arithmetic circuits, R1CS constraints, and cryptographic verifier protocols.",
-    recommender: "Siddharth Rao",
-    topic: "Research",
-    url: "https://zk-learning.org/",
-  },
-  {
-    id: "6",
-    num: "06",
-    title: "Operating Systems: Three Easy Pieces (OSTEP)",
-    desc: "Virtualization, concurrency, and persistence in operating systems with clean, readable prose and runnable code.",
-    recommender: "Bivash Kumar",
-    topic: "Systems",
-    url: "https://pages.cs.wisc.edu/~remzi/OSTEP/",
-  },
-  {
-    id: "7",
-    num: "07",
-    title: "Refactoring UI & Systems Design",
-    desc: "Practical UI/UX design heuristics for developers building polished developer tools and software interfaces.",
-    recommender: "Isha Verma",
-    topic: "Design",
-    url: "https://www.refactoringui.com/",
-  },
-  {
-    id: "8",
-    num: "08",
-    title: "The Architecture of Open Source Applications (AOSA)",
-    desc: "In-depth case studies on real-world open source systems, from git and LLVM to nginx and Berkeley DB.",
-    recommender: "Ananya Sharma",
-    topic: "Open Source",
-    url: "https://aosabook.org/",
-  },
-];
-
-const DEFAULT_SUBMISSIONS: SubmissionItem[] = [
-  {
-    id: "sub-1",
-    title: "MIT 6.824: Distributed Systems Engineering",
-    topic: "Systems",
-    date: "NOV 12, 2026",
-    status: "Pending",
-  },
-  {
-    id: "sub-2",
-    title: "Rust for Systems Programmers (Trifecta Labs)",
-    topic: "Systems",
-    date: "OCT 29, 2026",
-    status: "Approved",
-  },
-  {
-    id: "sub-3",
-    title: "WebGPU Explainer & WGSL Fundamentals",
-    topic: "AI",
-    date: "OCT 15, 2026",
-    status: "Approved",
-  },
-];
-
 const TOPICS = [
   "All",
   "Systems",
@@ -135,15 +36,57 @@ export default function ResourcesPage() {
   const [activeTopic, setActiveTopic] = useState("All");
   const [search, setSearch] = useState("");
   const [submissionsStatus, setSubmissionsStatus] = useState<"All" | "Pending" | "Approved" | "Rejected">("All");
-  const [submissions, setSubmissions] = useState<SubmissionItem[]>(DEFAULT_SUBMISSIONS);
+  const [resourcesList, setResourcesList] = useState<ResourceItem[]>([]);
+  const [submissions, setSubmissions] = useState<SubmissionItem[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [loading, setLoading] = useState(true);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/auth/session")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.user?.role === "admin") {
+          setIsAdmin(true);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   // Form state
   const [newTitle, setNewTitle] = useState("");
   const [newUrl, setNewUrl] = useState("");
   const [newTopic, setNewTopic] = useState("Systems");
   const [newDesc, setNewDesc] = useState("");
+
+  const loadResources = async () => {
+    try {
+      const res = await fetch("/api/resources");
+      if (res.ok) {
+        const data = await res.json();
+        const items = (data.resources || []).map((r: any, idx: number) => ({
+          id: r.id,
+          num: String(idx + 1).padStart(2, "0"),
+          title: r.title,
+          desc: r.description || "Advait curated educational resource.",
+          recommender: r.submitterName || "Advait Collective",
+          topic: r.category || "Systems",
+          url: r.link,
+        }));
+        setResourcesList(items);
+      }
+    } catch (err) {
+      console.error("Failed to fetch resources:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadResources();
+  }, []);
 
   // Hotkey "/" for fast search
   useEffect(() => {
@@ -159,7 +102,7 @@ export default function ResourcesPage() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  // Sync submissions from localStorage
+  // Sync user submissions from localStorage cache
   useEffect(() => {
     try {
       const saved = localStorage.getItem("advait_user_submissions");
@@ -169,32 +112,68 @@ export default function ResourcesPage() {
     } catch {}
   }, []);
 
-  const handleRecommendSubmit = (e: React.FormEvent) => {
+  const handleRecommendSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newTitle.trim()) return;
+    if (!newTitle.trim() || !newUrl.trim()) return;
 
-    const newSub: SubmissionItem = {
-      id: `sub-${Date.now()}`,
-      title: newTitle.trim(),
-      topic: newTopic,
-      date: "JUST NOW",
-      status: "Pending",
-    };
-
-    const updated = [newSub, ...submissions];
-    setSubmissions(updated);
+    setSubmitting(true);
     try {
-      localStorage.setItem("advait_user_submissions", JSON.stringify(updated));
-    } catch {}
+      const res = await fetch("/api/resources", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: newTitle.trim(),
+          link: newUrl.trim(),
+          category: newTopic,
+          description: newDesc.trim() || undefined,
+          tags: [newTopic],
+        }),
+      });
 
-    setNewTitle("");
-    setNewUrl("");
-    setNewDesc("");
-    setIsModalOpen(false);
+      if (res.ok) {
+        const data = await res.json();
+        const newSub: SubmissionItem = {
+          id: data.resource?.id || `sub-${Date.now()}`,
+          title: newTitle.trim(),
+          topic: newTopic,
+          date: "JUST NOW",
+          status: "Pending",
+        };
+
+        const updated = [newSub, ...submissions];
+        setSubmissions(updated);
+        try {
+          localStorage.setItem("advait_user_submissions", JSON.stringify(updated));
+        } catch {}
+
+        setNewTitle("");
+        setNewUrl("");
+        setNewDesc("");
+        setIsModalOpen(false);
+        if (isAdmin) {
+          alert("Resource published directly to Advait library!");
+          await loadResources();
+        } else {
+          alert("Resource proposal submitted successfully! It has been dispatched to the Admin Approval Queue for review.");
+        }
+      } else {
+        const err = await res.json();
+        if (res.status === 401) {
+          alert("Please sign in first to submit resources and earn Karma points!");
+        } else {
+          alert(err.error || "Failed to submit resource proposal.");
+        }
+      }
+    } catch (err) {
+      console.error("Submit error:", err);
+      alert("Network error submitting proposal.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const filteredResources = useMemo(() => {
-    return DEFAULT_RESOURCES.filter((r) => {
+    return resourcesList.filter((r) => {
       const matchesTopic = activeTopic === "All" || r.topic === activeTopic;
       const q = search.toLowerCase().trim();
       const matchesSearch =
@@ -249,20 +228,20 @@ export default function ResourcesPage() {
             </p>
             <div className={styles.statsRoster}>
               <div className={styles.statBox}>
-                <span className={styles.statNum}>{DEFAULT_RESOURCES.length}</span>
+                <span className={styles.statNum}>{resourcesList.length}</span>
                 <span className={styles.statLabel}>Core Syllabi</span>
               </div>
               <div className={styles.statBox}>
                 <span className={styles.statNum}>{submissions.length}</span>
                 <span className={styles.statLabel}>Submissions</span>
               </div>
-              <button
-                type="button"
-                onClick={() => setIsModalOpen(true)}
+              <Link
+                href="/publish"
                 className={styles.headerRecommendBtn}
+                style={{ textDecoration: "none" }}
               >
-                + Propose Resource ↗
-              </button>
+                {isAdmin ? "+ Add Resource (Creator Studio)" : "+ Propose Resource ↗"}
+              </Link>
             </div>
           </div>
         </header>
@@ -317,20 +296,24 @@ export default function ResourcesPage() {
         <section className={styles.resourcesSection} aria-label="Curated Syllabi">
           {filteredResources.length === 0 ? (
             <div className={styles.emptyState}>
-              <span className={styles.emptyPrompt}>[NO TEXTS FOUND]</span>
+              <span className={styles.emptyPrompt}>[LIBRARY EMPTY]</span>
               <p className={styles.emptyText}>
-                No educational resources match &quot;{search}&quot;.
+                {search
+                  ? `No educational resources match "${search}".`
+                  : "No community resources approved yet. Click '+ Recommend Resource' to submit the first text!"}
               </p>
-              <button
-                type="button"
-                onClick={() => {
-                  setSearch("");
-                  setActiveTopic("All");
-                }}
-                className={styles.resetBtn}
-              >
-                Reset Filter
-              </button>
+              {search && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearch("");
+                    setActiveTopic("All");
+                  }}
+                  className={styles.resetBtn}
+                >
+                  Reset Filter
+                </button>
+              )}
             </div>
           ) : (
             <div className={styles.resourcesGrid}>

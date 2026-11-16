@@ -14,32 +14,63 @@ const publicLinks = [
   { href: "/resources", label: "Resources", tag: "Library", num: "06" },
 ];
 
-const allLinks = [
-  { href: "/projects", label: "Projects", tag: "Artifacts", num: "01" },
-  { href: "/hall-of-builders", label: "Hall of Builders", tag: "Leaderboard", num: "02" },
-  { href: "/team", label: "Meet our Team", tag: "Stewardship", num: "03" },
-  { href: "/hall-of-flames", label: "Hall of Flames", tag: "Archive", num: "04" },
-  { href: "/events", label: "Advait's Social", tag: "Salons & Network", num: "05" },
-  { href: "/resources", label: "Resources", tag: "Library", num: "06" },
-  { href: "/dashboard", label: "Dashboard", tag: "Personal", num: "07" },
-  { href: "/admin", label: "Admin Portal", tag: "Admin", num: "08" },
+const memberLinks = [
+  ...publicLinks,
+  { href: "/publish", label: "Submit Artifact", tag: "Submit", num: "07" },
+  { href: "/dashboard", label: "Dashboard", tag: "Personal", num: "08" },
+];
+
+const adminLinks = [
+  ...publicLinks,
+  { href: "/publish", label: "Creator Studio", tag: "Publish", num: "07" },
+  { href: "/dashboard", label: "Dashboard", tag: "Personal", num: "08" },
+  { href: "/admin", label: "Admin Portal", tag: "Admin", num: "09" },
 ];
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const headerRef = useRef<HTMLElement>(null);
   const isLoginPage = pathname === "/login";
 
-  // Check login session cookie on mount and route changes
+  // Check login session cookie & user role on mount and route changes
   useEffect(() => {
-    const checkAuth = () => {
-      setIsLoggedIn(document.cookie.includes("advait_session="));
+    let isMounted = true;
+    const checkAuth = async () => {
+      try {
+        const res = await fetch("/api/auth/session");
+        if (res.ok) {
+          const data = await res.json();
+          if (isMounted) {
+            if (data.user) {
+              setIsLoggedIn(true);
+              setIsAdmin(data.user.role === "admin");
+            } else {
+              setIsLoggedIn(false);
+              setIsAdmin(false);
+            }
+          }
+        } else {
+          if (isMounted) {
+            setIsLoggedIn(false);
+            setIsAdmin(false);
+          }
+        }
+      } catch {
+        if (isMounted) {
+          setIsLoggedIn(false);
+          setIsAdmin(false);
+        }
+      }
     };
     checkAuth();
+    return () => {
+      isMounted = false;
+    };
   }, [pathname]);
 
   // Handle scroll and outside clicks
@@ -70,15 +101,21 @@ export function Header() {
     };
   }, []);
 
-  const handleSignOut = () => {
+  const handleSignOut = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+    } catch { }
     document.cookie = "advait_session=; path=/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+    document.cookie = "advait_session_active=; path=/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+    document.cookie = "advait_name=; path=/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+    document.cookie = "advait_role=; path=/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 UTC";
     setIsLoggedIn(false);
+    setIsAdmin(false);
     setMenuOpen(false);
-    router.push("/");
-    router.refresh();
+    window.location.href = "/";
   };
 
-  const navLinks = isLoggedIn ? allLinks : publicLinks;
+  const navLinks = isLoggedIn ? (isAdmin ? adminLinks : memberLinks) : publicLinks;
 
   return (
     <header
@@ -116,6 +153,19 @@ export function Header() {
             </Link>
           ) : (
             <>
+              {/* Creator Studio / Dispatch Button (Visible only to logged-in members & admins) */}
+              {isLoggedIn && pathname !== "/publish" && (
+                <Link
+                  href="/publish"
+                  className={styles.dispatchBtn}
+                  title="Open Creator Studio to dispatch or submit content"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  <span className={styles.dispatchIcon}>+</span>
+                  <span>{isAdmin ? "DISPATCH" : "CREATE"}</span>
+                </Link>
+              )}
+
               {/* Menu Trigger Button */}
               <button
                 type="button"

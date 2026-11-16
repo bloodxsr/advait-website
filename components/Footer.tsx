@@ -121,10 +121,6 @@ export function Footer() {
                 <span>Instagram Channel</span>
                 <span className={styles.linkArrow}>↗</span>
               </a>
-              <Link className={styles.navLink} href="/admin">
-                <span>Admin Portal</span>
-                <span className={styles.linkTag}>[Auth]</span>
-              </Link>
             </nav>
           </div>
         </div>

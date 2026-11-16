@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import styles from "./builders.module.css";
 
@@ -153,148 +153,50 @@ const TIER_THRESHOLDS: TierThreshold[] = [
   },
 ];
 
-const BUILDERS: Builder[] = [
-  {
-    rank: "01",
-    name: "Devin Reyes",
-    handle: "@devinreyes",
-    role: "Core Systems Architect",
-    division: "RED",
-    recentPr: "Added distributed node consensus in AetherSwarm Engine",
-    repo: "aetherswarm.rs",
-    lang: "Rust",
-    points: "3,840 pts",
-    prsCount: 38,
-    badge: "TOP ARCHITECT",
-  },
-  {
-    rank: "02",
-    name: "Lyra Chen",
-    handle: "@lyrachen",
-    role: "Graphics & Latents Researcher",
-    division: "RED",
-    recentPr: "Optimized Gaussian splatting shader pipeline for WebGPU",
-    repo: "latentmesh-webgpu",
-    lang: "TypeScript",
-    points: "3,120 pts",
-    prsCount: 29,
-    badge: "TOP RESEARCHER",
-  },
-  {
-    rank: "03",
-    name: "Siddharth Rao",
-    handle: "@siddharth",
-    role: "ZK Systems Engineer",
-    division: "RED",
-    recentPr: "ZK-SNARK proof verifier circuit integration for ONNX models",
-    repo: "zeroverif-zkml",
-    lang: "Python",
-    points: "2,790 pts",
-    prsCount: 24,
-    badge: "CORE BUILDER",
-  },
-  {
-    rank: "04",
-    name: "Mira Chen",
-    handle: "@mirachen",
-    role: "Edge Vision Specialist",
-    division: "RED",
-    recentPr: "Edge model quantization and TensorRT export benchmarks",
-    repo: "edge-vision-quant",
-    lang: "C++",
-    points: "2,480 pts",
-    prsCount: 19,
-    badge: "CONTRIBUTOR",
-  },
-  {
-    rank: "05",
-    name: "Aria Takahashi",
-    handle: "@ariat",
-    role: "Distributed Protocol Dev",
-    division: "RED",
-    recentPr: "Multi-agent shared memory protocol RFC specification",
-    repo: "swarm-protocol",
-    lang: "Rust",
-    points: "2,210 pts",
-    prsCount: 16,
-    badge: "CONTRIBUTOR",
-  },
-  {
-    rank: "06",
-    name: "Ananya Sharma",
-    handle: "@ananya",
-    role: "Ecosystem Stewardship",
-    division: "OPS",
-    recentPr: "Automated developer grant distribution smart contract ledger",
-    repo: "advait-grants",
-    lang: "Solidity",
-    points: "1,980 pts",
-    prsCount: 15,
-    badge: "DIVISION LEAD",
-  },
-  {
-    rank: "07",
-    name: "Vikramaditya Bose",
-    handle: "@vikramb",
-    role: "Game Engine Architect",
-    division: "GameVeda",
-    recentPr: "Custom HLSL volumetric cloud pass & procedural voxel collision",
-    repo: "gameveda-core",
-    lang: "C++",
-    points: "1,870 pts",
-    prsCount: 14,
-    badge: "DIVISION LEAD",
-  },
-  {
-    rank: "08",
-    name: "Isha Verma",
-    handle: "@isha",
-    role: "Visual Systems Lead",
-    division: "Creatives",
-    recentPr: "Kinetic SVG brutalist stencil generator & typography scale",
-    repo: "advait-stencil-sys",
-    lang: "TypeScript",
-    points: "1,740 pts",
-    prsCount: 13,
-    badge: "DIVISION LEAD",
-  },
-  {
-    rank: "09",
-    name: "Rohan Mehta",
-    handle: "@rohanm",
-    role: "Events & Operations",
-    division: "EVED",
-    recentPr: "Architecture Salon livestream telemetry & consensus voter",
-    repo: "eved-telemetry",
-    lang: "Go",
-    points: "1,620 pts",
-    prsCount: 12,
-    badge: "DIVISION LEAD",
-  },
-  {
-    rank: "10",
-    name: "Bivash Kumar",
-    handle: "@bivash",
-    role: "Systems Architect",
-    division: "RED",
-    recentPr: "Zero-latency edge runtime compilation benchmarks & WASM runner",
-    repo: "advait-runtime",
-    lang: "Rust",
-    points: "1,550 pts",
-    prsCount: 12,
-    badge: "RISING BUILDER",
-  },
-];
+// Real builders loaded dynamically from /api/leaderboard
+const BUILDERS: Builder[] = [];
 
 export default function HallOfBuildersPage() {
+  const [buildersList, setBuildersList] = useState<Builder[]>([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState<"all" | "cycle" | "prs">("all");
   const [criteriaFilter, setCriteriaFilter] = useState<
     "all" | "engineering" | "research" | "community"
   >("all");
 
+  useEffect(() => {
+    async function fetchLeaderboard() {
+      try {
+        const res = await fetch("/api/leaderboard");
+        const data = await res.json();
+        if (data.leaderboard && data.leaderboard.length > 0) {
+          const mapped: Builder[] = data.leaderboard.map((item: any) => ({
+            rank: item.rank.replace("#", ""),
+            name: item.name,
+            handle: `@${item.email.split("@")[0]}`,
+            role: item.headline || (item.role === "admin" ? "Lead Architect" : "Systems Engineer"),
+            division: item.divisionSlug || "RED",
+            recentPr: item.bio || "Active engineering contributions and architectural development",
+            repo: "advait-collective",
+            lang: item.techStack?.[0] || "TypeScript",
+            points: `${item.totalPoints.toLocaleString()} pts`,
+            prsCount: item.projectCount || 0,
+            badge: item.role === "admin" ? "TOP ARCHITECT" : (item.totalPoints > 100 ? "CORE BUILDER" : "ACTIVE CONTRIBUTOR"),
+          }));
+          setBuildersList(mapped);
+        }
+      } catch (err) {
+        console.error("Failed to fetch live leaderboard:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchLeaderboard();
+  }, []);
+
   const filteredBuilders = useMemo(() => {
-    return BUILDERS.filter((b) => {
+    return buildersList.filter((b) => {
       const q = search.toLowerCase().trim();
       if (!q) return true;
       return (
@@ -307,7 +209,7 @@ export default function HallOfBuildersPage() {
         b.recentPr.toLowerCase().includes(q)
       );
     });
-  }, [search]);
+  }, [buildersList, search]);
 
   const filteredCriteria = useMemo(() => {
     if (criteriaFilter === "all") return CRITERIA_RULES;
@@ -358,16 +260,16 @@ export default function HallOfBuildersPage() {
             </div>
             <div className={styles.statsRoster}>
               <div className={styles.statBox}>
-                <span className={styles.statNum}>120+</span>
+                <span className={styles.statNum}>{buildersList.reduce((acc: number, b) => acc + (b.prsCount || 0), 0)}</span>
                 <span className={styles.statLabel}>Merged PRs</span>
               </div>
               <div className={styles.statBox}>
-                <span className={styles.statNum}>48</span>
+                <span className={styles.statNum}>{buildersList.length}</span>
                 <span className={styles.statLabel}>Builders</span>
               </div>
               <div className={styles.statBox}>
-                <span className={styles.statNum}>24</span>
-                <span className={styles.statLabel}>Verified Repos</span>
+                <span className={styles.statNum}>100%</span>
+                <span className={styles.statLabel}>Verifiable</span>
               </div>
             </div>
           </div>
@@ -606,7 +508,7 @@ export default function HallOfBuildersPage() {
                       <span className={styles.standardText}>{c.standard}</span>
                       {c.multiplier && (
                         <span className={styles.multiplierPill}>
-                          ★ {c.multiplier}
+                          {c.multiplier}
                         </span>
                       )}
                     </td>

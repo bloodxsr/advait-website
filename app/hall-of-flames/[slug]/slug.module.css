@@ -1,0 +1,348 @@
+/* ==========================================================================
+   slug.module.css — Swiss Architectural Editorial Essay Reader
+   Obsidian Bedrock, Titanium Typography, Violet Specular Accents
+   ========================================================================== */
+
+.page {
+  min-height: 100vh;
+  padding: 120px max(24px, 4vw) 140px;
+  background:
+    radial-gradient(ellipse 90% 40% at 50% 0%, rgba(167, 139, 250, 0.08) 0%, transparent 60%),
+    #080808;
+  color: #ffffff;
+  position: relative;
+  z-index: 1;
+}
+
+.container {
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+/* ── 01. Top Navigation & Breadcrumb ─────────────────────────────────────── */
+.topNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid #27272a;
+  padding-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.backBtn {
+  font-family: var(--font-mono, monospace);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #a1a1aa;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.2s;
+}
+
+.backBtn:hover {
+  color: #a78bfa;
+}
+
+.shareBtn {
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid #27272a;
+  border-radius: 4px;
+  color: #d4d4d8;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.shareBtn:hover {
+  background: rgba(167, 139, 250, 0.15);
+  border-color: #a78bfa;
+  color: #ffffff;
+}
+
+/* ── 02. Article Header ──────────────────────────────────────────────────── */
+.articleHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.metaRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.categoryTag {
+  padding: 3px 8px;
+  background: rgba(167, 139, 250, 0.15);
+  border: 1px solid rgba(167, 139, 250, 0.35);
+  color: #c4b5fd;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.readTimeTag {
+  color: #71717a;
+}
+
+.title {
+  font-size: clamp(32px, 4.5vw, 54px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: #ffffff;
+  margin: 0;
+}
+
+.excerpt {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #a1a1aa;
+  margin: 0;
+  border-left: 3px solid #a78bfa;
+  padding-left: 16px;
+}
+
+/* ── 03. Author Byline ───────────────────────────────────────────────────── */
+.authorByline {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 0;
+  border-top: 1px solid #1f1f22;
+  border-bottom: 1px solid #1f1f22;
+}
+
+.avatarCircle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #18181b;
+  border: 1px solid #3f3f46;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono, monospace);
+  font-size: 14px;
+  font-weight: 700;
+  color: #c4b5fd;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.avatarImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.authorCol {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.authorName {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.authorHeadline {
+  font-size: 12px;
+  color: #71717a;
+}
+
+/* ── 04. Hero Cover Image ────────────────────────────────────────────────── */
+.coverContainer {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #27272a;
+  background: #121214;
+}
+
+.coverImage {
+  width: 100%;
+  max-height: 460px;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── 05. Markdown Body Content ───────────────────────────────────────────── */
+.bodyContent {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #d4d4d8;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.bodyContent h1 {
+  font-size: 28px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 32px 0 12px;
+  letter-spacing: -0.02em;
+}
+
+.bodyContent h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 28px 0 10px;
+  letter-spacing: -0.01em;
+}
+
+.bodyContent h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 20px 0 8px;
+}
+
+.bodyContent p {
+  margin: 0;
+  color: #d4d4d8;
+}
+
+.bodyContent strong {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.bodyContent em {
+  color: #c4b5fd;
+}
+
+.bodyContent ul,
+.bodyContent ol {
+  margin: 0;
+  padding-left: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bodyContent li {
+  color: #d4d4d8;
+}
+
+.bodyContent blockquote {
+  margin: 12px 0;
+  padding: 12px 20px;
+  background: rgba(167, 139, 250, 0.05);
+  border-left: 3px solid #a78bfa;
+  border-radius: 0 6px 6px 0;
+  font-style: italic;
+  color: #c4b5fd;
+}
+
+.bodyContent pre {
+  margin: 16px 0;
+  padding: 18px 20px;
+  background: #09090b;
+  border: 1px solid #27272a;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-family: var(--font-mono, monospace);
+  font-size: 13px;
+  line-height: 1.6;
+  color: #e4e4e7;
+}
+
+.bodyContent code {
+  font-family: var(--font-mono, monospace);
+  font-size: 13px;
+  background: #18181b;
+  border: 1px solid #27272a;
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #c4b5fd;
+}
+
+.bodyContent pre code {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: inherit;
+}
+
+.bodyContent img {
+  max-width: 100%;
+  border-radius: 8px;
+  border: 1px solid #27272a;
+  margin: 16px 0;
+}
+
+.bodyContent a {
+  color: #a78bfa;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.bodyContent a:hover {
+  color: #c4b5fd;
+}
+
+/* ── 06. Article Footer ──────────────────────────────────────────────────── */
+.articleFooter {
+  border-top: 1px solid #27272a;
+  padding-top: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.stampBadge {
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  color: #71717a;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stampPulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #30d158;
+}
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  padding: 10px 18px;
+  background: #18181b;
+  border: 1px solid #a78bfa;
+  color: #ffffff;
+  border-radius: 6px;
+  font-family: var(--font-mono, monospace);
+  font-size: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}

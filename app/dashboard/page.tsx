@@ -33,44 +33,7 @@ interface WorkstreamEvaluation {
   pointsDelta: number;
 }
 
-const SAMPLE_EVALUATIONS: WorkstreamEvaluation[] = [
-  {
-    id: "eval-1",
-    repo: "advait-collective/aetherswarm",
-    prNum: 48,
-    title: "feat(runtime): lock-free ring buffer for streaming agent telemetry",
-    status: "MERGED",
-    ciTime: "3 hrs ago",
-    pointsDelta: 85,
-  },
-  {
-    id: "eval-2",
-    repo: "advait-collective/zeroverif",
-    prNum: 19,
-    title: "refactor(zk-snark): optimize curve arithmetic for WebGPU backends",
-    status: "PASS",
-    ciTime: "1 day ago",
-    pointsDelta: 60,
-  },
-  {
-    id: "eval-3",
-    repo: "advait-collective/latentmesh",
-    prNum: 31,
-    title: "perf(renderer): SIMD vertex quantization pipeline",
-    status: "MERGED",
-    ciTime: "4 days ago",
-    pointsDelta: 75,
-  },
-  {
-    id: "eval-4",
-    repo: "advait-collective/governance-rfcs",
-    prNum: 12,
-    title: "rfc: dynamic division quorum allocation in consensus epochs",
-    status: "EVALUATING",
-    ciTime: "6 days ago",
-    pointsDelta: 40,
-  },
-];
+const SAMPLE_EVALUATIONS: WorkstreamEvaluation[] = [];
 
 interface KarmaLedgerEntry {
   id: string;
@@ -81,48 +44,7 @@ interface KarmaLedgerEntry {
   points: number;
 }
 
-const SAMPLE_KARMA_LEDGER: KarmaLedgerEntry[] = [
-  {
-    id: "k-1",
-    date: "14 NOV 2026",
-    activity: "PR #48 Merged to AetherSwarm Kernel",
-    source: "advait-collective/aetherswarm",
-    division: "RED",
-    points: 85,
-  },
-  {
-    id: "k-2",
-    date: "11 NOV 2026",
-    activity: "Advait Autumn Hackathon 1st Place (AI Systems)",
-    source: "Advait Collective Sprint 04",
-    division: "EVED",
-    points: 140,
-  },
-  {
-    id: "k-3",
-    date: "06 NOV 2026",
-    activity: "Peer-reviewed Research Dispatch (Edge Inference)",
-    source: "Advait Research Vault",
-    division: "RED",
-    points: 100,
-  },
-  {
-    id: "k-4",
-    date: "28 OCT 2026",
-    activity: "PR #31 Merged to LatentMesh Visualizer",
-    source: "advait-collective/latentmesh",
-    division: "RED",
-    points: 75,
-  },
-  {
-    id: "k-5",
-    date: "15 OCT 2026",
-    activity: "Collective Architecture Review & AST Benchmarking",
-    source: "Advait Hall of Builders",
-    division: "OPS",
-    points: 20,
-  },
-];
+const SAMPLE_KARMA_LEDGER: KarmaLedgerEntry[] = [];
 
 export default function Dashboard() {
   const [profile, setProfile] = useState<UserProfile>(DEFAULT_PROFILE);
@@ -132,8 +54,44 @@ export default function Dashboard() {
   const [toastMsg, setToastMsg] = useState<string | null>(null);
 
   useEffect(() => {
-    const loaded = loadProfile();
-    setProfile(loaded);
+    let isMounted = true;
+    async function fetchMe() {
+      try {
+        const res = await fetch("/api/users/me");
+        if (res.ok) {
+          const data = await res.json();
+          const p = data.profile;
+          if (p && isMounted) {
+            setProfile((prev) => ({
+              ...prev,
+              name: p.name || prev.name,
+              email: p.email || prev.email,
+              headline: p.headline || prev.headline,
+              year: p.year || prev.year,
+              section: p.section || prev.section,
+              department: p.department || prev.department,
+              bio: p.bio || prev.bio,
+              techTags: p.techStack && p.techStack.length > 0 ? p.techStack : prev.techTags,
+              github: p.github || prev.github,
+              linkedin: p.linkedin || prev.linkedin,
+              portfolio: p.portfolio || prev.portfolio,
+              points: p.totalPoints ?? prev.points,
+              rank: p.role === "admin" ? "Lead Architect" : p.totalPoints > 100 ? "Core Builder" : "Active Contributor",
+            }));
+          }
+        } else {
+          const loaded = loadProfile();
+          if (isMounted) setProfile(loaded);
+        }
+      } catch {
+        const loaded = loadProfile();
+        if (isMounted) setProfile(loaded);
+      }
+    }
+    fetchMe();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   // Handle ESC key to dismiss modal
@@ -619,34 +577,40 @@ export default function Dashboard() {
                 </div>
 
                 <div className={styles.evaluationList}>
-                  {SAMPLE_EVALUATIONS.map((evalItem) => (
-                    <div key={evalItem.id} className={styles.evaluationRow}>
-                      <div className={styles.evalTop}>
-                        <div className={styles.evalRepoRow}>
-                          <span className={styles.repoName}>{evalItem.repo}</span>
-                          <span className={styles.prBadge}>PR #{evalItem.prNum}</span>
-                        </div>
-                        <span
-                          className={`${styles.evalStatusBadge} ${
-                            evalItem.status === "MERGED"
-                              ? styles.statusMerged
-                              : evalItem.status === "PASS"
-                              ? styles.statusPass
-                              : styles.statusEvaluating
-                          }`}
-                        >
-                          {evalItem.status === "MERGED" && "● MERGED"}
-                          {evalItem.status === "PASS" && "● PASS · AST VERIFIED"}
-                          {evalItem.status === "EVALUATING" && "○ EVALUATING"}
-                        </span>
-                      </div>
-                      <p className={styles.evalTitle}>{evalItem.title}</p>
-                      <div className={styles.evalFooter}>
-                        <span className={styles.evalTime}>{evalItem.ciTime}</span>
-                        <span className={styles.evalPoints}>+{evalItem.pointsDelta} PTS ACCRUED</span>
-                      </div>
+                  {SAMPLE_EVALUATIONS.length === 0 ? (
+                    <div style={{ padding: "24px 0", color: "#71717a", fontFamily: "var(--font-mono)", fontSize: "12px" }}>
+                      No pull requests evaluated yet. As you contribute to collective repositories, evaluations will sync here.
                     </div>
-                  ))}
+                  ) : (
+                    SAMPLE_EVALUATIONS.map((evalItem) => (
+                      <div key={evalItem.id} className={styles.evaluationRow}>
+                        <div className={styles.evalTop}>
+                          <div className={styles.evalRepoRow}>
+                            <span className={styles.repoName}>{evalItem.repo}</span>
+                            <span className={styles.prBadge}>PR #{evalItem.prNum}</span>
+                          </div>
+                          <span
+                            className={`${styles.evalStatusBadge} ${
+                              evalItem.status === "MERGED"
+                                ? styles.statusMerged
+                                : evalItem.status === "PASS"
+                                ? styles.statusPass
+                                : styles.statusEvaluating
+                            }`}
+                          >
+                            {evalItem.status === "MERGED" && "● MERGED"}
+                            {evalItem.status === "PASS" && "● PASS · AST VERIFIED"}
+                            {evalItem.status === "EVALUATING" && "○ EVALUATING"}
+                          </span>
+                        </div>
+                        <p className={styles.evalTitle}>{evalItem.title}</p>
+                        <div className={styles.evalFooter}>
+                          <span className={styles.evalTime}>{evalItem.ciTime}</span>
+                          <span className={styles.evalPoints}>+{evalItem.pointsDelta} PTS ACCRUED</span>
+                        </div>
+                      </div>
+                    ))
+                  )}
                 </div>
               </article>
 
@@ -666,16 +630,22 @@ export default function Dashboard() {
                 </div>
 
                 <div className={styles.ledgerMiniList}>
-                  {SAMPLE_KARMA_LEDGER.slice(0, 3).map((entry) => (
-                    <div key={entry.id} className={styles.ledgerMiniRow}>
-                      <div className={styles.ledgerMiniLeft}>
-                        <span className={styles.ledgerDate}>{entry.date}</span>
-                        <span className={styles.ledgerActivity}>{entry.activity}</span>
-                        <span className={styles.ledgerSource}>{entry.source}</span>
-                      </div>
-                      <span className={styles.ledgerPointsBadge}>+{entry.points} PTS</span>
+                  {SAMPLE_KARMA_LEDGER.length === 0 ? (
+                    <div style={{ padding: "24px 0", color: "#71717a", fontFamily: "var(--font-mono)", fontSize: "12px" }}>
+                      No recent point accruals. Awarded points will appear here.
                     </div>
-                  ))}
+                  ) : (
+                    SAMPLE_KARMA_LEDGER.slice(0, 3).map((entry) => (
+                      <div key={entry.id} className={styles.ledgerMiniRow}>
+                        <div className={styles.ledgerMiniLeft}>
+                          <span className={styles.ledgerDate}>{entry.date}</span>
+                          <span className={styles.ledgerActivity}>{entry.activity}</span>
+                          <span className={styles.ledgerSource}>{entry.source}</span>
+                        </div>
+                        <span className={styles.ledgerPointsBadge}>+{entry.points} PTS</span>
+                      </div>
+                    ))
+                  )}
                 </div>
               </article>
             </div>
@@ -887,17 +857,25 @@ export default function Dashboard() {
                   </tr>
                 </thead>
                 <tbody>
-                  {SAMPLE_KARMA_LEDGER.map((entry) => (
-                    <tr key={entry.id} className={styles.ledgerRow}>
-                      <td className={styles.monoCell}>{entry.date}</td>
-                      <td className={styles.activityCell}>{entry.activity}</td>
-                      <td className={styles.monoCell}>{entry.source}</td>
-                      <td>
-                        <span className={styles.divBadge}>{entry.division}</span>
+                  {SAMPLE_KARMA_LEDGER.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} style={{ textAlign: "center", padding: "36px 16px", color: "#71717a", fontFamily: "var(--font-mono)", fontSize: "12px" }}>
+                        No karma transactions recorded yet. Points awarded by administrators or approved pull requests will appear here.
                       </td>
-                      <td className={styles.pointsDeltaCell}>+{entry.points} PTS</td>
                     </tr>
-                  ))}
+                  ) : (
+                    SAMPLE_KARMA_LEDGER.map((entry) => (
+                      <tr key={entry.id} className={styles.ledgerRow}>
+                        <td className={styles.monoCell}>{entry.date}</td>
+                        <td className={styles.activityCell}>{entry.activity}</td>
+                        <td className={styles.monoCell}>{entry.source}</td>
+                        <td>
+                          <span className={styles.divBadge}>{entry.division}</span>
+                        </td>
+                        <td className={styles.pointsDeltaCell}>+{entry.points} PTS</td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>

@@ -75,28 +75,110 @@ function AuthGateway() {
     }
   }, [searchParams]);
 
-  const activateSessionAndRedirect = () => {
-    setLoading(true);
-    document.cookie = "advait_session=member; path=/; max-age=604800; SameSite=Lax";
-    setTimeout(() => {
-      router.push(redirectTarget);
-      router.refresh();
-    }, 350);
-  };
+  const [errorMsg, setErrorMsg] = useState("");
 
-  const handleSignIn = (e: React.FormEvent) => {
-    e.preventDefault();
-    activateSessionAndRedirect();
-  };
-
-  const handleJoinSubmit = (e: React.FormEvent) => {
+  const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    // Simulate logging applicant into interview queue
-    setTimeout(() => {
+    setErrorMsg("");
+
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim(), password }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        setErrorMsg(data.error || "Authentication failed");
+        setLoading(false);
+        return;
+      }
+
+      // If user is admin and redirect wasn't custom, send to /admin
+      let target = redirectTarget;
+      if (data.user?.role === "admin") {
+        target = (!redirectTarget || redirectTarget === "/dashboard") ? "/admin" : redirectTarget;
+      } else {
+        if (target === "/admin") {
+          target = "/dashboard";
+        }
+      }
+
+      // Full navigation ensures fresh session cookies are sent to server & middleware
+      window.location.href = target;
+    } catch {
+      setErrorMsg("Network error. Please try again.");
       setLoading(false);
+    }
+  };
+
+  const handleDemoLogin = async (role: "user" | "admin") => {
+    setLoading(true);
+    setErrorMsg("");
+
+    const credentials =
+      role === "admin"
+        ? { email: "admin@advait.collective", password: "advait2026admin", role: "admin" }
+        : { email: "bivash@advait.collective", password: "advait2026member", role: "user" };
+
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(credentials),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        setErrorMsg(data.error || "Demo login failed");
+        setLoading(false);
+        return;
+      }
+
+      let target = role === "admin" ? "/admin" : "/dashboard";
+      if (redirectTarget && redirectTarget !== "/admin" && role !== "admin") {
+        target = redirectTarget;
+      }
+
+      // Full navigation ensures fresh session cookies are sent to server & middleware
+      window.location.href = target;
+    } catch {
+      setErrorMsg("Network error. Please try again.");
+      setLoading(false);
+    }
+  };
+
+  const handleJoinSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setErrorMsg("");
+
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: fullName,
+          email: joinEmail,
+          password: "advait2026member", // default initial password for applicants
+        }),
+      });
+
+      const data = await res.json();
+      setLoading(false);
+
+      if (!res.ok) {
+        setErrorMsg(data.error || "Registration failed");
+        return;
+      }
+
       setJoinSubmitted(true);
-    }, 450);
+    } catch {
+      setLoading(false);
+      setErrorMsg("Network error. Please try again.");
+    }
   };
 
   return (
@@ -179,7 +261,7 @@ function AuthGateway() {
               <button
                 type="button"
                 className={styles.oauthBtn}
-                onClick={activateSessionAndRedirect}
+                onClick={() => handleDemoLogin("user")}
                 disabled={loading}
               >
                 <GitHubIcon />
@@ -190,13 +272,20 @@ function AuthGateway() {
               <button
                 type="button"
                 className={styles.oauthBtn}
-                onClick={activateSessionAndRedirect}
+                onClick={() => handleDemoLogin("user")}
                 disabled={loading}
               >
                 <GoogleIcon />
                 <span>Continue with Google</span>
               </button>
             </div>
+
+            {/* Error Message */}
+            {errorMsg && (
+              <div style={{ color: "#ef4444", fontSize: "12.5px", fontFamily: "var(--font-mono)", textAlign: "center", padding: "8px", background: "rgba(239, 68, 68, 0.1)", borderRadius: "6px", border: "1px solid rgba(239, 68, 68, 0.3)" }}>
+                [ERROR] {errorMsg}
+              </div>
+            )}
 
             {/* Divider */}
             <div className={styles.divider}>
@@ -263,20 +352,31 @@ function AuthGateway() {
             {/* Instant Demo Access Shortcut */}
             <div className={styles.demoHelperBox}>
               <div className={styles.demoHelperHeader}>
-                <span className={styles.demoBadge}>[DEMO PROTOCOL]</span>
-                <span className={styles.demoHint}>Instant Member Bypass</span>
+                <span className={styles.demoBadge}>[ACTIVE OPERATOR & ADMIN ACCESS]</span>
+                <span className={styles.demoHint}>Real Postgres Auth</span>
               </div>
               <p className={styles.demoText}>
-                No credentials required for collective review. Click below to enter directly as an active operator.
+                Use your credentials or click below for instant access as a verified operator or administrator.
               </p>
-              <button
-                type="button"
-                onClick={activateSessionAndRedirect}
-                className={styles.demoBtn}
-                disabled={loading}
-              >
-                ⚡ ONE-CLICK ENTER AS OPERATOR →
-              </button>
+              <div style={{ display: "flex", gap: "8px", flexDirection: "column" }}>
+                <button
+                  type="button"
+                  onClick={() => handleDemoLogin("user")}
+                  className={styles.demoBtn}
+                  disabled={loading}
+                >
+                  ENTER AS MEMBER (Bivash Kumar) →
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDemoLogin("admin")}
+                  className={styles.demoBtn}
+                  disabled={loading}
+                  style={{ background: "rgba(168, 85, 247, 0.15)", borderColor: "rgba(168, 85, 247, 0.4)" }}
+                >
+                  ENTER AS ADMIN (Lead Architect) →
+                </button>
+              </div>
             </div>
           </div>
         )}

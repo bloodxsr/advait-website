@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import styles from "./projects.module.css";
 
@@ -23,148 +23,170 @@ interface Project {
   tags: string[];
 }
 
-const PROJECTS_DATA: Project[] = [
-  // ── 01. Open Source Projects (Community Based)
-  {
-    id: "1",
-    num: "01",
-    name: "AetherSwarm Engine",
-    category: "opensource",
-    categoryLabel: "Open source community project",
-    division: "RED",
-    desc: "Autonomous multi-agent orchestration for distributed AI models. Lightweight, fault-tolerant consensus engine designed for local edge nodes.",
-    lang: "Rust",
-    stars: "2.4k",
-    version: "v0.4.2",
-    author: "Advait Core Collective",
-    authorType: "Community Team",
-    link: "https://github.com",
-    tags: ["Distributed Systems", "Multi-Agent", "Edge AI", "WASM"],
-  },
-  {
-    id: "2",
-    num: "02",
-    name: "Advait-HOB-SDK",
-    category: "opensource",
-    categoryLabel: "Open source community project",
-    division: "RED",
-    desc: "Collective client SDK, CLI utilities, and high-performance RPC tooling for decentralized peer state synchronization and telemetry.",
-    lang: "Go",
-    stars: "1.2k",
-    version: "v1.1.0",
-    author: "Foundation Working Group",
-    authorType: "Community Team",
-    link: "https://github.com",
-    tags: ["SDK", "CLI", "RPC", "Networking"],
-  },
-
-  // ── 02. Individual Projects
-  {
-    id: "3",
-    num: "03",
-    name: "LatentMesh Visualizer",
-    category: "individual",
-    categoryLabel: "Individual builder project",
-    division: "RED",
-    desc: "Real-time neural radiance field and 3D Gaussian splatting visualizer running client-side with zero latency in WebGL and WebGPU compute shaders.",
-    lang: "TypeScript",
-    stars: "890",
-    version: "v1.2.0",
-    author: "Lyra Chen (@lyrachen)",
-    authorType: "Individual Dev",
-    link: "https://github.com",
-    tags: ["WebGL", "WebGPU", "3D Graphics", "Neural Fields"],
-  },
-  {
-    id: "4",
-    num: "04",
-    name: "SpectralFlow-TTS",
-    category: "individual",
-    categoryLabel: "Individual builder project",
-    division: "RED",
-    desc: "Zero-shot streaming neural text-to-speech engine with microsecond latency, custom vocoder passes, and expressive prosody control.",
-    lang: "Python",
-    stars: "1.7k",
-    version: "v0.8.4",
-    author: "Devin Reyes (@devinreyes)",
-    authorType: "Individual Dev",
-    link: "https://github.com",
-    tags: ["Audio AI", "PyTorch", "Streaming", "DSP"],
-  },
-
-  // ── 03. Group Projects
-  {
-    id: "5",
-    num: "05",
-    name: "ZeroVerif ZK-ML",
-    category: "group",
-    categoryLabel: "Group initiative",
-    division: "RED",
-    desc: "Zero-knowledge proof verification pipeline for privacy-preserving neural network inferences on untrusted cloud hardware and edge nodes.",
-    lang: "Python",
-    stars: "1.1k",
-    version: "v0.9.1",
-    author: "Crypto & ML Sprint Team (4 members)",
-    authorType: "Group Team",
-    link: "https://github.com",
-    tags: ["ZK-Snarks", "Privacy", "PyTorch", "ONNX"],
-  },
-  {
-    id: "6",
-    num: "06",
-    name: "GraphSynth Compiler",
-    category: "group",
-    categoryLabel: "Group initiative",
-    division: "RED",
-    desc: "Heterogeneous graph compiler targeting custom edge tensor cores and local NPU architectures with automated kernel fusion heuristics.",
-    lang: "C++",
-    stars: "950",
-    version: "v0.5.0",
-    author: "Compiler SIG Group (3 members)",
-    authorType: "Group Team",
-    link: "https://github.com",
-    tags: ["Compilers", "LLVM", "Edge Hardware", "IR"],
-  },
-  {
-    id: "7",
-    num: "07",
-    name: "Procedural Terrain Voxel Engine",
-    category: "group",
-    categoryLabel: "Group initiative",
-    division: "GameVeda",
-    desc: "Unreal Engine 5 custom HLSL shader pass, procedural volumetric collision meshes, and multithreaded voxel octree generator.",
-    lang: "C++",
-    stars: "840",
-    version: "v0.3.1",
-    author: "GameVeda Division Team",
-    authorType: "Group Team",
-    link: "https://github.com",
-    tags: ["Unreal Engine", "Voxel", "HLSL", "Physics"],
-  },
-  {
-    id: "8",
-    num: "08",
-    name: "Advait Kinetic Stencil System",
-    category: "group",
-    categoryLabel: "Group initiative",
-    division: "Creatives",
-    desc: "Brutalist typographic identity generator, dynamic SVG stencil glyph geometries, and liquid color fill shader engine.",
-    lang: "TypeScript",
-    stars: "620",
-    version: "v1.0.0",
-    author: "Creatives & Social Division",
-    authorType: "Group Team",
-    link: "https://github.com",
-    tags: ["Design Systems", "Typography", "SVG", "Brutalism"],
-  },
-];
-
 export default function ProjectsPage() {
   const [activeCategory, setActiveCategory] = useState<ProjectCategory>("all");
   const [search, setSearch] = useState("");
+  const [projectsList, setProjectsList] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Submission modal state
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [divisions, setDivisions] = useState<{ id: string; name: string; slug: string }[]>([]);
+  const [newProject, setNewProject] = useState({
+    name: "",
+    description: "",
+    type: "open_source" as "open_source" | "individual" | "group",
+    link: "",
+    divisionId: "",
+  });
+
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/auth/session")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.user?.role === "admin") {
+          setIsAdmin(true);
+        }
+      })
+      .catch(() => { });
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/divisions")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.divisions?.length > 0) {
+          setDivisions(data.divisions);
+          setNewProject((prev) => ({ ...prev, divisionId: data.divisions[0].id }));
+        }
+      })
+      .catch(() => { });
+  }, []);
+
+  const handleSubmitProposal = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newProject.name.trim() || !newProject.link.trim()) return;
+
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/projects", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: newProject.name.trim(),
+          description: newProject.description.trim() || undefined,
+          type: newProject.type,
+          link: newProject.link.trim(),
+          divisionId: newProject.divisionId || undefined,
+        }),
+      });
+
+      if (res.ok) {
+        setIsModalOpen(false);
+        setNewProject({
+          name: "",
+          description: "",
+          type: "open_source",
+          link: "",
+          divisionId: divisions[0]?.id || "",
+        });
+        if (isAdmin) {
+          alert("Project published directly to public registry!");
+          // Reload projects
+          window.location.reload();
+        } else {
+          alert(
+            "Project submitted successfully! It has been dispatched to the Admin Central Approval Queue for review."
+          );
+        }
+      } else {
+        const err = await res.json();
+        if (res.status === 401) {
+          alert("Please sign in first to submit projects and earn Karma points!");
+        } else {
+          alert(err.error || "Failed to submit project.");
+        }
+      }
+    } catch {
+      alert("Network error submitting project.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  useEffect(() => {
+    let isMounted = true;
+    async function loadProjects() {
+      try {
+        const res = await fetch("/api/projects");
+        if (res.ok) {
+          const data = await res.json();
+          const items = (data.projects || []).map((p: any, idx: number) => {
+            const cat =
+              p.type === "open_source"
+                ? "opensource"
+                : p.type === "individual"
+                  ? "individual"
+                  : "group";
+
+            const catLabel =
+              cat === "opensource"
+                ? "Open source community project"
+                : cat === "individual"
+                  ? "Individual builder project"
+                  : "Group initiative";
+
+            const authorType =
+              cat === "opensource"
+                ? "Community Team"
+                : cat === "individual"
+                  ? "Individual Dev"
+                  : "Group Team";
+
+            const tags = [
+              p.divisionSlug || p.divisionName || "RED",
+              p.subtopicName || "Systems",
+            ].filter(Boolean);
+
+            return {
+              id: p.id,
+              num: String(idx + 1).padStart(2, "0"),
+              name: p.name,
+              category: cat as "opensource" | "individual" | "group",
+              categoryLabel: catLabel,
+              division: p.divisionSlug || "RED",
+              desc: p.description || "Advait open-source architecture project.",
+              lang: p.divisionSlug === "GameVeda" ? "C++" : p.divisionSlug === "Creatives" ? "TypeScript" : "Rust",
+              stars: "1.2k",
+              version: "v1.0.0",
+              author: p.leadName || "Advait Core",
+              authorType: authorType as any,
+              link: p.link || "https://github.com/advait-collective",
+              tags,
+            };
+          });
+
+          if (isMounted) {
+            setProjectsList(items);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch projects:", err);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    }
+    loadProjects();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const filteredProjects = useMemo(() => {
-    return PROJECTS_DATA.filter((p) => {
+    return projectsList.filter((p) => {
       const matchesCategory =
         activeCategory === "all" || p.category === activeCategory;
       const q = search.toLowerCase().trim();
@@ -178,7 +200,7 @@ export default function ProjectsPage() {
         p.tags.some((t) => t.toLowerCase().includes(q));
       return matchesCategory && matchesSearch;
     });
-  }, [activeCategory, search]);
+  }, [projectsList, activeCategory, search]);
 
   return (
     <main className={styles.page}>
@@ -217,7 +239,7 @@ export default function ProjectsPage() {
             </p>
             <div className={styles.statsRoster}>
               <div className={styles.statBox}>
-                <span className={styles.statNum}>{PROJECTS_DATA.length}</span>
+                <span className={styles.statNum}>{projectsList.length}</span>
                 <span className={styles.statLabel}>Total Artifacts</span>
               </div>
               <div className={styles.statBox}>
@@ -264,9 +286,8 @@ export default function ProjectsPage() {
                 role="tab"
                 aria-selected={activeCategory === "all"}
                 onClick={() => setActiveCategory("all")}
-                className={`${styles.catPill} ${
-                  activeCategory === "all" ? styles.catPillActive : ""
-                }`}
+                className={`${styles.catPill} ${activeCategory === "all" ? styles.catPillActive : ""
+                  }`}
               >
                 [ALL]
               </button>
@@ -275,9 +296,8 @@ export default function ProjectsPage() {
                 role="tab"
                 aria-selected={activeCategory === "opensource"}
                 onClick={() => setActiveCategory("opensource")}
-                className={`${styles.catPill} ${
-                  activeCategory === "opensource" ? styles.catPillActive : ""
-                }`}
+                className={`${styles.catPill} ${activeCategory === "opensource" ? styles.catPillActive : ""
+                  }`}
               >
                 [OPEN SOURCE]
               </button>
@@ -286,9 +306,8 @@ export default function ProjectsPage() {
                 role="tab"
                 aria-selected={activeCategory === "individual"}
                 onClick={() => setActiveCategory("individual")}
-                className={`${styles.catPill} ${
-                  activeCategory === "individual" ? styles.catPillActive : ""
-                }`}
+                className={`${styles.catPill} ${activeCategory === "individual" ? styles.catPillActive : ""
+                  }`}
               >
                 [INDIVIDUAL]
               </button>
@@ -297,9 +316,8 @@ export default function ProjectsPage() {
                 role="tab"
                 aria-selected={activeCategory === "group"}
                 onClick={() => setActiveCategory("group")}
-                className={`${styles.catPill} ${
-                  activeCategory === "group" ? styles.catPillActive : ""
-                }`}
+                className={`${styles.catPill} ${activeCategory === "group" ? styles.catPillActive : ""
+                  }`}
               >
                 [GROUP INITIATIVES]
               </button>
@@ -337,7 +355,7 @@ export default function ProjectsPage() {
                       <span className={styles.divBadge}>[{p.division}]</span>
                       <span className={styles.catBadge}>{p.categoryLabel}</span>
                     </div>
-                    <span className={styles.starsCount}>★ {p.stars}</span>
+                    <span className={styles.starsCount}>{p.stars} stars</span>
                   </div>
 
                   {/* Name and Version */}
@@ -401,21 +419,121 @@ export default function ProjectsPage() {
             </div>
 
             <div className={styles.submitActions}>
-              <a
-                href="https://github.com"
-                target="_blank"
-                rel="noreferrer"
+              <Link
+                href="/publish"
                 className={styles.primarySubmitBtn}
+                style={{ textDecoration: "none" }}
               >
-                <span>+ Propose an Artifact</span>
+                <span>{isAdmin ? "+ Publish Project (Creator Studio)" : "+ Propose an Artifact"}</span>
                 <span>↗</span>
-              </a>
+              </Link>
               <Link href="/team" className={styles.secondaryStewardBtn}>
                 Contact Division Leads →
               </Link>
             </div>
           </div>
         </section>
+
+        {/* ── 04. Submit Project Proposal Modal ───────────────────────────────── */}
+        {isModalOpen && (
+          <div className={styles.modalOverlay} onClick={() => setIsModalOpen(false)}>
+            <div className={styles.modalCard} onClick={(e) => e.stopPropagation()}>
+              <div className={styles.modalHeader}>
+                <h3 className={styles.modalTitle}>
+                  {isAdmin ? "Direct Publish Project (Admin)" : "Submit Project Proposal"}
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className={styles.modalCloseBtn}
+                >
+                  [CLOSE]
+                </button>
+              </div>
+
+              <p style={{ color: "#a1a1aa", fontSize: "13px", margin: 0, lineHeight: 1.5 }}>
+                {isAdmin
+                  ? "As an Admin Architect, projects you publish will appear immediately in the public Advait registry without approval."
+                  : "Propose an open-source tool, engine, or research artifact. Submissions enter the central approval queue and award +15 Karma points upon publication."}
+              </p>
+
+              <form onSubmit={handleSubmitProposal} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                <div className={styles.formGroup}>
+                  <label className={styles.formLabel}>Project Name *</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g., AetherSwarm Consensus Engine"
+                    value={newProject.name}
+                    onChange={(e) => setNewProject({ ...newProject, name: e.target.value })}
+                    className={styles.modalInput}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label className={styles.formLabel}>Repository or Deployment URL *</label>
+                  <input
+                    type="url"
+                    required
+                    placeholder="https://github.com/your-username/repo"
+                    value={newProject.link}
+                    onChange={(e) => setNewProject({ ...newProject, link: e.target.value })}
+                    className={styles.modalInput}
+                  />
+                </div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+                  <div className={styles.formGroup}>
+                    <label className={styles.formLabel}>Type</label>
+                    <select
+                      value={newProject.type}
+                      onChange={(e) => setNewProject({ ...newProject, type: e.target.value as any })}
+                      className={styles.modalSelect}
+                    >
+                      <option value="open_source">Open Source</option>
+                      <option value="individual">Individual</option>
+                      <option value="group">Group Project</option>
+                    </select>
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label className={styles.formLabel}>Division</label>
+                    <select
+                      value={newProject.divisionId}
+                      onChange={(e) => setNewProject({ ...newProject, divisionId: e.target.value })}
+                      className={styles.modalSelect}
+                    >
+                      {divisions.map((d) => (
+                        <option key={d.id} value={d.id}>
+                          {d.slug} ({d.name})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label className={styles.formLabel}>Description</label>
+                  <textarea
+                    rows={3}
+                    placeholder="Architecture highlights, benchmark numbers, or problem statement..."
+                    value={newProject.description}
+                    onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
+                    className={styles.modalTextarea}
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className={styles.modalSubmitBtn}
+                >
+                  {submitting ? "Submitting Proposal..." : "Submit Project for Peer Review →"}
+                </button>
+              </form>
+            </div>
+          </div>
+        )}
       </div>
     </main>
   );

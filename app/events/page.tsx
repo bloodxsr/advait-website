@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
+import { CountdownTimer } from "@/components/CountdownTimer";
 import styles from "./events.module.css";
 
 type EventFilter = "all" | "upcoming" | "past" | "news" | "socials";
@@ -14,11 +15,13 @@ interface EventItem {
   division: string;
   title: string;
   date: string;
+  rawStartsAt?: string;
   time?: string;
   venue?: string;
   desc: string;
   status: "upcoming" | "past" | "news";
   actionText: string;
+  imageUrls?: string[];
 }
 
 interface SocialChannel {
@@ -95,105 +98,250 @@ const SOCIAL_CHANNELS: SocialChannel[] = [
   },
 ];
 
-const NEXT_FEATURED_SALON = {
-  num: "00",
-  title: "AetherSwarm Distributed Architecture Salon",
-  division: "RED / EVED",
-  date: "OCT 28, 2026",
-  time: "6:00 PM – 8:30 PM IST",
-  venue: "Main Campus Auditorium & Discord Live Stage",
-  desc: "A hands-on technical workshop dissecting multi-agent node consensus, WebGPU compute shaders, and low-latency RPC streaming protocols with core collective maintainers and division stewards.",
-  link: "#rsvp",
-};
-
-const EVENTS_DATA: EventItem[] = [
-  {
-    id: "e-1",
-    num: "01",
-    type: "event",
-    typeLabel: "TECHNICAL SALON",
-    division: "RED",
-    title: "Open Systems & Generative Latents Workshop",
-    date: "NOV 04, 2026",
-    time: "5:00 PM IST",
-    venue: "Lab 4 & Discord Stream",
-    desc: "Building local inference visualizers with 3D Gaussian splatting running client-side with zero cloud dependencies and custom WebGL shaders.",
-    status: "upcoming",
-    actionText: "RSVP for session ↗",
-  },
-  {
-    id: "e-2",
-    num: "02",
-    type: "event",
-    typeLabel: "RESEARCH SALON",
-    division: "RED",
-    title: "Zero-Knowledge Proofs in Compilation Pipelines",
-    date: "NOV 18, 2026",
-    time: "6:30 PM IST",
-    venue: "Discord Live Stage",
-    desc: "Deep-dive into ZK-SNARK verifier circuits, proof-carrying intermediate representations, and confidential ONNX neural network execution.",
-    status: "upcoming",
-    actionText: "RSVP for session ↗",
-  },
-  {
-    id: "e-3",
-    num: "03",
-    type: "news",
-    typeLabel: "COLLECTIVE DISPATCH",
-    division: "OPS",
-    title: "Advait Autumn Research Sprint Kickoff & Grants",
-    date: "OCT 20, 2026",
-    desc: "Announcing $5,000 in micro-grants for student open-source infrastructure projects, edge AI accelerators, and verifiable compute artifacts.",
-    status: "news",
-    actionText: "Read announcement ↗",
-  },
-  {
-    id: "e-4",
-    num: "04",
-    type: "event",
-    typeLabel: "ANNUAL REVIEW",
-    division: "EVED",
-    title: "End-of-Year Collective Review & Project Showcase",
-    date: "DEC 19, 2026",
-    time: "4:00 PM IST",
-    venue: "Advait Innovation Hub",
-    desc: "Showcasing student-built autonomous agents, peer-reviewed paper dispatches, and awarding the top open source contributors in the Hall of Builders.",
-    status: "upcoming",
-    actionText: "RSVP for showcase ↗",
-  },
-  {
-    id: "e-5",
-    num: "05",
-    type: "event",
-    typeLabel: "ARCHIVE SALON",
-    division: "RED",
-    title: "Designing Data-Intensive Micro-Architectures",
-    date: "SEP 12, 2026",
-    desc: "Archive recording & lecture slides from our systems salon exploring fault tolerance, replication logs, and Raft consensus.",
-    status: "past",
-    actionText: "View slides & recording ↗",
-  },
-  {
-    id: "e-6",
-    num: "06",
-    type: "news",
-    typeLabel: "SYSTEM DISPATCH",
-    division: "RED",
-    title: "Advait-HOB-SDK v1.1.0 Released to Community",
-    date: "SEP 02, 2026",
-    desc: "Complete overhaul of the Go & Rust client SDKs featuring automated state sync, high-throughput RPC, and zero-alloc serialization.",
-    status: "news",
-    actionText: "View release notes ↗",
-  },
-];
-
 export default function EventsPage() {
   const [filter, setFilter] = useState<EventFilter>("all");
   const [search, setSearch] = useState("");
   const [rsvpSuccess, setRsvpSuccess] = useState(false);
+  const [eventsList, setEventsList] = useState<EventItem[]>([]);
+  const [socialChannels, setSocialChannels] = useState<SocialChannel[]>([]);
+  const [featuredSalon, setFeaturedSalon] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  // Admin Check & Event Creation Modal State
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isEventModalOpen, setIsEventModalOpen] = useState(false);
+  const [creatingEvent, setCreatingEvent] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [newEvent, setNewEvent] = useState({
+    title: "",
+    description: "",
+    kind: "salon" as "salon" | "workshop" | "meetup" | "hackathon" | "news",
+    location: "Main Auditorium & Online",
+    startsAt: new Date(Date.now() + 86400000 * 3).toISOString().slice(0, 16),
+    endsAt: "",
+    status: "upcoming" as "upcoming" | "completed",
+    imageUrl: "",
+  });
+
+  // Verify Admin Session
+  useEffect(() => {
+    fetch("/api/auth/session")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.user?.role === "admin") {
+          setIsAdmin(true);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingImage(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("/api/uploads", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setNewEvent((prev) => ({ ...prev, imageUrl: data.url }));
+      } else {
+        const err = await res.json();
+        alert(err.error || "Failed to upload image");
+      }
+    } catch {
+      alert("Network error uploading image");
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
+  const handleCreateEvent = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newEvent.title.trim()) return;
+
+    setCreatingEvent(true);
+    try {
+      const res = await fetch("/api/events", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: newEvent.title.trim(),
+          description: newEvent.description.trim() || undefined,
+          kind: newEvent.kind,
+          location: newEvent.location.trim() || undefined,
+          startsAt: new Date(newEvent.startsAt).toISOString(),
+          endsAt: newEvent.endsAt ? new Date(newEvent.endsAt).toISOString() : undefined,
+          status: newEvent.status,
+          imageUrl: newEvent.imageUrl || undefined,
+        }),
+      });
+
+      if (res.ok) {
+        setIsEventModalOpen(false);
+        setNewEvent({
+          title: "",
+          description: "",
+          kind: "salon",
+          location: "Main Auditorium & Online",
+          startsAt: new Date(Date.now() + 86400000 * 3).toISOString().slice(0, 16),
+          endsAt: "",
+          status: "upcoming",
+          imageUrl: "",
+        });
+        // Reload events list
+        loadEventsAndSocials();
+        alert("Event scheduled and published successfully!");
+      } else {
+        const err = await res.json();
+        alert(err.error || "Failed to schedule event.");
+      }
+    } catch {
+      alert("Network error scheduling event.");
+    } finally {
+      setCreatingEvent(false);
+    }
+  };
+
+  const loadEventsAndSocials = async () => {
+    try {
+      const [evRes, socRes, socialPostsRes] = await Promise.all([
+        fetch("/api/events"),
+        fetch("/api/social-links"),
+        fetch("/api/social-posts"),
+      ]);
+
+      const allItems: EventItem[] = [];
+
+      if (evRes.ok) {
+        const evData = await evRes.json();
+        (evData.events || []).forEach((e: any, idx: number) => {
+          const dateStr = e.startsAt
+            ? new Date(e.startsAt).toLocaleDateString("en-US", {
+                month: "short",
+                day: "2-digit",
+                year: "numeric",
+              }).toUpperCase()
+            : "OCT 2026";
+
+          const status = e.status === "completed" ? "past" : e.kind === "news" ? "news" : "upcoming";
+          const typeLabel =
+            e.kind === "salon"
+              ? "TECHNICAL SALON"
+              : e.kind === "news"
+              ? "SYSTEM DISPATCH"
+              : "COMMUNITY EVENT";
+
+          allItems.push({
+            id: e.id,
+            num: String(idx + 1).padStart(2, "0"),
+            type: e.kind === "news" ? "news" : "event",
+            typeLabel,
+            division: "RED",
+            title: e.title,
+            date: dateStr,
+            rawStartsAt: e.startsAt,
+            time: "6:00 PM IST",
+            venue: e.location || "Online & Main Campus",
+            desc: e.description || "Advait technical salon and collective gathering.",
+            status,
+            actionText: status === "past" ? "View archive ↗" : "RSVP for session ↗",
+          });
+        });
+      }
+
+      if (socialPostsRes.ok) {
+        const spData = await socialPostsRes.json();
+        (spData.posts || []).forEach((sp: any, idx: number) => {
+          const dateStr = sp.createdAt
+            ? new Date(sp.createdAt).toLocaleDateString("en-US", {
+                month: "short",
+                day: "2-digit",
+                year: "numeric",
+              }).toUpperCase()
+            : "OCT 2026";
+
+          const typeLabel =
+            sp.type === "gallery"
+              ? "PHOTO GALLERY"
+              : sp.type === "news"
+              ? "NEWS DISPATCH"
+              : "PHOTO POST";
+
+          allItems.push({
+            id: sp.id,
+            num: String(allItems.length + idx + 1).padStart(2, "0"),
+            type: sp.type === "news" ? "news" : "event",
+            typeLabel,
+            division: sp.divisionSlug || "Creatives",
+            title: sp.title,
+            date: dateStr,
+            rawStartsAt: sp.createdAt,
+            time: undefined,
+            venue: undefined,
+            desc: sp.caption || "Advait social dispatch.",
+            status: sp.type === "news" ? "news" : "past",
+            actionText: sp.type === "news" ? "Read dispatch ↗" : "View photos ↗",
+            imageUrls: sp.imageUrls,
+          });
+        });
+      }
+
+      setEventsList(allItems);
+      if (allItems.length > 0) {
+        const firstSalon = allItems.find((i) => i.typeLabel.includes("SALON") && i.status === "upcoming") || allItems.find((i) => i.status === "upcoming") || allItems[0];
+        setFeaturedSalon({
+          num: "00",
+          title: firstSalon.title,
+          division: "RED / EVED",
+          date: firstSalon.date,
+          rawStartsAt: firstSalon.rawStartsAt,
+          time: firstSalon.time || "6:00 PM IST",
+          venue: firstSalon.venue || "Main Campus Auditorium",
+          desc: firstSalon.desc,
+          link: "#rsvp",
+        });
+      }
+
+      if (socRes.ok) {
+        const socData = await socRes.json();
+        const sItems: SocialChannel[] = (socData.socials || []).map((s: any, idx: number) => ({
+          id: s.id,
+          num: String(idx + 1).padStart(2, "0"),
+          name: s.title,
+          handle: s.platform === "github" ? "github.com/advait-collective" : `@advait_${s.platform}`,
+          desc: `Official Advait Collective verified platform on ${s.title}.`,
+          badge: `${s.title.toUpperCase()} CHANNEL`,
+          url: s.url,
+          metric: "Verified Collective Channel",
+        }));
+
+        if (sItems.length > 0) {
+          setSocialChannels(sItems);
+        }
+      }
+    } catch (err) {
+      console.error("Failed to fetch events:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadEventsAndSocials();
+  }, []);
+
+  const currentSocialChannels = socialChannels.length > 0 ? socialChannels : SOCIAL_CHANNELS;
 
   const filteredEvents = useMemo(() => {
-    return EVENTS_DATA.filter((item) => {
+    return eventsList.filter((item) => {
       const matchesFilter =
         filter === "all"
           ? true
@@ -278,58 +426,68 @@ export default function EventsPage() {
         </header>
 
         {/* ── 01. Featured Upcoming Salon Hero Banner ──────────────────────────── */}
-        <section id="rsvp" className={styles.featuredSection}>
-          <div className={styles.featuredCard}>
-            <div className={styles.featuredTopRow}>
-              <div className={styles.featuredBadges}>
-                <span className={styles.featuredPill}>[FEATURED SALON]</span>
-                <span className={styles.divTag}>[{NEXT_FEATURED_SALON.division}]</span>
-              </div>
-              <span className={styles.countdownBadge}>● LIVE REGISTRATION OPEN</span>
-            </div>
-
-            <div className={styles.featuredContent}>
-              <div className={styles.dateTimeGrid}>
-                <div className={styles.dateBlock}>
-                  <span className={styles.dateLabel}>DATE:</span>
-                  <span className={styles.dateValue}>{NEXT_FEATURED_SALON.date}</span>
+        {featuredSalon && (
+          <section id="rsvp" className={styles.featuredSection}>
+            <div className={styles.featuredCard}>
+              <div className={styles.featuredTopRow}>
+                <div className={styles.featuredBadges}>
+                  <span className={styles.featuredPill}>[FEATURED SALON]</span>
+                  <span className={styles.divTag}>[{featuredSalon.division}]</span>
                 </div>
-                <div className={styles.dateBlock}>
-                  <span className={styles.dateLabel}>TIME:</span>
-                  <span className={styles.dateValue}>{NEXT_FEATURED_SALON.time}</span>
-                </div>
-                <div className={styles.dateBlock}>
-                  <span className={styles.dateLabel}>LOCATION:</span>
-                  <span className={styles.dateValue}>{NEXT_FEATURED_SALON.venue}</span>
-                </div>
+                <span className={styles.countdownBadge}>● LIVE REGISTRATION OPEN</span>
               </div>
 
-              <h2 className={styles.featuredHeading}>
-                {NEXT_FEATURED_SALON.title}
-              </h2>
-              <p className={styles.featuredDesc}>{NEXT_FEATURED_SALON.desc}</p>
-            </div>
+              <div className={styles.featuredContent}>
+                <div className={styles.dateTimeGrid}>
+                  <div className={styles.dateBlock}>
+                    <span className={styles.dateLabel}>DATE:</span>
+                    <span className={styles.dateValue}>{featuredSalon.date}</span>
+                  </div>
+                  <div className={styles.dateBlock}>
+                    <span className={styles.dateLabel}>TIME:</span>
+                    <span className={styles.dateValue}>{featuredSalon.time}</span>
+                  </div>
+                  <div className={styles.dateBlock}>
+                    <span className={styles.dateLabel}>LOCATION:</span>
+                    <span className={styles.dateValue}>{featuredSalon.venue}</span>
+                  </div>
+                </div>
 
-            <div className={styles.featuredActions}>
-              <button
-                type="button"
-                onClick={handleRsvp}
-                className={styles.rsvpBtn}
-              >
-                <span>{rsvpSuccess ? "✓ RSVP REGISTERED ON DOCKET" : "RSVP FOR THIS TECHNICAL SALON"}</span>
-                <span>→</span>
-              </button>
-              <a
-                href="https://discord.com"
-                target="_blank"
-                rel="noreferrer"
-                className={styles.discordBtn}
-              >
-                Join Discord Stage ↗
-              </a>
+                <h2 className={styles.featuredHeading}>
+                  {featuredSalon.title}
+                </h2>
+                
+                {/* Live Real-time Countdown Timer for Featured Salon */}
+                {featuredSalon.rawStartsAt && (
+                  <div style={{ margin: "16px 0" }}>
+                    <CountdownTimer targetDate={featuredSalon.rawStartsAt} variant="hero" />
+                  </div>
+                )}
+
+                <p className={styles.featuredDesc}>{featuredSalon.desc}</p>
+              </div>
+
+              <div className={styles.featuredActions}>
+                <button
+                  type="button"
+                  onClick={handleRsvp}
+                  className={styles.rsvpBtn}
+                >
+                  <span>{rsvpSuccess ? "RSVP REGISTERED ON DOCKET" : "RSVP FOR THIS TECHNICAL SALON"}</span>
+                  <span>→</span>
+                </button>
+                <a
+                  href="https://discord.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  className={styles.discordBtn}
+                >
+                  Join Discord Stage ↗
+                </a>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         {/* ── 02. Filter & Search Controls ────────────────────────────────────── */}
         <section className={styles.controlsSection}>
@@ -356,8 +514,26 @@ export default function EventsPage() {
               )}
             </div>
 
-            {/* Filter Pills */}
+            {/* Filter Pills & Creator Studio Dispatch Entry */}
             <div className={styles.filterPills} role="tablist">
+              <Link
+                href="/publish"
+                className={styles.adminCreateBtn}
+                style={{
+                  textDecoration: "none",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "7px",
+                  background: "linear-gradient(135deg, rgba(168, 85, 247, 0.28), rgba(236, 72, 153, 0.22))",
+                  border: "1px solid rgba(168, 85, 247, 0.55)",
+                  boxShadow: "0 0 16px rgba(168, 85, 247, 0.25)",
+                }}
+                title="Open Unified Creator Studio to schedule events, publish news, upload photos, or submit blogs"
+              >
+                <span style={{ color: "#c084fc", fontSize: "14px" }}>+</span>
+                <span>{isAdmin ? "+ POST ANYTHING / STUDIO" : "+ DISPATCH / SUBMIT"}</span>
+              </Link>
+
               <button
                 type="button"
                 role="tab"
@@ -418,18 +594,22 @@ export default function EventsPage() {
             <div className={styles.emptyState}>
               <span className={styles.emptyPrompt}>[NO SESSIONS FOUND]</span>
               <p className={styles.emptyText}>
-                No gatherings match your search &quot;{search}&quot;.
+                {search
+                  ? `No gatherings match your search "${search}".`
+                  : "No events or salons currently scheduled on docket. Stay tuned or connect through our network channels below."}
               </p>
-              <button
-                type="button"
-                onClick={() => {
-                  setFilter("all");
-                  setSearch("");
-                }}
-                className={styles.resetBtn}
-              >
-                Reset Filters
-              </button>
+              {search && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFilter("all");
+                    setSearch("");
+                  }}
+                  className={styles.resetBtn}
+                >
+                  Reset Filters
+                </button>
+              )}
             </div>
           ) : (
             <div className={styles.eventsGrid}>
@@ -442,7 +622,28 @@ export default function EventsPage() {
                       <span className={styles.divPill}>[{ev.division}]</span>
                       <span className={styles.typeBadge}>[{ev.typeLabel}]</span>
                     </div>
-                    <span className={styles.dateStamp}>{ev.date}</span>
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "4px" }}>
+                      <span className={styles.dateStamp}>{ev.date}</span>
+                      {ev.rawStartsAt && ev.status === "upcoming" && (
+                        <CountdownTimer targetDate={ev.rawStartsAt} variant="badge" />
+                      )}
+                      {ev.type === "news" && (
+                        <span style={{
+                          fontFamily: "var(--font-mono)",
+                          fontSize: "9.5px",
+                          fontWeight: 700,
+                          color: "#38bdf8",
+                          background: "rgba(56, 189, 248, 0.12)",
+                          border: "1px solid rgba(56, 189, 248, 0.35)",
+                          padding: "1px 5px",
+                          borderRadius: "3px",
+                          letterSpacing: "0.04em",
+                          whiteSpace: "nowrap"
+                        }}>
+                          ● PERMANENT NEWS
+                        </span>
+                      )}
+                    </div>
                   </div>
 
                   {/* Body */}
@@ -457,6 +658,19 @@ export default function EventsPage() {
                             <span>{ev.venue}</span>
                           </>
                         )}
+                      </div>
+                    )}
+                    {ev.imageUrls && ev.imageUrls.length > 0 && (
+                      <div style={{ display: "flex", gap: "6px", margin: "10px 0", overflow: "hidden", borderRadius: "4px" }}>
+                        {ev.imageUrls.slice(0, 3).map((img, i) => (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            key={i}
+                            src={img}
+                            alt={ev.title}
+                            style={{ height: "100px", width: ev.imageUrls && ev.imageUrls.length > 1 ? "33%" : "100%", objectFit: "cover", borderRadius: "4px" }}
+                          />
+                        ))}
                       </div>
                     )}
                     <p className={styles.eventDescText}>{ev.desc}</p>
@@ -507,7 +721,7 @@ export default function EventsPage() {
           </div>
 
           <div className={styles.socialsGrid}>
-            {SOCIAL_CHANNELS.map((soc) => (
+            {currentSocialChannels.map((soc) => (
               <a
                 key={soc.id}
                 href={soc.url}
@@ -572,6 +786,146 @@ export default function EventsPage() {
             </div>
           </div>
         </section>
+
+        {/* ── 06. Admin Schedule Event Modal ──────────────────────────────────── */}
+        {isEventModalOpen && (
+          <div className={styles.modalOverlay} onClick={() => setIsEventModalOpen(false)}>
+            <div className={styles.modalCard} onClick={(e) => e.stopPropagation()}>
+              <div className={styles.modalHeader}>
+                <h3 className={styles.modalTitle}>Schedule New Gathering (Admin Direct)</h3>
+                <button
+                  type="button"
+                  onClick={() => setIsEventModalOpen(false)}
+                  className={styles.modalCloseBtn}
+                >
+                  [CLOSE]
+                </button>
+              </div>
+
+              <p style={{ color: "#a1a1aa", fontSize: "13px", margin: 0, lineHeight: 1.5 }}>
+                Directly publish an architecture salon, technical workshop, or collective gathering
+                to the official Advait calendar.
+              </p>
+
+              <form onSubmit={handleCreateEvent} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                <div className={styles.formGroup}>
+                  <label className={styles.formLabel}>Event Title *</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g., Technical Salon 05: Distributed State Sync"
+                    value={newEvent.title}
+                    onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
+                    className={styles.modalInput}
+                  />
+                </div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+                  <div className={styles.formGroup}>
+                    <label className={styles.formLabel}>Event Kind</label>
+                    <select
+                      value={newEvent.kind}
+                      onChange={(e) => setNewEvent({ ...newEvent, kind: e.target.value as any })}
+                      className={styles.modalSelect}
+                    >
+                      <option value="salon">Technical Salon</option>
+                      <option value="workshop">Hands-on Workshop</option>
+                      <option value="hackathon">Hackathon / Sprint</option>
+                      <option value="meetup">Community Meetup</option>
+                      <option value="news">Official Dispatch</option>
+                    </select>
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label className={styles.formLabel}>Location / Venue</label>
+                    <input
+                      type="text"
+                      placeholder="e.g., Main Campus & Discord Stage"
+                      value={newEvent.location}
+                      onChange={(e) => setNewEvent({ ...newEvent, location: e.target.value })}
+                      className={styles.modalInput}
+                    />
+                  </div>
+                </div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+                  <div className={styles.formGroup}>
+                    <label className={styles.formLabel}>Starts At *</label>
+                    <input
+                      type="datetime-local"
+                      required
+                      value={newEvent.startsAt}
+                      onChange={(e) => setNewEvent({ ...newEvent, startsAt: e.target.value })}
+                      className={styles.modalInput}
+                    />
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label className={styles.formLabel}>Ends At (Optional)</label>
+                    <input
+                      type="datetime-local"
+                      value={newEvent.endsAt}
+                      onChange={(e) => setNewEvent({ ...newEvent, endsAt: e.target.value })}
+                      className={styles.modalInput}
+                    />
+                  </div>
+                </div>
+
+                {/* Cover Image Upload / Attachment */}
+                <div className={styles.formGroup}>
+                  <label className={styles.formLabel}>Cover Image (Optional)</label>
+                  <div className={styles.uploadRow}>
+                    <input
+                      type="url"
+                      placeholder="Paste image URL or click browse..."
+                      value={newEvent.imageUrl}
+                      onChange={(e) => setNewEvent({ ...newEvent, imageUrl: e.target.value })}
+                      className={styles.modalInput}
+                      style={{ flex: 1 }}
+                    />
+                    <label className={styles.uploadBtn}>
+                      <span>{uploadingImage ? "Uploading..." : "Browse"}</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        style={{ display: "none" }}
+                        disabled={uploadingImage}
+                      />
+                    </label>
+                  </div>
+                  {newEvent.imageUrl && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={newEvent.imageUrl}
+                      alt="Event preview"
+                      style={{ width: "100%", height: "120px", objectFit: "cover", borderRadius: "6px", marginTop: "6px", border: "1px solid #27272a" }}
+                    />
+                  )}
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label className={styles.formLabel}>Description &amp; Agenda</label>
+                  <textarea
+                    rows={3}
+                    placeholder="Keynote topics, speaker credentials, and discussion prompts..."
+                    value={newEvent.description}
+                    onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })}
+                    className={styles.modalTextarea}
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={creatingEvent || uploadingImage}
+                  className={styles.modalSubmitBtn}
+                >
+                  {creatingEvent ? "Publishing Gathering..." : "Publish Event to Calendar"}
+                </button>
+              </form>
+            </div>
+          </div>
+        )}
       </div>
     </main>
   );
