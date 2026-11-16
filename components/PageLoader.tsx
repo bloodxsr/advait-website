@@ -139,9 +139,8 @@ export function PageLoader() {
 
   return (
     <div
-      className={`${styles.overlay} ${
-        isDarkPage ? styles.overlayDark : ""
-      } ${isExiting ? styles.overlayExiting : ""}`}
+      className={`${styles.overlay} ${isDarkPage ? styles.overlayDark : ""
+        } ${isExiting ? styles.overlayExiting : ""}`}
       role="status"
       aria-label="Transitioning between Advait pages"
     >
