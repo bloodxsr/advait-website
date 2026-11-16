@@ -30,11 +30,13 @@ export function StencilGlyph({
   fillProgress,
   className,
   style,
+  fillColor = "currentColor",
 }: {
   glyph: keyof typeof GLYPH_PATHS;
   fillProgress?: number;
   className?: string;
   style?: React.CSSProperties;
+  fillColor?: string;
 }) {
   const path = GLYPH_PATHS[glyph];
   const viewBox = GLYPH_VIEWBOX[glyph];
@@ -50,15 +52,15 @@ export function StencilGlyph({
         ...style,
       }}
     >
-      {/* 01. Ghost Base Layer (15% faint silhouette matching CRL shader uGhost) */}
+      {/* 01. Ghost Base Layer (18% faint silhouette matching CRL shader uGhost) */}
       <svg
         viewBox={viewBox}
         style={{
           width: "100%",
           height: "100%",
           display: "block",
-          fill: "#000000",
-          opacity: 0.15,
+          fill: fillColor,
+          opacity: 0.18,
         }}
       >
         <path d={path} />
@@ -81,7 +83,7 @@ export function StencilGlyph({
               width: "100%",
               height: "100%",
               display: "block",
-              fill: "#000000",
+              fill: fillColor,
             }}
           >
             <path d={path} />
