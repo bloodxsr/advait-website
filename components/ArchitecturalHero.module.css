@@ -36,9 +36,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(36px, 5vh, 72px);
+  gap: clamp(40px, 6vh, 84px);
   will-change: transform;
-  animation: scrollDownMarquee 26s linear infinite;
+  animation: scrollDownMarquee 48s linear infinite;
 }
 
 @keyframes scrollDownMarquee {
@@ -53,8 +53,8 @@
 
 /* Monumental full-screen size: rotated 90° anti-clockwise for every single letter */
 .marqueeLetter {
-  width: clamp(520px, 82vw, 1200px);
-  height: clamp(520px, 82vw, 1200px);
+  width: clamp(580px, 92vw, 1400px);
+  height: clamp(580px, 92vw, 1400px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -62,8 +62,8 @@
 }
 
 .marqueeLetterI {
-  width: clamp(520px, 82vw, 1200px);
-  height: clamp(260px, 42vw, 620px);
+  width: clamp(580px, 92vw, 1400px);
+  height: clamp(300px, 48vw, 720px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -307,12 +307,12 @@
   }
 
   .marqueeLetter {
-    width: 94vw;
-    height: 94vw;
+    width: 98vw;
+    height: 98vw;
   }
 
   .marqueeLetterI {
-    width: 94vw;
-    height: 52vw;
+    width: 98vw;
+    height: 54vw;
   }
 }
