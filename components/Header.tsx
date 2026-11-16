@@ -8,22 +8,20 @@ import styles from "./Header.module.css";
 const publicLinks = [
   { href: "/projects", label: "Projects", tag: "Artifacts", num: "01" },
   { href: "/hall-of-flames", label: "Hall of Flames", tag: "Archive", num: "02" },
-  { href: "/leaderboard", label: "Leaderboard", tag: "Rankings", num: "03" },
+  { href: "/team", label: "Meet our Team", tag: "Stewardship", num: "03" },
   { href: "/events", label: "Events", tag: "Gatherings", num: "04" },
   { href: "/resources", label: "Resources", tag: "Library", num: "05" },
-  { href: "/team", label: "Meet our Team", tag: "Stewardship", num: "06" },
 ];
 
 const allLinks = [
   { href: "/projects", label: "Projects", tag: "Artifacts", num: "01" },
   { href: "/hall-of-flames", label: "Hall of Flames", tag: "Archive", num: "02" },
-  { href: "/leaderboard", label: "Leaderboard", tag: "Rankings", num: "03" },
+  { href: "/team", label: "Meet our Team", tag: "Stewardship", num: "03" },
   { href: "/events", label: "Events", tag: "Gatherings", num: "04" },
   { href: "/resources", label: "Resources", tag: "Library", num: "05" },
-  { href: "/team", label: "Meet our Team", tag: "Stewardship", num: "06" },
-  { href: "/dashboard", label: "Dashboard", tag: "Personal", num: "07" },
-  { href: "/social", label: "Social Links", tag: "Network", num: "08" },
-  { href: "/admin", label: "Admin Portal", tag: "Admin", num: "09" },
+  { href: "/dashboard", label: "Dashboard", tag: "Personal", num: "06" },
+  { href: "/social", label: "Social Links", tag: "Network", num: "07" },
+  { href: "/admin", label: "Admin Portal", tag: "Admin", num: "08" },
 ];
 
 export function Header() {
@@ -138,10 +136,10 @@ export function Header() {
                 </button>
               ) : (
                 <>
-                  <Link className={styles.signInBtn} href="/login">
+                  <Link className={styles.signInBtn} href="/login?mode=signin">
                     Sign in
                   </Link>
-                  <Link className={styles.joinBtn} href="/login">
+                  <Link className={styles.joinBtn} href="/login?mode=join">
                     Join
                   </Link>
                 </>
@@ -164,11 +162,11 @@ export function Header() {
               aria-hidden="true"
             />
             <span className={styles.dropdownTitle}>
-              {isLoggedIn ? "All Collective Directory" : "Explore Advait / 2026"}
+              {isLoggedIn ? "MEMBER DIRECTORY" : "ROSTER INDEX / 2026"}
             </span>
           </div>
           <span className={styles.dropdownBadge}>
-            {isLoggedIn ? "Verified Member" : "Directory Index"}
+            {isLoggedIn ? "[VERIFIED]" : "[05 ROUTES]"}
           </span>
         </div>
 

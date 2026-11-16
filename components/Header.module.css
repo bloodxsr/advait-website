@@ -129,22 +129,23 @@
   gap: 6px;
   height: 32px;
   padding: 0 12px;
-  border-radius: 999px;
+  border-radius: 4px;
   font-family: var(--font-mono);
-  font-size: 11.5px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.9);
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.28);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .menuBtn:hover {
-  background: rgba(255, 255, 255, 0.18);
-  color: #ffffff;
+  background: #ffffff;
+  border-color: #ffffff;
+  color: #000000;
 }
 
 .menuBtnActive {
@@ -168,7 +169,7 @@
   width: 100%;
   height: 1.5px;
   background: currentColor;
-  border-radius: 1px;
+  border-radius: 0;
   transition: transform 0.2s ease;
 }
 
@@ -177,7 +178,7 @@
   width: 100%;
   height: 1.5px;
   background: currentColor;
-  border-radius: 1px;
+  border-radius: 0;
   transform: translateY(2.5px) rotate(45deg);
 }
 
@@ -186,12 +187,12 @@
   width: 100%;
   height: 1.5px;
   background: currentColor;
-  border-radius: 1px;
+  border-radius: 0;
   transform: translateY(-2.5px) rotate(-45deg);
 }
 
 .menuLabel {
-  letter-spacing: 0.02em;
+  letter-spacing: 0.04em;
 }
 
 /* Sign In Button */
@@ -201,20 +202,23 @@
   justify-content: center;
   height: 32px;
   padding: 0 14px;
-  border-radius: 999px;
+  border-radius: 4px;
   font-family: var(--font-mono);
-  font-size: 11.5px;
-  font-weight: 600;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   color: #ffffff;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.35);
   text-decoration: none;
   white-space: nowrap;
   transition: all 0.2s ease;
 }
 
 .signInBtn:hover {
-  background: rgba(255, 255, 255, 0.16);
+  background: #ffffff;
+  color: #000000;
   border-color: #ffffff;
 }
 
@@ -225,14 +229,15 @@
   justify-content: center;
   height: 32px;
   padding: 0 16px;
-  border-radius: 999px;
+  border-radius: 4px;
   font-family: var(--font-mono);
-  font-size: 11.5px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   background: #ffffff;
   color: #000000;
+  border: 1px solid #ffffff;
   text-decoration: none;
   white-space: nowrap;
   transition: all 0.2s ease;
@@ -243,8 +248,9 @@
 }
 
 .joinBtn:hover {
-  background: #e5e5e5;
-  transform: translateY(-1px);
+  background: #000000;
+  color: #ffffff;
+  border-color: #ffffff;
 }
 
 /* Sign Out Button */
@@ -253,19 +259,21 @@
   align-items: center;
   height: 32px;
   padding: 0 14px;
-  border-radius: 999px;
+  border-radius: 4px;
   font-family: var(--font-mono);
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
   color: #ff453a;
   background: rgba(255, 69, 58, 0.12);
-  border: 1px solid rgba(255, 69, 58, 0.3);
+  border: 1px solid rgba(255, 69, 58, 0.35);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .signOutBtn:hover {
-  background: rgba(255, 69, 58, 0.24);
+  background: #ff453a;
   color: #ffffff;
 }
 
@@ -277,14 +285,12 @@
   position: absolute;
   top: calc(100% + 10px);
   right: 28px;
-  width: min(380px, calc(100vw - 32px));
-  background: rgba(18, 18, 20, 0.96);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 18px;
-  padding: 16px;
-  backdrop-filter: blur(40px) saturate(190%);
-  -webkit-backdrop-filter: blur(40px) saturate(190%);
-  box-shadow: 0 24px 64px -12px rgba(0, 0, 0, 0.8);
+  width: min(400px, calc(100vw - 32px));
+  background: #0d0d0e;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 6px;
+  padding: 16px 14px;
+  box-shadow: 0 24px 64px -10px rgba(0, 0, 0, 0.85);
   box-sizing: border-box;
 
   opacity: 0;
@@ -310,8 +316,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 10px 14px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 6px 8px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
 }
 
 .dropdownStatus {
@@ -331,24 +337,27 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #0a84ff;
+  background: #ffffff;
 }
 
 .dropdownTitle {
   font-family: var(--font-mono);
-  font-size: 11.5px;
-  font-weight: 600;
+  font-size: 11px;
+  font-weight: 700;
   color: #ffffff;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .dropdownBadge {
   font-family: var(--font-mono);
   font-size: 10px;
+  font-weight: 700;
   padding: 2px 7px;
-  border-radius: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.6);
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
 }
 
 .menuLinks {
@@ -360,66 +369,79 @@
 
 .menuItem {
   display: grid;
-  grid-template-columns: 28px 1fr auto auto;
+  grid-template-columns: 26px 1fr auto auto;
   align-items: center;
   gap: 12px;
   padding: 10px 12px;
-  border-radius: 8px;
+  border-radius: 4px;
+  border: 1px solid transparent;
   text-decoration: none;
-  transition: all 0.15s ease;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .menuItem:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: #ffffff;
+  border-color: #ffffff;
+}
+
+.menuItem:hover .itemNumber,
+.menuItem:hover .itemLabel,
+.menuItem:hover .itemTag,
+.menuItem:hover .itemArrow {
+  color: #000000;
+}
+
+.menuItem:hover .itemArrow {
+  transform: translate(3px, -3px);
 }
 
 .menuItemActive {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
 }
 
 .itemNumber {
   font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.45);
+  font-size: 11.5px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.5);
+  transition: color 0.15s ease;
 }
 
 .itemLabel {
   font-family: var(--font-space), var(--font-brand), sans-serif;
   font-size: 14.5px;
-  font-weight: 600;
+  font-weight: 700;
   color: #ffffff;
+  letter-spacing: -0.01em;
+  transition: color 0.15s ease;
 }
 
 .itemTag {
   font-family: var(--font-mono);
-  font-size: 10.5px;
-  color: rgba(255, 255, 255, 0.5);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.55);
+  transition: color 0.15s ease;
 }
 
 .itemArrow {
   font-family: var(--font-mono);
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.4);
-  transition: transform 0.15s ease;
-}
-
-.menuItem:hover .itemArrow {
-  transform: translate(2px, -2px);
-  color: #ffffff;
+  color: rgba(255, 255, 255, 0.45);
+  transition: transform 0.15s ease, color 0.15s ease;
 }
 
 .dropdownFooter {
-  padding-top: 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
 }
 
 .dropdownFooterText {
   font-family: var(--font-mono);
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.4);
+  font-size: 9.5px;
+  color: rgba(255, 255, 255, 0.5);
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
 }
 
 @media (max-width: 600px) {
