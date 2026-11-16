@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { AmbientBackground } from "@/components/AmbientBackground";
+import { PageLoader } from "@/components/PageLoader";
 import "lenis/dist/lenis.css";
 import "./globals.css";
 
@@ -21,6 +22,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en">
       <body className={`${inter.variable} ${spaceGrotesk.variable} ${jetBrains.variable} ${outfit.variable}`}>
+        <PageLoader />
         <SmoothScroll />
         <AmbientBackground />
         <Header />

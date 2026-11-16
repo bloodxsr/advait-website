@@ -4,19 +4,32 @@ import { useEffect, useState, useRef } from "react";
 import { StencilGlyph } from "./AdvaitGlyphs";
 import styles from "./AdvaitIntro.module.css";
 
+// In-memory session flag: survives Next.js client-side navigation, resets on browser refresh
+let hasPlayedThisSession = false;
+
 interface AdvaitIntroProps {
   onComplete?: () => void;
 }
 
 export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
+  // If already played, immediately skip mounting
+  const [isVisible, setIsVisible] = useState(() => !hasPlayedThisSession);
   const [fillProgress, setFillProgress] = useState(0);
   const [assembled, setAssembled] = useState(false);
   const [isZooming, setIsZooming] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
   const animFrameRef = useRef<number | null>(null);
 
   useEffect(() => {
+    if (hasPlayedThisSession) {
+      document.body.removeAttribute("data-intro-active");
+      onComplete?.();
+      return;
+    }
+
+    // Mark as played so it will not run again during in-app page transitions
+    hasPlayedThisSession = true;
+
     // 00. Set body attribute to ensure navbar & hero text are hidden during intro fill
     document.body.setAttribute("data-intro-active", "true");
 
