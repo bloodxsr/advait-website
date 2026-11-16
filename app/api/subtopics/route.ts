@@ -3,6 +3,8 @@ import { db } from "@/lib/db";
 import { subtopics } from "@/db/schema";
 import { asc } from "drizzle-orm";
 
+export const revalidate = 60;
+
 export async function GET() {
   try {
     const list = await db.select().from(subtopics).orderBy(asc(subtopics.name));

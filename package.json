@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint .",
+    "test": "vitest run"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.119.0",
@@ -28,7 +29,10 @@
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "drizzle-kit": "^0.31.11",
+    "eslint": "^9.0.0",
+    "eslint-config-next": "latest",
     "tsx": "^4.23.15",
-    "typescript": "latest"
+    "typescript": "latest",
+    "vitest": "^5.1.0"
   }
 }

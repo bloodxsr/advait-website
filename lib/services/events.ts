@@ -4,7 +4,7 @@ import { eq, desc, and } from "drizzle-orm";
 import type { z } from "zod";
 import type { createEventSchema, updateEventSchema } from "@/lib/validators/events";
 
-export async function getEvents(kind?: string) {
+export async function getEvents(kind?: string, limit = 50, offset = 0) {
   const conditions = [];
 
   if (kind && kind !== "all") {
@@ -17,7 +17,9 @@ export async function getEvents(kind?: string) {
     .select()
     .from(events)
     .where(whereClause)
-    .orderBy(desc(events.startsAt));
+    .orderBy(desc(events.startsAt))
+    .limit(limit)
+    .offset(offset);
 }
 
 export async function createEvent(input: z.infer<typeof createEventSchema>) {

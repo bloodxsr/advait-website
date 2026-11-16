@@ -10,7 +10,7 @@ export interface CreateSocialPostInput {
   divisionId?: string;
 }
 
-export async function getSocialPosts(type?: string, divisionSlug?: string) {
+export async function getSocialPosts(type?: string, divisionSlug?: string, limit = 50, offset = 0) {
   const conditions = [];
 
   if (type && type !== "all") {
@@ -41,7 +41,9 @@ export async function getSocialPosts(type?: string, divisionSlug?: string) {
     .leftJoin(divisions, eq(socialPosts.divisionId, divisions.id))
     .leftJoin(users, eq(socialPosts.authorId, users.id))
     .where(whereClause)
-    .orderBy(desc(socialPosts.createdAt));
+    .orderBy(desc(socialPosts.createdAt))
+    .limit(limit)
+    .offset(offset);
 }
 
 export async function createSocialPost(authorId: string, input: CreateSocialPostInput) {

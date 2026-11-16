@@ -2,20 +2,18 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
 
-const SECRET_KEY = new TextEncoder().encode(
-  process.env.AUTH_SECRET || "advait_collective_auth_secret_2026_x7k9m2p4q8r1"
-);
+const authSecret = process.env.AUTH_SECRET;
 
-export async function middleware(request: NextRequest) {
+if (!authSecret) {
+  throw new Error("AUTH_SECRET must be configured");
+}
+
+const SECRET_KEY = new TextEncoder().encode(authSecret);
+
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-
   const isDashboard = pathname.startsWith("/dashboard");
   const isAdmin = pathname.startsWith("/admin");
-
-  if (!isDashboard && !isAdmin) {
-    return NextResponse.next();
-  }
-
   const token = request.cookies.get("advait_session")?.value;
 
   if (!token) {
@@ -26,21 +24,25 @@ export async function middleware(request: NextRequest) {
 
   try {
     const { payload } = await jwtVerify(token, SECRET_KEY);
-    const role = (payload as { role?: string }).role;
+    const role = payload.role;
 
-    // Strict admin role gate
+    if (typeof payload.userId !== "string" || (role !== "user" && role !== "admin")) {
+      throw new Error("Invalid session claims");
+    }
+
     if (isAdmin && role !== "admin") {
-      const dashboardUrl = new URL("/dashboard", request.url);
-      return NextResponse.redirect(dashboardUrl);
+      return NextResponse.redirect(new URL("/dashboard", request.url));
     }
 
     return NextResponse.next();
   } catch {
-    // Expired or invalid token
     const loginUrl = new URL("/login", request.url);
     loginUrl.searchParams.set("redirect", pathname);
     const response = NextResponse.redirect(loginUrl);
     response.cookies.delete("advait_session");
+    response.cookies.delete("advait_session_active");
+    response.cookies.delete("advait_name");
+    response.cookies.delete("advait_role");
     return response;
   }
 }

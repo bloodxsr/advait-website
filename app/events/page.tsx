@@ -3,14 +3,16 @@
 import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { CountdownTimer } from "@/components/CountdownTimer";
+import { uploadWithSignedUrl } from "@/lib/client-upload";
 import styles from "./events.module.css";
 
-type EventFilter = "all" | "upcoming" | "past" | "news" | "socials";
+type EventFilter = "all" | "upcoming" | "past" | "news" | "gallery" | "socials";
+type ContentType = "event" | "news" | "gallery";
 
 interface EventItem {
   id: string;
   num: string;
-  type: "event" | "news";
+  type: ContentType;
   typeLabel: string;
   division: string;
   title: string;
@@ -141,23 +143,10 @@ export default function EventsPage() {
 
     setUploadingImage(true);
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-
-      const res = await fetch("/api/uploads", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        setNewEvent((prev) => ({ ...prev, imageUrl: data.url }));
-      } else {
-        const err = await res.json();
-        alert(err.error || "Failed to upload image");
-      }
-    } catch {
-      alert("Network error uploading image");
+      const url = await uploadWithSignedUrl(file, "event");
+      setNewEvent((prev) => ({ ...prev, imageUrl: url }));
+    } catch (error) {
+      alert(error instanceof Error ? error.message : "Network error uploading image");
     } finally {
       setUploadingImage(false);
     }
@@ -260,6 +249,10 @@ export default function EventsPage() {
       if (socialPostsRes.ok) {
         const spData = await socialPostsRes.json();
         (spData.posts || []).forEach((sp: any, idx: number) => {
+          if (sp.type === "news" && allItems.some((item) => item.type === "news" && item.title === sp.title)) {
+            return;
+          }
+
           const dateStr = sp.createdAt
             ? new Date(sp.createdAt).toLocaleDateString("en-US", {
                 month: "short",
@@ -278,7 +271,7 @@ export default function EventsPage() {
           allItems.push({
             id: sp.id,
             num: String(allItems.length + idx + 1).padStart(2, "0"),
-            type: sp.type === "news" ? "news" : "event",
+            type: sp.type === "news" ? "news" : "gallery",
             typeLabel,
             division: sp.divisionSlug || "Creatives",
             title: sp.title,
@@ -295,8 +288,13 @@ export default function EventsPage() {
       }
 
       setEventsList(allItems);
-      if (allItems.length > 0) {
-        const firstSalon = allItems.find((i) => i.typeLabel.includes("SALON") && i.status === "upcoming") || allItems.find((i) => i.status === "upcoming") || allItems[0];
+      const eventItemsForFeature = allItems.filter((item) => item.type === "event");
+      const firstSalon =
+        eventItemsForFeature.find((i) => i.typeLabel.includes("SALON") && i.status === "upcoming") ||
+        eventItemsForFeature.find((i) => i.status === "upcoming") ||
+        eventItemsForFeature[0];
+
+      if (firstSalon) {
         setFeaturedSalon({
           num: "00",
           title: firstSalon.title,
@@ -308,6 +306,8 @@ export default function EventsPage() {
           desc: firstSalon.desc,
           link: "#rsvp",
         });
+      } else {
+        setFeaturedSalon(null);
       }
 
       if (socRes.ok) {
@@ -351,6 +351,8 @@ export default function EventsPage() {
               ? item.status === "past"
               : filter === "news"
                 ? item.status === "news"
+                : filter === "gallery"
+                  ? item.type === "gallery"
                 : true;
 
       const q = search.toLowerCase().trim();
@@ -364,6 +366,95 @@ export default function EventsPage() {
       return matchesFilter && matchesSearch;
     });
   }, [filter, search]);
+
+  const eventItems = filteredEvents.filter((item) => item.type === "event");
+  const newsItems = filteredEvents.filter((item) => item.type === "news");
+  const galleryItems = filteredEvents.filter((item) => item.type === "gallery");
+
+  const renderContentCard = (ev: EventItem) => (
+    <article key={ev.id} className={styles.eventCard}>
+      <div className={styles.cardTop}>
+        <div className={styles.cardBadges}>
+          <span className={styles.cardNum}>[{ev.num}]</span>
+          <span className={styles.divPill}>[{ev.division}]</span>
+          <span className={styles.typeBadge}>[{ev.typeLabel}]</span>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "4px" }}>
+          <span className={styles.dateStamp}>{ev.date}</span>
+          {ev.rawStartsAt && ev.status === "upcoming" && (
+            <CountdownTimer targetDate={ev.rawStartsAt} variant="badge" />
+          )}
+          {ev.type === "news" && (
+            <span className={styles.newsMarker}>● PERMANENT NEWS</span>
+          )}
+        </div>
+      </div>
+
+      <div className={styles.cardBody}>
+        <h3 className={styles.eventHeading}>{ev.title}</h3>
+        {ev.time && (
+          <div className={styles.timeVenueRow}>
+            <span>{ev.time}</span>
+            {ev.venue && (
+              <>
+                <span>·</span>
+                <span>{ev.venue}</span>
+              </>
+            )}
+          </div>
+        )}
+        {ev.imageUrls && ev.imageUrls.length > 0 && (
+          <div className={styles.contentImages}>
+            {ev.imageUrls.slice(0, 3).map((img, i) => (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                key={i}
+                src={img}
+                alt={ev.title}
+                className={styles.contentImage}
+              />
+            ))}
+          </div>
+        )}
+        <p className={styles.eventDescText}>{ev.desc}</p>
+      </div>
+
+      <div className={styles.cardFooter}>
+        <span className={styles.statusIndicator}>
+          {ev.status === "upcoming"
+            ? "● UPCOMING SESSION"
+            : ev.status === "past"
+              ? "○ ARCHIVED PROCEEDINGS"
+              : "◆ OFFICIAL DISPATCH"}
+        </span>
+        <span className={styles.cardAction}>{ev.actionText}</span>
+      </div>
+    </article>
+  );
+
+  const renderContentSection = (
+    id: string,
+    index: string,
+    label: string,
+    title: string,
+    items: EventItem[],
+    emptyText: string
+  ) => (
+    <section className={styles.contentSection} id={id} aria-labelledby={`${id}-title`}>
+      <div className={styles.contentSectionHeader}>
+        <div className={styles.contentSectionIndex}>
+          <span>[{index}]</span>
+          <span>{label}</span>
+        </div>
+        <h2 id={`${id}-title`} className={styles.contentSectionTitle}>{title}</h2>
+      </div>
+      {items.length > 0 ? (
+        <div className={styles.eventsGrid}>{items.map(renderContentCard)}</div>
+      ) : (
+        <div className={styles.sectionEmptyState}>{emptyText}</div>
+      )}
+    </section>
+  );
 
   const handleRsvp = () => {
     setRsvpSuccess(true);
@@ -514,26 +605,8 @@ export default function EventsPage() {
               )}
             </div>
 
-            {/* Filter Pills & Creator Studio Dispatch Entry */}
+            {/* Filter Pills */}
             <div className={styles.filterPills} role="tablist">
-              <Link
-                href="/publish"
-                className={styles.adminCreateBtn}
-                style={{
-                  textDecoration: "none",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "7px",
-                  background: "linear-gradient(135deg, rgba(168, 85, 247, 0.28), rgba(236, 72, 153, 0.22))",
-                  border: "1px solid rgba(168, 85, 247, 0.55)",
-                  boxShadow: "0 0 16px rgba(168, 85, 247, 0.25)",
-                }}
-                title="Open Unified Creator Studio to schedule events, publish news, upload photos, or submit blogs"
-              >
-                <span style={{ color: "#c084fc", fontSize: "14px" }}>+</span>
-                <span>{isAdmin ? "+ POST ANYTHING / STUDIO" : "+ DISPATCH / SUBMIT"}</span>
-              </Link>
-
               <button
                 type="button"
                 role="tab"
@@ -577,6 +650,16 @@ export default function EventsPage() {
               <button
                 type="button"
                 role="tab"
+                aria-selected={filter === "gallery"}
+                onClick={() => setFilter("gallery")}
+                className={`${styles.filterPill} ${filter === "gallery" ? styles.filterPillActive : ""
+                  }`}
+              >
+                [GALLERY &amp; PHOTOS]
+              </button>
+              <button
+                type="button"
+                role="tab"
                 aria-selected={filter === "socials"}
                 onClick={() => setFilter("socials")}
                 className={`${styles.filterPill} ${filter === "socials" ? styles.filterPillActive : ""
@@ -588,15 +671,19 @@ export default function EventsPage() {
           </div>
         </section>
 
-        {/* ── 03. Events Grid (Opposite Theme: Inverts to Solid White on Hover) ─ */}
-        <section className={styles.eventsGridSection} aria-label="Events Calendar">
+        {/* ── 03. Dedicated Events, News, and Gallery sections ──────────────── */}
+        <section className={styles.eventsGridSection} aria-label="Events, News, and Galleries">
           {filteredEvents.length === 0 ? (
             <div className={styles.emptyState}>
               <span className={styles.emptyPrompt}>[NO SESSIONS FOUND]</span>
               <p className={styles.emptyText}>
                 {search
-                  ? `No gatherings match your search "${search}".`
-                  : "No events or salons currently scheduled on docket. Stay tuned or connect through our network channels below."}
+                  ? `No content matches your search "${search}".`
+                  : filter === "gallery"
+                    ? "No photo posts or galleries have been published yet."
+                    : filter === "news"
+                      ? "No official news dispatches have been published yet."
+                      : "No events, news, or galleries are currently available."}
               </p>
               {search && (
                 <button
@@ -612,86 +699,32 @@ export default function EventsPage() {
               )}
             </div>
           ) : (
-            <div className={styles.eventsGrid}>
-              {filteredEvents.map((ev) => (
-                <article key={ev.id} className={styles.eventCard}>
-                  {/* Card Top */}
-                  <div className={styles.cardTop}>
-                    <div className={styles.cardBadges}>
-                      <span className={styles.cardNum}>[{ev.num}]</span>
-                      <span className={styles.divPill}>[{ev.division}]</span>
-                      <span className={styles.typeBadge}>[{ev.typeLabel}]</span>
-                    </div>
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "4px" }}>
-                      <span className={styles.dateStamp}>{ev.date}</span>
-                      {ev.rawStartsAt && ev.status === "upcoming" && (
-                        <CountdownTimer targetDate={ev.rawStartsAt} variant="badge" />
-                      )}
-                      {ev.type === "news" && (
-                        <span style={{
-                          fontFamily: "var(--font-mono)",
-                          fontSize: "9.5px",
-                          fontWeight: 700,
-                          color: "#38bdf8",
-                          background: "rgba(56, 189, 248, 0.12)",
-                          border: "1px solid rgba(56, 189, 248, 0.35)",
-                          padding: "1px 5px",
-                          borderRadius: "3px",
-                          letterSpacing: "0.04em",
-                          whiteSpace: "nowrap"
-                        }}>
-                          ● PERMANENT NEWS
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Body */}
-                  <div className={styles.cardBody}>
-                    <h3 className={styles.eventHeading}>{ev.title}</h3>
-                    {ev.time && (
-                      <div className={styles.timeVenueRow}>
-                        <span>{ev.time}</span>
-                        {ev.venue && (
-                          <>
-                            <span>·</span>
-                            <span>{ev.venue}</span>
-                          </>
-                        )}
-                      </div>
-                    )}
-                    {ev.imageUrls && ev.imageUrls.length > 0 && (
-                      <div style={{ display: "flex", gap: "6px", margin: "10px 0", overflow: "hidden", borderRadius: "4px" }}>
-                        {ev.imageUrls.slice(0, 3).map((img, i) => (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img
-                            key={i}
-                            src={img}
-                            alt={ev.title}
-                            style={{ height: "100px", width: ev.imageUrls && ev.imageUrls.length > 1 ? "33%" : "100%", objectFit: "cover", borderRadius: "4px" }}
-                          />
-                        ))}
-                      </div>
-                    )}
-                    <p className={styles.eventDescText}>{ev.desc}</p>
-                  </div>
-
-                  {/* Footer */}
-                  <div className={styles.cardFooter}>
-                    <span className={styles.statusIndicator}>
-                      {ev.status === "upcoming"
-                        ? "● UPCOMING SESSION"
-                        : ev.status === "past"
-                          ? "○ ARCHIVED PROCEEDINGS"
-                          : "◆ OFFICIAL DISPATCH"}
-                    </span>
-                    <span className={styles.cardAction}>
-                      <span>{ev.actionText}</span>
-                    </span>
-                  </div>
-                </article>
-              ))}
-            </div>
+            <>
+              {eventItems.length > 0 && renderContentSection(
+                "events",
+                "03",
+                "CALENDAR / LIVE PROGRAMMING",
+                "EVENTS & SALONS",
+                eventItems,
+                "No events or salons are currently scheduled."
+              )}
+              {newsItems.length > 0 && renderContentSection(
+                "news",
+                "04",
+                "EDITORIAL / OFFICIAL DISPATCHES",
+                "NEWS & ANNOUNCEMENTS",
+                newsItems,
+                "No official news dispatches have been published."
+              )}
+              {galleryItems.length > 0 && renderContentSection(
+                "gallery",
+                "05",
+                "VISUAL ARCHIVE / COLLECTIVE MOMENTS",
+                "GALLERIES & PHOTO POSTS",
+                galleryItems,
+                "No photo posts or galleries have been published."
+              )}
+            </>
           )}
         </section>
 

@@ -2,13 +2,14 @@ import { NextResponse } from "next/server";
 import { getPosts, createPost } from "@/lib/services/posts";
 import { requireUser } from "@/lib/auth";
 import { createPostSchema } from "@/lib/validators/posts";
+import { parseLimit } from "@/lib/query";
 
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     const subtopic = searchParams.get("subtopic") || undefined;
     const status = searchParams.get("status") || "approved";
-    const limit = searchParams.get("limit") ? Number(searchParams.get("limit")) : 20;
+    const limit = parseLimit(searchParams.get("limit"), 20);
 
     const data = await getPosts(subtopic, status, limit);
     return NextResponse.json({ posts: data });

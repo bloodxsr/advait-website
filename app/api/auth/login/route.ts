@@ -5,9 +5,20 @@ import { users } from "@/db/schema";
 import { loginSchema } from "@/lib/validators/auth";
 import { createSessionToken, COOKIE_NAME } from "@/lib/auth";
 import { eq } from "drizzle-orm";
+import { checkRateLimit, clearRateLimit, recordFailedAttempt } from "@/lib/rate-limit";
 
 export async function POST(req: Request) {
   try {
+    const forwardedFor = req.headers.get("x-forwarded-for");
+    const clientKey = forwardedFor?.split(",")[0]?.trim() || "unknown";
+    const rateLimit = await checkRateLimit(`login:${clientKey}`);
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { error: "Too many login attempts. Please try again later." },
+        { status: 429, headers: { "Retry-After": String(rateLimit.retryAfterSeconds) } }
+      );
+    }
+
     const body = await req.json();
     const result = loginSchema.safeParse(body);
 
@@ -31,22 +42,27 @@ export async function POST(req: Request) {
     const invalidCredentialsError = "Invalid email or password";
 
     if (!user) {
+      await recordFailedAttempt(`login:${clientKey}`);
       return NextResponse.json({ error: invalidCredentialsError }, { status: 401 });
     }
 
     // Verify password
     const passwordMatch = await bcrypt.compare(password, user.passwordHash);
     if (!passwordMatch) {
+      await recordFailedAttempt(`login:${clientKey}`);
       return NextResponse.json({ error: invalidCredentialsError }, { status: 401 });
     }
 
     // Enforce role requirement when admin login is selected
     if (role === "admin" && user.role !== "admin") {
+      await recordFailedAttempt(`login:${clientKey}`);
       return NextResponse.json(
         { error: "Access denied: this account does not possess administrative privileges" },
         { status: 403 }
       );
     }
+
+    await clearRateLimit(`login:${clientKey}`);
 
     // Create session token
     const token = await createSessionToken({

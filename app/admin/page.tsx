@@ -612,22 +612,6 @@ export default function AdminPage() {
           </div>
 
           <div className={styles.mastheadRight}>
-            <Link
-              href="/publish"
-              className={styles.refreshBtn}
-              style={{
-                background: "linear-gradient(135deg, rgba(168, 85, 247, 0.25), rgba(236, 72, 153, 0.2))",
-                borderColor: "rgba(168, 85, 247, 0.55)",
-                color: "#ffffff",
-                textDecoration: "none",
-                boxShadow: "0 0 16px rgba(168, 85, 247, 0.25)",
-              }}
-              title="Open full-screen creator studio to publish events, news, photos, galleries, blogs, or projects"
-            >
-              <span style={{ color: "#c084fc", fontSize: "14px" }}>+</span>
-              <span>Open Creator Studio →</span>
-            </Link>
-
             <button
               type="button"
               onClick={loadData}

@@ -13,20 +13,26 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
     }
 
-    if (!file.type.startsWith("image/")) {
-      return NextResponse.json({ error: "Only image files are allowed" }, { status: 400 });
+    const allowedTypes = new Map([
+      ["image/jpeg", "jpg"],
+      ["image/png", "png"],
+      ["image/webp", "webp"],
+    ]);
+    const extension = allowedTypes.get(file.type);
+
+    if (!extension) {
+      return NextResponse.json({ error: "Only JPEG, PNG, and WebP images are allowed" }, { status: 400 });
     }
 
-    if (file.size > 10 * 1024 * 1024) {
-      return NextResponse.json({ error: "File size exceeds 10MB limit" }, { status: 400 });
+    if (file.size > 5 * 1024 * 1024) {
+      return NextResponse.json({ error: "File size exceeds 5MB limit" }, { status: 400 });
     }
 
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    const ext = file.name.split(".").pop() || "jpg";
     const fileId = crypto.randomUUID();
-    const key = `uploads/${session.userId}/${Date.now()}-${fileId}.${ext}`;
+    const key = `uploads/${session.userId}/${Date.now()}-${fileId}.${extension}`;
 
     const uploaded = await uploadFile(buffer, key, file.type);
 

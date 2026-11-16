@@ -22,7 +22,7 @@ const memberLinks = [
 
 const adminLinks = [
   ...publicLinks,
-  { href: "/publish", label: "Creator Studio", tag: "Publish", num: "07" },
+  { href: "/publish", label: "Publish", tag: "Publish", num: "07" },
   { href: "/dashboard", label: "Dashboard", tag: "Personal", num: "08" },
   { href: "/admin", label: "Admin Portal", tag: "Admin", num: "09" },
 ];
@@ -30,6 +30,8 @@ const adminLinks = [
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [educationalOpen, setEducationalOpen] = useState(false);
+  const [communityOpen, setCommunityOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const pathname = usePathname();
@@ -112,10 +114,28 @@ export function Header() {
     setIsLoggedIn(false);
     setIsAdmin(false);
     setMenuOpen(false);
+    setEducationalOpen(false);
+    setCommunityOpen(false);
     window.location.href = "/";
   };
 
   const navLinks = isLoggedIn ? (isAdmin ? adminLinks : memberLinks) : publicLinks;
+  const educationalLinks = navLinks.filter(
+    (link) => link.href === "/projects" || link.href === "/resources"
+  );
+  const communityLinks = navLinks.filter(
+    (link) => link.href === "/hall-of-builders" || link.href === "/hall-of-flames"
+  );
+  const directLinks = navLinks.filter(
+    (link) =>
+      link.href !== "/projects" &&
+      link.href !== "/resources" &&
+      link.href !== "/hall-of-builders" &&
+      link.href !== "/hall-of-flames"
+  );
+  const educationalActive = educationalLinks.some((link) => pathname === link.href);
+  const communityActive = communityLinks.some((link) => pathname === link.href);
+  const topLevelRouteCount = 2 + directLinks.length;
 
   return (
     <header
@@ -153,19 +173,6 @@ export function Header() {
             </Link>
           ) : (
             <>
-              {/* Creator Studio / Dispatch Button (Visible only to logged-in members & admins) */}
-              {isLoggedIn && pathname !== "/publish" && (
-                <Link
-                  href="/publish"
-                  className={styles.dispatchBtn}
-                  title="Open Creator Studio to dispatch or submit content"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  <span className={styles.dispatchIcon}>+</span>
-                  <span>{isAdmin ? "DISPATCH" : "CREATE"}</span>
-                </Link>
-              )}
-
               {/* Menu Trigger Button */}
               <button
                 type="button"
@@ -223,22 +230,94 @@ export function Header() {
             </span>
           </div>
           <span className={styles.dropdownBadge}>
-            {isLoggedIn ? "[VERIFIED]" : "[06 ROUTES]"}
+            {isLoggedIn ? "[VERIFIED]" : `[${String(topLevelRouteCount).padStart(2, "0")} ROUTES]`}
           </span>
         </div>
 
         <div className={styles.menuLinks}>
-          {navLinks.map((link) => {
+          <div className={styles.menuGroup}>
+            <button
+              type="button"
+              className={`${styles.menuGroupTrigger} ${educationalActive ? styles.menuItemActive : ""}`}
+              aria-expanded={educationalOpen}
+              onClick={() => setEducationalOpen((open) => !open)}
+            >
+              <span className={styles.itemNumber}>01</span>
+              <span className={styles.itemLabel}>Educational</span>
+              <span className={styles.itemTag}>[Learning &amp; Work]</span>
+              <span className={`${styles.itemArrow} ${educationalOpen ? styles.itemArrowOpen : ""}`}>⌄</span>
+            </button>
+            <div className={`${styles.subMenu} ${educationalOpen ? styles.subMenuOpen : ""}`}>
+              {educationalLinks.map((link, index) => {
+                const isActive = pathname === link.href;
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`${styles.menuItem} ${styles.subMenuItem} ${isActive ? styles.menuItemActive : ""}`}
+                    role="menuitem"
+                    onClick={() => {
+                      setMenuOpen(false);
+                      setEducationalOpen(false);
+                    }}
+                  >
+                    <span className={styles.itemNumber}>{String(index + 1).padStart(2, "0")}</span>
+                    <span className={styles.itemLabel}>{link.label}</span>
+                    <span className={styles.itemTag}>[{link.tag}]</span>
+                    <span className={styles.itemArrow}>↗</span>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+          <div className={styles.menuGroup}>
+            <button
+              type="button"
+              className={`${styles.menuGroupTrigger} ${communityActive ? styles.menuItemActive : ""}`}
+              aria-expanded={communityOpen}
+              onClick={() => setCommunityOpen((open) => !open)}
+            >
+              <span className={styles.itemNumber}>02</span>
+              <span className={styles.itemLabel}>Community</span>
+              <span className={styles.itemTag}>[Recognition &amp; Archive]</span>
+              <span className={`${styles.itemArrow} ${communityOpen ? styles.itemArrowOpen : ""}`}>⌄</span>
+            </button>
+            <div className={`${styles.subMenu} ${communityOpen ? styles.subMenuOpen : ""}`}>
+              {communityLinks.map((link, index) => {
+                const isActive = pathname === link.href;
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`${styles.menuItem} ${styles.subMenuItem} ${isActive ? styles.menuItemActive : ""}`}
+                    role="menuitem"
+                    onClick={() => {
+                      setMenuOpen(false);
+                      setCommunityOpen(false);
+                    }}
+                  >
+                    <span className={styles.itemNumber}>{String(index + 1).padStart(2, "0")}</span>
+                    <span className={styles.itemLabel}>{link.label}</span>
+                    <span className={styles.itemTag}>[{link.tag}]</span>
+                    <span className={styles.itemArrow}>↗</span>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+          {directLinks.map((link, index) => {
             const isActive = pathname === link.href;
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`${styles.menuItem} ${isActive ? styles.menuItemActive : ""}`}
+                className={`${styles.menuItem} ${
+                  link.href === "/events" ? styles.socialMenuItem : ""
+                } ${isActive ? styles.menuItemActive : ""}`}
                 role="menuitem"
                 onClick={() => setMenuOpen(false)}
               >
-                <span className={styles.itemNumber}>{link.num}</span>
+                <span className={styles.itemNumber}>{String(index + 3).padStart(2, "0")}</span>
                 <span className={styles.itemLabel}>{link.label}</span>
                 <span className={styles.itemTag}>[{link.tag}]</span>
                 <span className={styles.itemArrow}>↗</span>

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { httpUrlSchema } from "./url";
 
 export const updateProfileSchema = z.object({
   name: z.string().min(2).max(100).optional(),
@@ -7,11 +8,11 @@ export const updateProfileSchema = z.object({
   year: z.string().optional(),
   section: z.string().optional(),
   department: z.string().optional(),
-  avatarUrl: z.string().url().optional().or(z.literal("")),
+  avatarUrl: httpUrlSchema.optional().or(z.literal("")),
   techStack: z.array(z.string()).optional(),
-  github: z.string().url().optional().or(z.literal("")),
-  linkedin: z.string().url().optional().or(z.literal("")),
-  portfolio: z.string().url().optional().or(z.literal("")),
+  github: httpUrlSchema.optional().or(z.literal("")),
+  linkedin: httpUrlSchema.optional().or(z.literal("")),
+  portfolio: httpUrlSchema.optional().or(z.literal("")),
 });
 
 export const profileSectionSchema = z.object({

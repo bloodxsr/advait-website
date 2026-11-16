@@ -2,14 +2,20 @@ import { NextResponse } from "next/server";
 import { getEvents, createEvent } from "@/lib/services/events";
 import { requireRole } from "@/lib/auth";
 import { createEventSchema } from "@/lib/validators/events";
+import { parseLimit, parseOffset } from "@/lib/query";
 
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     const kind = searchParams.get("kind") || undefined;
+    const limit = parseLimit(searchParams.get("limit"));
+    const offset = parseOffset(searchParams.get("offset"));
 
-    const data = await getEvents(kind);
-    return NextResponse.json({ events: data });
+    const data = await getEvents(kind, limit, offset);
+    return NextResponse.json(
+      { events: data, pagination: { limit, offset, hasMore: data.length === limit } },
+      { headers: { "Cache-Control": "public, s-maxage=30, stale-while-revalidate=120" } }
+    );
   } catch (err: any) {
     console.error("Get events error:", err);
     return NextResponse.json({ error: "Failed to fetch events" }, { status: 500 });

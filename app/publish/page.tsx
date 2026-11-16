@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import { CountdownTimer } from "@/components/CountdownTimer";
+import { uploadWithSignedUrl } from "@/lib/client-upload";
 import styles from "./publish.module.css";
 
 type ContentType = "event" | "news" | "photo" | "gallery" | "blog" | "project" | "resource";
@@ -215,22 +216,15 @@ export default function PublishStudioPage() {
   const uploadSingleImage = async (file: File): Promise<string | null> => {
     setUploadingImage(true);
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-      const res = await fetch("/api/uploads", {
-        method: "POST",
-        body: formData,
-      });
-      if (res.ok) {
-        const data = await res.json();
-        return data.url;
-      } else {
-        const err = await res.json();
-        alert(err.error || "Image upload failed");
-        return null;
-      }
-    } catch {
-      alert("Network error uploading image");
+      const kind =
+        selectedType === "gallery" ? "gallery" :
+        selectedType === "photo" ? "photo" :
+        selectedType === "event" || selectedType === "news" ? "event" :
+        "post-cover";
+
+      return await uploadWithSignedUrl(file, kind);
+    } catch (error) {
+      alert(error instanceof Error ? error.message : "Network error authorizing image upload");
       return null;
     } finally {
       setUploadingImage(false);
@@ -341,38 +335,41 @@ export default function PublishStudioPage() {
           return;
         }
 
-        const [evRes] = await Promise.all([
-          fetch("/api/events", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              title: newsData.title.trim(),
-              description: (newsData.excerpt ? `${newsData.excerpt}\n\n` : "") + newsData.body,
-              kind: "news",
-              startsAt: new Date().toISOString(),
-              imageUrl: newsData.imageUrl || undefined,
-              status: "upcoming",
-            }),
+        const evRes = await fetch("/api/events", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            title: newsData.title.trim(),
+            description: (newsData.excerpt ? `${newsData.excerpt}\n\n` : "") + newsData.body,
+            kind: "news",
+            startsAt: new Date().toISOString(),
+            imageUrl: newsData.imageUrl || undefined,
+            status: "upcoming",
           }),
-          newsData.imageUrl
-            ? fetch("/api/social-posts", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                  title: newsData.title.trim(),
-                  caption: newsData.excerpt || newsData.body.slice(0, 200),
-                  type: "news",
-                  imageUrls: [newsData.imageUrl],
-                }),
-              })
-            : Promise.resolve(null),
-        ]);
+        });
 
         if (evRes.ok) {
+          let mirrorWarning = "";
+          if (newsData.imageUrl) {
+            const socialRes = await fetch("/api/social-posts", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                title: newsData.title.trim(),
+                caption: newsData.excerpt || newsData.body.slice(0, 200),
+                type: "news",
+                imageUrls: [newsData.imageUrl],
+              }),
+            });
+            if (!socialRes.ok) {
+              mirrorWarning = " The event archive was saved, but its Social mirror could not be created.";
+            }
+          }
+
           setSuccessResult({
             title: newsData.title,
             link: "/events",
-            message: "Official news dispatch permanently archived in Advait News & Events docket.",
+            message: `Official news dispatch permanently archived in Advait News & Events docket.${mirrorWarning}`,
           });
         } else {
           const err = await evRes.json();

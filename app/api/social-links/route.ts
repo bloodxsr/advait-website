@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { getSocialLinks } from "@/lib/services/socials";
 
+export const revalidate = 60;
+
 export async function GET() {
   try {
     const data = await getSocialLinks();

@@ -2,15 +2,21 @@ import { NextResponse } from "next/server";
 import { getSocialPosts, createSocialPost } from "@/lib/services/social-posts";
 import { requireRole } from "@/lib/auth";
 import { createSocialPostSchema } from "@/lib/validators/social-posts";
+import { parseLimit, parseOffset } from "@/lib/query";
 
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     const type = searchParams.get("type") || undefined;
     const division = searchParams.get("division") || undefined;
+    const limit = parseLimit(searchParams.get("limit"));
+    const offset = parseOffset(searchParams.get("offset"));
 
-    const data = await getSocialPosts(type, division);
-    return NextResponse.json({ posts: data });
+    const data = await getSocialPosts(type, division, limit, offset);
+    return NextResponse.json(
+      { posts: data, pagination: { limit, offset, hasMore: data.length === limit } },
+      { headers: { "Cache-Control": "public, s-maxage=30, stale-while-revalidate=120" } }
+    );
   } catch (err: any) {
     console.error("Get social posts error:", err);
     return NextResponse.json({ error: "Failed to fetch social posts" }, { status: 500 });

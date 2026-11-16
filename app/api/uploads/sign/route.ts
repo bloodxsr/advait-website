@@ -5,7 +5,7 @@ import { z } from "zod";
 import crypto from "crypto";
 
 const uploadSignSchema = z.object({
-  kind: z.enum(["avatar", "post-cover", "event"]),
+  kind: z.enum(["avatar", "post-cover", "event", "photo", "gallery"]),
   contentType: z.enum(["image/jpeg", "image/png", "image/webp"]),
   size: z.number().max(5 * 1024 * 1024, "File size limit is 5 MB"),
 });
@@ -25,8 +25,8 @@ export async function POST(req: Request) {
 
     const { kind, contentType } = result.data;
 
-    // 'event' uploads require admin role
-    if (kind === "event" && session.role !== "admin") {
+    // Publishing event and Social media content requires admin role.
+    if (["event", "photo", "gallery"].includes(kind) && session.role !== "admin") {
       return NextResponse.json({ error: "Admin role required for event uploads" }, { status: 403 });
     }
 
@@ -38,8 +38,10 @@ export async function POST(req: Request) {
       key = `avatars/${session.userId}/${fileId}.${ext}`;
     } else if (kind === "post-cover") {
       key = `posts/${session.userId}/${fileId}.${ext}`;
-    } else {
+    } else if (kind === "event") {
       key = `events/${fileId}.${ext}`;
+    } else {
+      key = `social/${session.userId}/${fileId}.${ext}`;
     }
 
     const signed = await signUpload(key);

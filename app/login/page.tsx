@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import styles from "./login.module.css";
 
@@ -45,9 +45,12 @@ const DIVISIONS = [
 ];
 
 function AuthGateway() {
-  const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectTarget = searchParams.get("redirect") || "/dashboard";
+  const requestedRedirect = searchParams.get("redirect");
+  const redirectTarget =
+    requestedRedirect && requestedRedirect.startsWith("/") && !requestedRedirect.startsWith("//")
+      ? requestedRedirect
+      : "/dashboard";
   const isLocked = searchParams.get("locked") === "true";
   const initialMode = searchParams.get("mode") === "join" ? "join" : "signin";
 
@@ -63,6 +66,8 @@ function AuthGateway() {
   const [fullName, setFullName] = useState("");
   const [githubUser, setGithubUser] = useState("");
   const [joinEmail, setJoinEmail] = useState("");
+  const [joinPassword, setJoinPassword] = useState("");
+  const [joinPasswordConfirmation, setJoinPasswordConfirmation] = useState("");
   const [division, setDivision] = useState("RED");
   const [intentNote, setIntentNote] = useState("");
   const [joinSubmitted, setJoinSubmitted] = useState(false);
@@ -114,46 +119,16 @@ function AuthGateway() {
     }
   };
 
-  const handleDemoLogin = async (role: "user" | "admin") => {
-    setLoading(true);
-    setErrorMsg("");
-
-    const credentials =
-      role === "admin"
-        ? { email: "admin@advait.collective", password: "advait2026admin", role: "admin" }
-        : { email: "bivash@advait.collective", password: "advait2026member", role: "user" };
-
-    try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(credentials),
-      });
-
-      const data = await res.json();
-      if (!res.ok) {
-        setErrorMsg(data.error || "Demo login failed");
-        setLoading(false);
-        return;
-      }
-
-      let target = role === "admin" ? "/admin" : "/dashboard";
-      if (redirectTarget && redirectTarget !== "/admin" && role !== "admin") {
-        target = redirectTarget;
-      }
-
-      // Full navigation ensures fresh session cookies are sent to server & middleware
-      window.location.href = target;
-    } catch {
-      setErrorMsg("Network error. Please try again.");
-      setLoading(false);
-    }
-  };
-
   const handleJoinSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setErrorMsg("");
+
+    if (joinPassword !== joinPasswordConfirmation) {
+      setErrorMsg("Passwords do not match.");
+      setLoading(false);
+      return;
+    }
 
     try {
       const res = await fetch("/api/auth/register", {
@@ -162,7 +137,10 @@ function AuthGateway() {
         body: JSON.stringify({
           name: fullName,
           email: joinEmail,
-          password: "advait2026member", // default initial password for applicants
+          password: joinPassword,
+          github: githubUser.replace(/^@/, "").trim() || undefined,
+          divisionSlug: division,
+          intentNote: intentNote.trim() || undefined,
         }),
       });
 
@@ -249,37 +227,13 @@ function AuthGateway() {
             onClick={() => setMode("join")}
           >
             <span className={styles.tabNum}>[02]</span>
-            <span>JOIN &amp; INTERVIEWS</span>
+            <span>JOIN / REGISTER</span>
           </button>
         </div>
 
         {/* ── MODE: SIGN IN ───────────────────────────────────────────── */}
         {mode === "signin" && (
           <div className={styles.flowWrap}>
-            {/* OAuth Actions */}
-            <div className={styles.oauthStack}>
-              <button
-                type="button"
-                className={styles.oauthBtn}
-                onClick={() => handleDemoLogin("user")}
-                disabled={loading}
-              >
-                <GitHubIcon />
-                <span>Continue with GitHub</span>
-                <span className={styles.oauthTag}>[ONE-CLICK]</span>
-              </button>
-
-              <button
-                type="button"
-                className={styles.oauthBtn}
-                onClick={() => handleDemoLogin("user")}
-                disabled={loading}
-              >
-                <GoogleIcon />
-                <span>Continue with Google</span>
-              </button>
-            </div>
-
             {/* Error Message */}
             {errorMsg && (
               <div style={{ color: "#ef4444", fontSize: "12.5px", fontFamily: "var(--font-mono)", textAlign: "center", padding: "8px", background: "rgba(239, 68, 68, 0.1)", borderRadius: "6px", border: "1px solid rgba(239, 68, 68, 0.3)" }}>
@@ -349,35 +303,6 @@ function AuthGateway() {
               </button>
             </form>
 
-            {/* Instant Demo Access Shortcut */}
-            <div className={styles.demoHelperBox}>
-              <div className={styles.demoHelperHeader}>
-                <span className={styles.demoBadge}>[ACTIVE OPERATOR & ADMIN ACCESS]</span>
-                <span className={styles.demoHint}>Real Postgres Auth</span>
-              </div>
-              <p className={styles.demoText}>
-                Use your credentials or click below for instant access as a verified operator or administrator.
-              </p>
-              <div style={{ display: "flex", gap: "8px", flexDirection: "column" }}>
-                <button
-                  type="button"
-                  onClick={() => handleDemoLogin("user")}
-                  className={styles.demoBtn}
-                  disabled={loading}
-                >
-                  ENTER AS MEMBER (Bivash Kumar) →
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDemoLogin("admin")}
-                  className={styles.demoBtn}
-                  disabled={loading}
-                  style={{ background: "rgba(168, 85, 247, 0.15)", borderColor: "rgba(168, 85, 247, 0.4)" }}
-                >
-                  ENTER AS ADMIN (Lead Architect) →
-                </button>
-              </div>
-            </div>
           </div>
         )}
 
@@ -501,6 +426,42 @@ function AuthGateway() {
                       value={joinEmail}
                       onChange={(e) => setJoinEmail(e.target.value)}
                       required
+                    />
+                  </div>
+
+                  <div className={styles.field}>
+                    <label className={styles.label} htmlFor="join-password">
+                      <span>ACCOUNT PASSWORD</span>
+                      <span className={styles.reqMarker}>*</span>
+                    </label>
+                    <input
+                      id="join-password"
+                      type="password"
+                      className={styles.input}
+                      placeholder="At least 6 characters"
+                      value={joinPassword}
+                      onChange={(e) => setJoinPassword(e.target.value)}
+                      minLength={6}
+                      required
+                      autoComplete="new-password"
+                    />
+                  </div>
+
+                  <div className={styles.field}>
+                    <label className={styles.label} htmlFor="join-password-confirmation">
+                      <span>CONFIRM PASSWORD</span>
+                      <span className={styles.reqMarker}>*</span>
+                    </label>
+                    <input
+                      id="join-password-confirmation"
+                      type="password"
+                      className={styles.input}
+                      placeholder="Repeat your password"
+                      value={joinPasswordConfirmation}
+                      onChange={(e) => setJoinPasswordConfirmation(e.target.value)}
+                      minLength={6}
+                      required
+                      autoComplete="new-password"
                     />
                   </div>
 

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { db } from "@/lib/db";
-import { users } from "@/db/schema";
+import { divisions, users } from "@/db/schema";
 import { registerSchema } from "@/lib/validators/auth";
 import { createSessionToken, COOKIE_NAME } from "@/lib/auth";
 import { eq } from "drizzle-orm";
@@ -18,7 +18,18 @@ export async function POST(req: Request) {
       );
     }
 
-    const { name, email, password, department, year, section, divisionId } = result.data;
+    const {
+      name,
+      email,
+      password,
+      github,
+      divisionSlug,
+      intentNote,
+      department,
+      year,
+      section,
+      divisionId,
+    } = result.data;
 
     // Check existing email
     const existing = await db
@@ -34,6 +45,16 @@ export async function POST(req: Request) {
       );
     }
 
+    let resolvedDivisionId = divisionId;
+    if (!resolvedDivisionId && divisionSlug) {
+      const [division] = await db
+        .select({ id: divisions.id })
+        .from(divisions)
+        .where(eq(divisions.slug, divisionSlug))
+        .limit(1);
+      resolvedDivisionId = division?.id;
+    }
+
     // Hash password & insert user (role is strictly 'user')
     const passwordHash = await bcrypt.hash(password, 10);
     const [newUser] = await db
@@ -43,10 +64,12 @@ export async function POST(req: Request) {
         email: email.toLowerCase(),
         passwordHash,
         role: "user",
+        github: github || null,
+        bio: intentNote || null,
         department: department || null,
         year: year || null,
         section: section || null,
-        divisionId: divisionId || null,
+        divisionId: resolvedDivisionId || null,
       })
       .returning({
         id: users.id,
@@ -78,10 +101,17 @@ export async function POST(req: Request) {
     response.cookies.set("advait_name", encodeURIComponent(newUser.name), {
       path: "/",
       maxAge: 60 * 60 * 24 * 7,
+      sameSite: "lax",
+    });
+    response.cookies.set("advait_session_active", "true", {
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7,
+      sameSite: "lax",
     });
     response.cookies.set("advait_role", "user", {
       path: "/",
       maxAge: 60 * 60 * 24 * 7,
+      sameSite: "lax",
     });
 
     return response;

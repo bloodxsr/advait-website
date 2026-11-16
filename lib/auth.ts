@@ -1,9 +1,17 @@
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
+import { db } from "@/lib/db";
+import { users } from "@/db/schema";
+import { eq } from "drizzle-orm";
+import { z } from "zod";
 
-const SECRET_KEY = new TextEncoder().encode(
-  process.env.AUTH_SECRET || "advait_collective_auth_secret_2026_x7k9m2p4q8r1"
-);
+const authSecret = process.env.AUTH_SECRET;
+
+if (!authSecret) {
+  throw new Error("AUTH_SECRET must be configured");
+}
+
+const SECRET_KEY = new TextEncoder().encode(authSecret);
 
 export const COOKIE_NAME = "advait_session";
 
@@ -13,6 +21,13 @@ export interface SessionPayload {
   name: string;
   role: "user" | "admin";
 }
+
+const sessionPayloadSchema = z.object({
+  userId: z.string().uuid(),
+  email: z.string().email(),
+  name: z.string().min(1),
+  role: z.enum(["user", "admin"]),
+});
 
 /**
  * Creates an encrypted JWT session token valid for 7 days
@@ -31,7 +46,8 @@ export async function createSessionToken(payload: SessionPayload): Promise<strin
 export async function verifySessionToken(token: string): Promise<SessionPayload | null> {
   try {
     const { payload } = await jwtVerify(token, SECRET_KEY);
-    return payload as unknown as SessionPayload;
+    const result = sessionPayloadSchema.safeParse(payload);
+    return result.success ? result.data : null;
   } catch {
     return null;
   }
@@ -63,8 +79,15 @@ export async function requireUser(): Promise<SessionPayload> {
  */
 export async function requireRole(role: "user" | "admin"): Promise<SessionPayload> {
   const session = await requireUser();
-  if (role === "admin" && session.role !== "admin") {
+  const [user] = await db
+    .select({ role: users.role })
+    .from(users)
+    .where(eq(users.id, session.userId))
+    .limit(1);
+
+  if (!user || (role === "admin" && user.role !== "admin") || (role === "user" && user.role !== "user")) {
     throw new Error("FORBIDDEN");
   }
-  return session;
+
+  return { ...session, role: user.role as "user" | "admin" };
 }

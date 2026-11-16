@@ -3,6 +3,7 @@
 import { useState, useMemo, useRef, useEffect } from "react";
 import Link from "next/link";
 import styles from "./hof.module.css";
+import { uploadWithSignedUrl } from "@/lib/client-upload";
 
 interface FlameEntry {
   id: number;
@@ -120,18 +121,10 @@ export default function HallOfFlames() {
 
     setUploadingCover(true);
     try {
-      const fd = new FormData();
-      fd.append("file", file);
-      const res = await fetch("/api/uploads", { method: "POST", body: fd });
-      if (res.ok) {
-        const data = await res.json();
-        setNewBlog((prev) => ({ ...prev, coverImageUrl: data.url }));
-      } else {
-        const err = await res.json();
-        alert(err.error || "Failed to upload image");
-      }
-    } catch {
-      alert("Network error uploading image");
+      const url = await uploadWithSignedUrl(file, "post-cover");
+      setNewBlog((prev) => ({ ...prev, coverImageUrl: url }));
+    } catch (error) {
+      alert(error instanceof Error ? error.message : "Network error uploading image");
     } finally {
       setUploadingCover(false);
     }
@@ -144,22 +137,14 @@ export default function HallOfFlames() {
 
     setUploadingBodyImg(true);
     try {
-      const fd = new FormData();
-      fd.append("file", file);
-      const res = await fetch("/api/uploads", { method: "POST", body: fd });
-      if (res.ok) {
-        const data = await res.json();
-        const altText = file.name.replace(/\.[^/.]+$/, "");
-        setNewBlog((prev) => ({
-          ...prev,
-          bodyMd: prev.bodyMd + `\n\n![${altText}](${data.url})\n\n`,
-        }));
-      } else {
-        const err = await res.json();
-        alert(err.error || "Failed to upload image");
-      }
-    } catch {
-      alert("Network error uploading image");
+      const url = await uploadWithSignedUrl(file, "post-cover");
+      const altText = file.name.replace(/\.[^/.]+$/, "");
+      setNewBlog((prev) => ({
+        ...prev,
+        bodyMd: prev.bodyMd + `\n\n![${altText}](${url})\n\n`,
+      }));
+    } catch (error) {
+      alert(error instanceof Error ? error.message : "Network error uploading image");
     } finally {
       setUploadingBodyImg(false);
     }

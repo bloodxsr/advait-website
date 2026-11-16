@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getProjects, createProject } from "@/lib/services/projects";
 import { requireUser } from "@/lib/auth";
 import { createProjectSchema } from "@/lib/validators/projects";
+import { parseLimit } from "@/lib/query";
 
 export async function GET(req: Request) {
   try {
@@ -10,7 +11,7 @@ export async function GET(req: Request) {
     const subtopic = searchParams.get("subtopic") || undefined;
     const division = searchParams.get("division") || undefined;
     const status = searchParams.get("status") || "approved";
-    const limit = searchParams.get("limit") ? Number(searchParams.get("limit")) : 50;
+    const limit = parseLimit(searchParams.get("limit"));
 
     const data = await getProjects({ type, subtopic, division, status, limit });
     return NextResponse.json({ projects: data });

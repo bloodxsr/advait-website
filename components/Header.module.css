@@ -419,8 +419,104 @@
 .menuLinks {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding: 10px 0;
+  gap: 0;
+  padding: 8px 0;
+}
+
+.menuGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.menuGroupTrigger {
+  display: grid;
+  grid-template-columns: 26px 1fr auto auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.menuGroupTrigger:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.menuGroupTrigger:hover .itemNumber,
+.menuGroupTrigger:hover .itemLabel {
+  color: #ffffff;
+}
+
+.menuGroupTrigger:hover .itemTag,
+.menuGroupTrigger:hover .itemArrow {
+  color: #c084fc;
+}
+
+.subMenu {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+}
+
+.subMenu > .menuItem {
+  flex: 0 0 auto;
+}
+
+.subMenuOpen {
+  max-height: 160px;
+  opacity: 1;
+}
+
+.subMenuOpen > .menuItem {
+  margin-top: 2px;
+}
+
+.subMenuItem {
+  margin-left: 26px;
+  border-left-color: rgba(192, 132, 252, 0.25);
+}
+
+.socialMenuItem {
+  background: #d9dee3;
+  border-color: #f3f5f7;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08), 0 8px 20px rgba(0, 0, 0, 0.16);
+}
+
+.socialMenuItem .itemNumber,
+.socialMenuItem .itemLabel,
+.socialMenuItem .itemTag,
+.socialMenuItem .itemArrow {
+  color: #080808;
+}
+
+.socialMenuItem:hover,
+.socialMenuItem.menuItemActive {
+  background: #f2f4f6;
+  border-color: #ffffff;
+}
+
+.socialMenuItem:hover .itemNumber,
+.socialMenuItem:hover .itemLabel,
+.socialMenuItem:hover .itemTag,
+.socialMenuItem:hover .itemArrow {
+  color: #000000;
+}
+
+.itemArrowOpen {
+  transform: rotate(180deg);
+  color: #c084fc;
 }
 
 .menuItem {
