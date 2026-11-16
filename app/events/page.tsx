@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import styles from "./events.module.css";
 
-type EventFilter = "all" | "upcoming" | "past" | "news";
+type EventFilter = "all" | "upcoming" | "past" | "news" | "socials";
 
 interface EventItem {
   id: string;
@@ -20,6 +20,80 @@ interface EventItem {
   status: "upcoming" | "past" | "news";
   actionText: string;
 }
+
+interface SocialChannel {
+  id: string;
+  num: string;
+  name: string;
+  handle: string;
+  desc: string;
+  badge: string;
+  url: string;
+  metric: string;
+}
+
+const SOCIAL_CHANNELS: SocialChannel[] = [
+  {
+    id: "soc-ig",
+    num: "01",
+    name: "Instagram",
+    handle: "@advait.collective",
+    desc: "Visual design essays, generative stencil breakdowns, salon backstage recaps, and collective culture dispatches.",
+    badge: "VISUAL & CULTURE",
+    url: "https://instagram.com",
+    metric: "1.8K Followers",
+  },
+  {
+    id: "soc-gh",
+    num: "02",
+    name: "GitHub Organization",
+    handle: "github.com/advait-collective",
+    desc: "Open source engineering artifacts: AetherSwarm, LatentMesh WebGPU, ZKML proof verifiers, and client SDKs.",
+    badge: "CODE & REPOSITORIES",
+    url: "https://github.com",
+    metric: "48 Repositories · 120+ PRs",
+  },
+  {
+    id: "soc-dc",
+    num: "03",
+    name: "Discord Stage & Lounge",
+    handle: "discord.gg/advait",
+    desc: "Real-time builder rooms for RED, OPS, EVED, Creatives, and GameVeda. Live stage broadcasts for all technical salons.",
+    badge: "REAL-TIME COMMUNITY",
+    url: "https://discord.com",
+    metric: "3,200+ Members Active",
+  },
+  {
+    id: "soc-x",
+    num: "04",
+    name: "X / Twitter",
+    handle: "@advait_collective",
+    desc: "Low-latency engineering threads, benchmark differentials, research paper dispatches, and salon reminders.",
+    badge: "SYSTEMS DISPATCHES",
+    url: "https://x.com",
+    metric: "Daily Announcements",
+  },
+  {
+    id: "soc-yt",
+    num: "05",
+    name: "YouTube Channel",
+    handle: "youtube.com/@advait",
+    desc: "Full-length 4K lecture archives, architecture teardown recordings, WebGPU shader workshops, and builder demos.",
+    badge: "VIDEO ARCHIVE",
+    url: "https://youtube.com",
+    metric: "Salon Video Vault",
+  },
+  {
+    id: "soc-news",
+    num: "06",
+    name: "Research Newsletter",
+    handle: "hello@advait.collective",
+    desc: "Curated fortnightly digest covering state-of-the-art open models, collective grant allocations, and peer review logs.",
+    badge: "EDITORIAL DIGEST",
+    url: "mailto:hello@advait.collective",
+    metric: "Fortnightly Docket",
+  },
+];
 
 const NEXT_FEATURED_SALON = {
   num: "00",
@@ -127,7 +201,9 @@ export default function EventsPage() {
           ? item.status === "upcoming"
           : filter === "past"
           ? item.status === "past"
-          : item.status === "news";
+          : filter === "news"
+          ? item.status === "news"
+          : true;
 
       const q = search.toLowerCase().trim();
       const matchesSearch =
@@ -167,7 +243,7 @@ export default function EventsPage() {
 
           <div className={styles.titleRow}>
             <div className={styles.titleWrap}>
-              <h1 className={styles.title}>EVENTS &amp; SALONS</h1>
+              <h1 className={styles.title}>EVENTS &amp; SOCIALS</h1>
               <span className={styles.registered}>®</span>
             </div>
             <span className={styles.versionTag}>/V.01</span>
@@ -175,20 +251,27 @@ export default function EventsPage() {
           </div>
 
           <div className={styles.headerSummaryRow}>
-            <p className={styles.headerSummary}>
-              <span className={styles.monoIndex}>{`{1}`}</span>
-              Architecture salons, hackathon cohorts, paper reading groups, and technical
-              dispatches hosted by the Advait collective. All gatherings prioritize rigorous
-              engineering breakdown, runnable live code, and open discussion over keynote fluff.
-            </p>
+            <div className={styles.summaryLeftCol}>
+              <p className={styles.headerSummary}>
+                <span className={styles.monoIndex}>{`{1}`}</span>
+                Architecture salons, hackathon cohorts, paper reading groups, and technical
+                dispatches hosted by the Advait collective. All gatherings prioritize rigorous
+                engineering breakdown, runnable live code, and open discussion over keynote fluff.
+              </p>
+              <div className={styles.headerJumpWrap}>
+                <a href="#socials" className={styles.jumpSocialsLink}>
+                  [04] VIEW COMMUNITY CHANNELS &amp; SOCIAL HUBS ↓
+                </a>
+              </div>
+            </div>
             <div className={styles.statsRoster}>
               <div className={styles.statBox}>
                 <span className={styles.statNum}>04</span>
                 <span className={styles.statLabel}>Upcoming Salons</span>
               </div>
               <div className={styles.statBox}>
-                <span className={styles.statNum}>100%</span>
-                <span className={styles.statLabel}>Free &amp; Open</span>
+                <span className={styles.statNum}>06</span>
+                <span className={styles.statLabel}>Social Hubs</span>
               </div>
               <div className={styles.statBox}>
                 <span className={styles.statNum}>1.2k+</span>
@@ -323,6 +406,17 @@ export default function EventsPage() {
               >
                 [DISPATCHES &amp; NEWS]
               </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={filter === "socials"}
+                onClick={() => setFilter("socials")}
+                className={`${styles.filterPill} ${
+                  filter === "socials" ? styles.filterPillActive : ""
+                }`}
+              >
+                [COMMUNITY &amp; SOCIALS]
+              </button>
             </div>
           </div>
         </section>
@@ -396,12 +490,71 @@ export default function EventsPage() {
           )}
         </section>
 
-        {/* ── 04. Propose a Salon Section ─────────────────────────────────────── */}
+        {/* ── 04. Merged Community Channels & Social Network Hub ──────────────── */}
+        <section
+          className={styles.socialsSection}
+          id="socials"
+          aria-label="Community Channels & Social Hub"
+        >
+          <div className={styles.socialsHeader}>
+            <div className={styles.socialsIndexRow}>
+              <span className={styles.socialsIndex}>[04]</span>
+              <span className={styles.socialsLabel}>
+                NETWORK DOCKET / SOCIAL REDIRECTS
+              </span>
+            </div>
+            <div className={styles.socialsTitleRow}>
+              <h2 className={styles.socialsTitle}>
+                COMMUNITY CHANNELS &amp; SOCIAL HUBS
+              </h2>
+              <p className={styles.socialsSubtitle}>
+                Advait operates across open network spaces. Connect directly with division stewards,
+                attend salon live stages on Discord, follow visual design essays on Instagram, and
+                fork open-source codebases on GitHub.
+              </p>
+            </div>
+          </div>
+
+          <div className={styles.socialsGrid}>
+            {SOCIAL_CHANNELS.map((soc) => (
+              <a
+                key={soc.id}
+                href={soc.url}
+                target="_blank"
+                rel="noreferrer"
+                className={styles.socialCard}
+              >
+                <div className={styles.socialCardTop}>
+                  <div className={styles.socialNumBadge}>
+                    <span className={styles.socialNum}>[{soc.num}]</span>
+                    <span className={styles.socialBadge}>[{soc.badge}]</span>
+                  </div>
+                  <span className={styles.socialArrow}>↗</span>
+                </div>
+
+                <div className={styles.socialCardBody}>
+                  <h3 className={styles.socialName}>{soc.name}</h3>
+                  <span className={styles.socialHandle}>{soc.handle}</span>
+                  <p className={styles.socialDesc}>{soc.desc}</p>
+                </div>
+
+                <div className={styles.socialCardFooter}>
+                  <span className={styles.socialMetric}>{soc.metric}</span>
+                  <span className={styles.socialLinkAction}>
+                    Connect ↗
+                  </span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+
+        {/* ── 05. Propose a Salon Section ─────────────────────────────────────── */}
         <section className={styles.proposeSection}>
           <div className={styles.proposeCard}>
             <div className={styles.proposeLeft}>
               <div className={styles.proposeIndex}>
-                <span>[04]</span>
+                <span>[05]</span>
                 <span>SPEAKER &amp; SALON PROPOSALS</span>
               </div>
               <h3 className={styles.proposeTitle}>

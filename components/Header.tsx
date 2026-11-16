@@ -10,7 +10,7 @@ const publicLinks = [
   { href: "/hall-of-builders", label: "Hall of Builders", tag: "Leaderboard", num: "02" },
   { href: "/team", label: "Meet our Team", tag: "Stewardship", num: "03" },
   { href: "/hall-of-flames", label: "Hall of Flames", tag: "Archive", num: "04" },
-  { href: "/events", label: "Events", tag: "Gatherings", num: "05" },
+  { href: "/events", label: "Events & Socials", tag: "Salons & Network", num: "05" },
   { href: "/resources", label: "Resources", tag: "Library", num: "06" },
 ];
 
@@ -19,11 +19,10 @@ const allLinks = [
   { href: "/hall-of-builders", label: "Hall of Builders", tag: "Leaderboard", num: "02" },
   { href: "/team", label: "Meet our Team", tag: "Stewardship", num: "03" },
   { href: "/hall-of-flames", label: "Hall of Flames", tag: "Archive", num: "04" },
-  { href: "/events", label: "Events", tag: "Gatherings", num: "05" },
+  { href: "/events", label: "Events & Socials", tag: "Salons & Network", num: "05" },
   { href: "/resources", label: "Resources", tag: "Library", num: "06" },
   { href: "/dashboard", label: "Dashboard", tag: "Personal", num: "07" },
-  { href: "/social", label: "Social Links", tag: "Network", num: "08" },
-  { href: "/admin", label: "Admin Portal", tag: "Admin", num: "09" },
+  { href: "/admin", label: "Admin Portal", tag: "Admin", num: "08" },
 ];
 
 export function Header() {

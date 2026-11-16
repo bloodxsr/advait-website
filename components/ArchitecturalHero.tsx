@@ -126,7 +126,7 @@ export function ArchitecturalHero() {
               <span className={styles.dirNum}>[4]</span> Stewardship &amp; team roster ↗
             </Link>
             <Link href="/events" className={styles.dirItem}>
-              <span className={styles.dirNum}>[5]</span> Salons, workshops &amp; events ↗
+              <span className={styles.dirNum}>[5]</span> Salons, events &amp; socials ↗
             </Link>
             <Link href="/hall-of-flames" className={styles.dirItem}>
               <span className={styles.dirNum}>[6]</span> Hall of flames selected work ↗
@@ -143,13 +143,66 @@ export function ArchitecturalHero() {
             across modern computing.
           </p>
 
-          {/* Right Column: Status & Scroll */}
+          {/* Right Column: Social Redirects, Status & Scroll */}
           <div className={styles.statusCol}>
-            <span>DIR / 2026</span>
-            <span>AUTONOMOUS SYSTEMS</span>
-            <span onClick={scrollToContent} className={styles.scrollHint}>
-              Scroll to explore ↓
-            </span>
+            <div className={styles.socialBlock}>
+              <span className={styles.socialLabel}>[NETWORK / REDIRECTS]</span>
+              <div className={styles.socialList}>
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  className={styles.socialLink}
+                  title="Instagram"
+                >
+                  Instagram ↗
+                </a>
+                <a
+                  href="https://github.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  className={styles.socialLink}
+                  title="GitHub"
+                >
+                  GitHub ↗
+                </a>
+                <a
+                  href="https://x.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  className={styles.socialLink}
+                  title="X / Twitter"
+                >
+                  X / Twitter ↗
+                </a>
+                <a
+                  href="https://discord.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  className={styles.socialLink}
+                  title="Discord"
+                >
+                  Discord ↗
+                </a>
+                <a
+                  href="https://youtube.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  className={styles.socialLink}
+                  title="YouTube"
+                >
+                  YouTube ↗
+                </a>
+              </div>
+            </div>
+
+            <div className={styles.statusSub}>
+              <span>DIR / 2026</span>
+              <span>AUTONOMOUS SYSTEMS</span>
+              <span onClick={scrollToContent} className={styles.scrollHint}>
+                Scroll to explore ↓
+              </span>
+            </div>
           </div>
         </div>
       </div>

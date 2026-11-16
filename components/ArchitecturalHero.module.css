@@ -282,10 +282,60 @@
   flex-direction: column;
   align-items: flex-end;
   text-align: right;
-  gap: 8px;
+  gap: 16px;
   font-family: var(--font-mono);
   font-size: 11px;
   color: rgba(255, 255, 255, 0.7);
+}
+
+.socialBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.socialLabel {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+}
+
+.socialList {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+}
+
+.socialLink {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #ffffff;
+  text-decoration: none;
+  padding: 2px 6px;
+  border-radius: 3px;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.socialLink:hover {
+  background: #ffffff;
+  color: #000000;
+  transform: translateX(-3px);
+}
+
+.statusSub {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
 }
 
 .scrollHint {
@@ -327,6 +377,25 @@
   .statusCol {
     align-items: flex-start;
     text-align: left;
+  }
+
+  .socialBlock {
+    align-items: flex-start;
+  }
+
+  .socialList {
+    align-items: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .socialLink:hover {
+    transform: translateY(-2px);
+  }
+
+  .statusSub {
+    align-items: flex-start;
   }
 
   .marqueeLetter {
