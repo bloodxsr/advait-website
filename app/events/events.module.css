@@ -1,387 +1,765 @@
 /* ==========================================================================
-   events.module.css — Events & Club News (iOS Dark Theme)
+   events.module.css — Opposite Theme (Inverted Dark Brutalism)
+   Pitch black backdrop (#0a0a0c), pure crisp white typography (#ffffff),
+   monospaced indices, and white-inversion hover cards.
    ========================================================================== */
 
 .page {
   min-height: 100vh;
-  padding: 85px max(24px, 3.5vw) 120px;
-  background: #000000;
+  padding: 100px max(24px, 3.5vw) 120px;
+  background: #0a0a0c;
   color: #ffffff;
   position: relative;
   z-index: 1;
+  user-select: text;
 }
 
 .container {
   width: 100%;
-  max-width: min(1540px, calc(100vw - 48px));
+  max-width: min(1560px, calc(100vw - 48px));
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 60px;
 }
 
-/* ── Hero / Header ───────────────────────────────────────────────────────── */
-.hero {
+/* ── 00. Monumental Swiss Header (Pure White on Pitch Black) ──────────────── */
+.header {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 20px 0 6px;
+  gap: 28px;
+  padding-bottom: 50px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.eyebrow {
+.headerTop {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.headerIndex {
   font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #0a84ff;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.headerMeta {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.65);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.titleRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  padding: 10px 0 6px;
+}
+
+.titleWrap {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
 }
 
 .title {
   margin: 0;
-  font-family: var(--font-brand), var(--font-system), sans-serif;
-  font-size: clamp(34px, 5vw, 48px);
-  font-weight: 700;
-  letter-spacing: -0.03em;
+  font-family: var(--font-space), var(--font-brand), sans-serif;
+  font-size: clamp(48px, 8.5vw, 110px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
   color: #ffffff;
-  line-height: 1.15;
+  text-transform: uppercase;
 }
 
-.subtitle {
-  margin: 0;
-  color: rgba(235, 235, 245, 0.65);
-  font-size: 16px;
-  line-height: 1.5;
-}
-
-/* ── Filter Pills (Upcoming / Past / News) ───────────────────────────────── */
-.filterRow {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.filterPill {
-  height: 36px;
-  padding: 0 20px;
-  border-radius: 999px;
-  background: rgba(28, 28, 32, 0.7);
-  border: 1px solid rgba(84, 84, 88, 0.4);
-  color: rgba(235, 235, 245, 0.65);
-  font-family: var(--font-system), sans-serif;
-  font-size: 13.5px;
-  font-weight: 500;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.filterPill:hover {
-  background: rgba(44, 44, 48, 0.85);
+.registered {
+  font-family: var(--font-space), var(--font-brand), sans-serif;
+  font-size: clamp(18px, 3vw, 36px);
+  font-weight: 800;
   color: #ffffff;
 }
 
-.filterPillActive {
-  background: #0a84ff;
-  border-color: #0a84ff;
-  color: #ffffff;
-  font-weight: 600;
-  box-shadow: 0 2px 10px rgba(10, 132, 255, 0.3);
+.versionTag {
+  font-family: var(--font-space), var(--font-brand), sans-serif;
+  font-size: clamp(32px, 6vw, 76px);
+  font-weight: 800;
+  font-style: italic;
+  letter-spacing: -0.05em;
+  color: rgba(255, 255, 255, 0.7);
 }
 
-/* ── Featured Next Event Card (Split 50/50 Layout) ───────────────────────── */
-.featuredCard {
+.yearTag {
+  font-family: var(--font-space), var(--font-brand), sans-serif;
+  font-size: clamp(32px, 6vw, 76px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.headerSummaryRow {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  background: rgba(22, 22, 26, 0.85);
-  border: 1px solid rgba(84, 84, 88, 0.38);
-  border-radius: 24px;
-  backdrop-filter: blur(35px) saturate(180%);
-  -webkit-backdrop-filter: blur(35px) saturate(180%);
-  overflow: hidden;
-  box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.7);
-  transition: border-color 0.2s ease;
+  grid-template-columns: 1.8fr 1.2fr;
+  gap: 40px;
+  align-items: flex-start;
+  padding-top: 14px;
 }
 
-.featuredCard:hover {
-  border-color: rgba(10, 132, 255, 0.45);
+.headerSummary {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.85);
+  max-width: 760px;
 }
 
-.featuredVisual {
-  position: relative;
-  min-height: 300px;
-  background: linear-gradient(135deg, rgba(10, 132, 255, 0.22) 0%, rgba(191, 90, 242, 0.15) 50%, rgba(0, 0, 0, 0.8) 100%);
+.monoIndex {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  margin-right: 8px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.statsRoster {
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 30px;
-  overflow: hidden;
+  justify-content: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
-.visualPattern {
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-  background-size: 20px 20px;
-  opacity: 0.35;
-}
-
-.visualBadgeOverlay {
-  position: relative;
-  z-index: 2;
+.statBox {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  text-align: center;
+  padding: 12px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 6px;
+  min-width: 100px;
 }
 
-.visualDateBox {
-  padding: 14px 20px;
-  border-radius: 16px;
-  background: rgba(0, 0, 0, 0.65);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(20px);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5);
-}
-
-.visualDay {
-  display: block;
-  font-family: var(--font-brand), var(--font-system), sans-serif;
-  font-size: 36px;
+.statNum {
+  font-family: var(--font-space), var(--font-brand), sans-serif;
+  font-size: 24px;
   font-weight: 800;
   color: #ffffff;
   line-height: 1;
 }
 
-.visualMonth {
-  display: block;
+.statLabel {
   font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 600;
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.6);
   text-transform: uppercase;
-  color: #0a84ff;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.06em;
   margin-top: 4px;
 }
 
-.visualLabel {
-  font-size: 12px;
-  color: rgba(235, 235, 245, 0.5);
+/* ── 01. Featured Upcoming Salon Banner ──────────────────────────────────── */
+.featuredSection {
+  margin-top: 10px;
+}
+
+.featuredCard {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 8px;
+  padding: 38px 42px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.6);
+  transition: all 0.25s ease;
+}
+
+.featuredCard:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.featuredTopRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.featuredBadges {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.featuredPill {
   font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  background: #ffffff;
+  color: #000000;
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+}
+
+.divTag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+}
+
+.countdownBadge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #30d158;
+  letter-spacing: 0.06em;
 }
 
 .featuredContent {
-  padding: 38px 36px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 14px;
+  gap: 16px;
 }
 
-.nextEventBadge {
-  align-self: flex-start;
+.dateTimeGrid {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  flex-wrap: wrap;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.dateBlock {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
   font-family: var(--font-mono);
+}
+
+.dateLabel {
   font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: #0a84ff;
-  background: rgba(10, 132, 255, 0.15);
-  border: 1px solid rgba(10, 132, 255, 0.35);
-  padding: 4px 12px;
-  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.55);
 }
 
-.featuredTitle {
-  margin: 0;
-  font-family: var(--font-brand), var(--font-system), sans-serif;
-  font-size: 26px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: #ffffff;
-  line-height: 1.25;
-}
-
-.featuredMeta {
-  margin: 0;
-  font-family: var(--font-mono);
+.dateValue {
   font-size: 12.5px;
-  color: rgba(235, 235, 245, 0.6);
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.featuredHeading {
+  margin: 0;
+  font-family: var(--font-space), var(--font-brand), sans-serif;
+  font-size: clamp(28px, 3.8vw, 44px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: #ffffff;
 }
 
 .featuredDesc {
   margin: 0;
-  color: rgba(235, 235, 245, 0.72);
   font-size: 14.5px;
-  line-height: 1.55;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.85);
+  max-width: 860px;
 }
 
 .featuredActions {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-top: 6px;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-top: 10px;
 }
 
 .rsvpBtn {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 13px 24px;
+  background: #ffffff;
+  color: #000000;
+  border: 1px solid #ffffff;
+  border-radius: 4px;
+  cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  height: 40px;
-  padding: 0 20px;
-  border-radius: 999px;
-  background: #0a84ff;
-  color: #ffffff;
-  font-size: 13px;
-  font-weight: 600;
-  text-decoration: none;
+  gap: 8px;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 14px rgba(10, 132, 255, 0.3);
 }
 
 .rsvpBtn:hover {
-  background: #0071e3;
-  transform: translateY(-1px);
+  background: #000000;
+  color: #ffffff;
+  border-color: #ffffff;
 }
 
-/* ── 3-Column Card Grid ──────────────────────────────────────────────────── */
-.grid {
+.discordBtn {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 12px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 4px;
+  color: #ffffff;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.discordBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: #ffffff;
+}
+
+/* ── 02. Filter & Search Controls ────────────────────────────────────────── */
+.controlsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.controlsRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.searchWrap {
+  flex: 1;
+  min-width: 320px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.searchWrap:focus-within {
+  border-color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.searchPrompt {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.searchInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: #ffffff;
+}
+
+.searchInput::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.clearSearchBtn {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.65);
+  cursor: pointer;
+  padding: 2px 6px;
+}
+
+.clearSearchBtn:hover {
+  color: #ffffff;
+}
+
+.filterPills {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filterPill {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 10px 16px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filterPill:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.filterPillActive {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+}
+
+.filterPillActive:hover {
+  background: #ffffff;
+  color: #000000;
+}
+
+/* ── 03. Events Grid (Opposite Theme: White Inversion on Hover) ──────────── */
+.eventsGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
   gap: 24px;
 }
 
-.card {
-  background: rgba(22, 22, 26, 0.85);
-  border: 1px solid rgba(84, 84, 88, 0.38);
-  border-radius: 20px;
-  backdrop-filter: blur(35px) saturate(180%);
-  -webkit-backdrop-filter: blur(35px) saturate(180%);
-  overflow: hidden;
+.eventCard {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  padding: 28px 26px;
   display: flex;
   flex-direction: column;
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.5);
+  justify-content: space-between;
+  gap: 20px;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  color: #ffffff;
 }
 
-.card:hover {
+/* OPPOSITE THEME INVERSION: Hover turns card solid white with pitch black text! */
+.eventCard:hover {
+  background: #ffffff;
+  border-color: #ffffff;
+  color: #000000;
   transform: translateY(-3px);
-  border-color: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 16px 40px rgba(255, 255, 255, 0.12), 0 24px 60px rgba(0, 0, 0, 0.8);
 }
 
-.cardVisual {
-  position: relative;
-  height: 160px;
-  background: rgba(30, 30, 34, 0.6);
+.eventCard:hover .cardNum,
+.eventCard:hover .typeBadge,
+.eventCard:hover .dateStamp,
+.eventCard:hover .eventHeading,
+.eventCard:hover .timeVenueRow,
+.eventCard:hover .eventDescText,
+.eventCard:hover .statusIndicator,
+.eventCard:hover .cardAction {
+  color: #000000;
+}
+
+.eventCard:hover .divPill {
+  background: rgba(0, 0, 0, 0.1);
+  border-color: rgba(0, 0, 0, 0.3);
+  color: #000000;
+}
+
+.cardTop {
   display: flex;
   align-items: center;
-  justify-content: center;
-  overflow: hidden;
+  justify-content: space-between;
+  gap: 12px;
 }
 
-.cardVisualGradient {
-  position: absolute;
-  inset: 0;
-  opacity: 0.7;
+.cardBadges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.cardVisualDate {
-  position: relative;
-  z-index: 2;
+.cardNum {
   font-family: var(--font-mono);
-  font-size: 11px;
-  color: rgba(235, 235, 245, 0.65);
-  background: rgba(0, 0, 0, 0.55);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 4px 10px;
-  border-radius: 999px;
-  backdrop-filter: blur(10px);
+  font-size: 11.5px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.divPill {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+}
+
+.typeBadge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.05em;
+}
+
+.dateStamp {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .cardBody {
-  padding: 22px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  flex: 1;
+  gap: 8px;
 }
 
-.cardTag {
-  align-self: flex-start;
-  font-family: var(--font-mono);
-  font-size: 10.5px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  padding: 3px 9px;
-  border-radius: 999px;
-}
-
-.tagEvent {
-  background: rgba(10, 132, 255, 0.14);
-  color: #0a84ff;
-  border: 1px solid rgba(10, 132, 255, 0.3);
-}
-
-.tagNews {
-  background: rgba(255, 159, 10, 0.14);
-  color: #ff9f0a;
-  border: 1px solid rgba(255, 159, 10, 0.3);
-}
-
-.cardTitle {
+.eventHeading {
   margin: 0;
-  font-size: 17px;
-  font-weight: 700;
+  font-family: var(--font-space), var(--font-brand), sans-serif;
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
   color: #ffffff;
-  letter-spacing: -0.01em;
-  line-height: 1.3;
+  line-height: 1.2;
 }
 
-.cardMeta {
-  margin: 0;
+.timeVenueRow {
   font-family: var(--font-mono);
-  font-size: 12px;
-  color: rgba(235, 235, 245, 0.5);
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.65);
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.cardDesc {
+.eventDescText {
   margin: 0;
   font-size: 13.5px;
-  color: rgba(235, 235, 245, 0.65);
-  line-height: 1.5;
-  flex: 1;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  flex-wrap: wrap;
+}
+
+.eventCard:hover .cardFooter {
+  border-top-color: rgba(0, 0, 0, 0.18);
+}
+
+.statusIndicator {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.55);
 }
 
 .cardAction {
-  margin-top: 6px;
-  font-size: 12.5px;
-  font-weight: 600;
-  color: #0a84ff;
-  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #ffffff;
   display: inline-flex;
   align-items: center;
   gap: 4px;
 }
 
-.cardAction:hover {
-  text-decoration: underline;
+/* Empty State */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 60px 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed rgba(255, 255, 255, 0.25);
+  border-radius: 6px;
+  text-align: center;
 }
 
+.emptyPrompt {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.emptyText {
+  margin: 0;
+  font-size: 13.5px;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.resetBtn {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 6px 14px;
+  background: #ffffff;
+  color: #000000;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 6px;
+}
+
+/* ── 04. Propose Section ─────────────────────────────────────────────────── */
+.proposeSection {
+  margin-top: 20px;
+}
+
+.proposeCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  padding: 38px 42px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  flex-wrap: wrap;
+}
+
+.proposeLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 780px;
+}
+
+.proposeIndex {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.proposeTitle {
+  margin: 0;
+  font-family: var(--font-space), var(--font-brand), sans-serif;
+  font-size: clamp(20px, 2.4vw, 28px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
+
+.proposeDesc {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.proposeActions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 220px;
+}
+
+.primaryProposeBtn {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 12px 20px;
+  background: #ffffff;
+  color: #000000;
+  border-radius: 4px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.primaryProposeBtn:hover {
+  background: #e0e0e0;
+  transform: translateY(-2px);
+}
+
+.secondaryTeamBtn {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 10px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  color: #ffffff;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.secondaryTeamBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ── Responsiveness ──────────────────────────────────────────────────────── */
 @media (max-width: 900px) {
-  .featuredCard {
+  .headerSummaryRow {
     grid-template-columns: 1fr;
+    gap: 24px;
   }
 
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
+  .statsRoster {
+    justify-content: flex-start;
   }
 }
 
-@media (max-width: 600px) {
-  .grid {
+@media (max-width: 640px) {
+  .page {
+    padding: 85px 16px 80px;
+  }
+
+  .titleRow {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .eventsGrid {
     grid-template-columns: 1fr;
+  }
+
+  .featuredCard,
+  .proposeCard {
+    padding: 24px;
   }
 }

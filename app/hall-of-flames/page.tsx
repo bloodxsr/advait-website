@@ -4,78 +4,97 @@ import { useState, useMemo, useRef, useEffect } from "react";
 import Link from "next/link";
 import styles from "./hof.module.css";
 
-const entries = [
+interface FlameEntry {
+  id: number;
+  num: string;
+  title: string;
+  excerpt: string;
+  author: string;
+  date: string;
+  issue: string;
+  tags: string[];
+  type: string;
+  readTime: string;
+}
+
+const ENTRIES: FlameEntry[] = [
   {
     id: 1,
+    num: "01",
     title: "Designing technology with clarity and care",
     excerpt:
       "A meditation on the relationship between thoughtful design and lasting technical work. How the best systems are built with patience, legibility, and care for the people who will use them.",
     author: "Advait Research Cell",
-    date: "Oct 2026",
-    issue: "Issue 04",
+    date: "OCT 2026",
+    issue: "ISSUE 04",
     tags: ["Design", "Research"],
     type: "Essay",
-    readTime: "8 min",
+    readTime: "8 MIN",
   },
   {
     id: 2,
+    num: "02",
     title: "Notes on building in public",
     excerpt:
       "What it means to share your work before it is finished. A field report from members who shipped their tools, experiments, and half-formed ideas to the collective for feedback.",
     author: "Community Archive",
-    date: "Sep 2026",
-    issue: "Issue 03",
+    date: "SEP 2026",
+    issue: "ISSUE 03",
     tags: ["Community", "Open Source"],
     type: "Field Report",
-    readTime: "5 min",
+    readTime: "5 MIN",
   },
   {
     id: 3,
+    num: "03",
     title: "Small systems, lasting impact",
     excerpt:
       "On the quiet power of focused, well-scoped software. This essay traces the lineage of small but enduring tools and what made them persist where larger efforts failed.",
     author: "Foundation Architecture",
-    date: "Aug 2026",
-    issue: "Issue 02",
+    date: "AUG 2026",
+    issue: "ISSUE 02",
     tags: ["Systems", "Architecture"],
     type: "Essay",
-    readTime: "11 min",
+    readTime: "11 MIN",
   },
   {
     id: 4,
+    num: "04",
     title: "Latent space exploration at the edge",
     excerpt:
-      "An experimental project running generative models on constrained hardware. The write-up covers everything from quantisation strategies to real-time output on a Raspberry Pi cluster.",
+      "An experimental project running generative models on constrained hardware. The write-up covers everything from quantization strategies to real-time output on a Raspberry Pi cluster.",
     author: "Generative Latents Lab",
-    date: "Jul 2026",
-    issue: "Issue 01",
+    date: "JUL 2026",
+    issue: "ISSUE 01",
     tags: ["AI", "Research", "Systems"],
     type: "Project",
-    readTime: "14 min",
+    readTime: "14 MIN",
   },
   {
     id: 5,
+    num: "05",
     title: "Open protocols for a closed world",
     excerpt:
       "Why federated and open-protocol systems matter more than ever. A look at the architecture of open systems and the tradeoffs that come with building for interoperability.",
     author: "Autonomous Systems Group",
-    date: "Jun 2026",
-    issue: "Issue 00",
+    date: "JUN 2026",
+    issue: "ISSUE 00",
     tags: ["Architecture", "Open Source", "Community"],
     type: "Research Note",
-    readTime: "9 min",
+    readTime: "9 MIN",
   },
   {
     id: 6,
+    num: "06",
     title: "ZeroVerif: proof-carrying verification at compile time",
     excerpt:
       "A technical deep-dive into zero-knowledge proof systems embedded in the compilation pipeline. Built by members during the Q2 research sprint.",
     author: "ZeroVerif Team",
-    date: "May 2026",
-    issue: "Special",
+    date: "MAY 2026",
+    issue: "SPECIAL",
     tags: ["AI", "Systems", "Research"],
     type: "Project",
-    readTime: "18 min",
+    readTime: "18 MIN",
   },
 ];
 
@@ -99,150 +118,217 @@ export default function HallOfFlames() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  const filtered = useMemo(() => {
-    return entries.filter((e) => {
+  const filteredEntries = useMemo(() => {
+    return ENTRIES.filter((item) => {
+      const matchesTag = activeTag === "All" || item.tags.includes(activeTag);
+      const q = search.toLowerCase().trim();
       const matchesSearch =
-        search.trim() === "" ||
-        e.title.toLowerCase().includes(search.toLowerCase()) ||
-        e.excerpt.toLowerCase().includes(search.toLowerCase()) ||
-        e.author.toLowerCase().includes(search.toLowerCase()) ||
-        e.tags.some((t) => t.toLowerCase().includes(search.toLowerCase()));
-      const matchesTag = activeTag === "All" || e.tags.includes(activeTag);
-      return matchesSearch && matchesTag;
+        !q ||
+        item.title.toLowerCase().includes(q) ||
+        item.excerpt.toLowerCase().includes(q) ||
+        item.author.toLowerCase().includes(q) ||
+        item.tags.some((t) => t.toLowerCase().includes(q));
+      return matchesTag && matchesSearch;
     });
   }, [search, activeTag]);
 
   return (
     <main className={styles.page}>
-      {/* Page Header */}
-      <div className={styles.hero}>
-        <div className={styles.heroInner}>
-          <p className={styles.eyebrow}>Archival research / Selected work</p>
-          <h1 className={styles.title}>Hall of Flames</h1>
-          <p className={styles.subtitle}>
-            A curated archive of experiments, essays, and projects that have
-            moved the collective forward.
-          </p>
-        </div>
-      </div>
-
-      {/* Search & Filter Bar */}
-      <div className={styles.controls}>
-        <div className={styles.controlsInner}>
-          <div className={styles.searchWrap}>
-            <svg
-              className={styles.searchIcon}
-              viewBox="0 0 24 24"
-              width="17"
-              height="17"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <circle cx="11" cy="11" r="8" />
-              <path d="M21 21l-4.35-4.35" />
-            </svg>
-            <input
-              ref={searchInputRef}
-              className={styles.searchInput}
-              type="text"
-              placeholder="Search entries, authors, tags…"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-            {search ? (
-              <button
-                className={styles.clearBtn}
-                onClick={() => setSearch("")}
-                aria-label="Clear search"
-              >
-                ×
-              </button>
-            ) : (
-              <span className={styles.searchHint} title="Press / to search">/</span>
-            )}
+      <div className={styles.container}>
+        {/* ── 00. Monumental Swiss Header ─────────────────────────────────────── */}
+        <header className={styles.header}>
+          <div className={styles.headerTop}>
+            <div className={styles.headerIndex}>
+              <span>[00]</span>
+              <span>SELECTED WORK &amp; ESSAYS / ARCHIVE</span>
+            </div>
+            <div className={styles.headerMeta}>
+              <span>CURATED ESSAYS</span>
+              <span>·</span>
+              <span>TECHNICAL REVIEWS</span>
+              <span>·</span>
+              <span>DIR / 2026</span>
+            </div>
           </div>
 
-          <div className={styles.tagRow}>
-            {ALL_TAGS.map((tag) => (
-              <button
-                key={tag}
-                className={`${styles.tagPill} ${activeTag === tag ? styles.tagPillActive : ""}`}
-                onClick={() => setActiveTag(tag)}
-              >
-                {tag}
-              </button>
-            ))}
+          <div className={styles.titleRow}>
+            <div className={styles.titleWrap}>
+              <h1 className={styles.title}>HALL OF FLAMES</h1>
+              <span className={styles.registered}>®</span>
+            </div>
+            <span className={styles.versionTag}>/V.01</span>
+            <span className={styles.yearTag}>(2026)</span>
           </div>
-        </div>
-      </div>
 
-      {/* Results count */}
-      <div className={styles.resultsBar}>
-        <div className={styles.resultsInner}>
-          <span className={styles.resultsCount}>
-            {filtered.length} {filtered.length === 1 ? "entry" : "entries"}
-            {activeTag !== "All" && ` in ${activeTag}`}
-            {search && ` matching "${search}"`}
-          </span>
-        </div>
-      </div>
+          <div className={styles.headerSummaryRow}>
+            <p className={styles.headerSummary}>
+              <span className={styles.monoIndex}>{`{1}`}</span>
+              A curated archive of technical writings, architectural retrospectives,
+              and breakthrough research notes authored by members of the Advait collective.
+              Selected for intellectual craft, clarity, and enduring relevance over trend.
+            </p>
+            <div className={styles.statsRoster}>
+              <div className={styles.statBox}>
+                <span className={styles.statNum}>06</span>
+                <span className={styles.statLabel}>Archived Works</span>
+              </div>
+              <div className={styles.statBox}>
+                <span className={styles.statNum}>04</span>
+                <span className={styles.statLabel}>Print Issues</span>
+              </div>
+              <div className={styles.statBox}>
+                <span className={styles.statNum}>100%</span>
+                <span className={styles.statLabel}>Peer Reviewed</span>
+              </div>
+            </div>
+          </div>
+        </header>
 
-      {/* Cards Grid */}
-      <section className={styles.grid}>
-        <div className={styles.gridInner}>
-          {filtered.length === 0 ? (
-            <div className={styles.empty}>
-              <span className={styles.emptyIcon}>◎</span>
-              <p>No entries match your search.</p>
+        {/* ── 01. Filter & Search Controls ────────────────────────────────────── */}
+        <section className={styles.controlsSection}>
+          <div className={styles.controlsRow}>
+            {/* Search Input */}
+            <div className={styles.searchWrap}>
+              <span className={styles.searchPrompt}>[SEARCH] ›</span>
+              <input
+                ref={searchInputRef}
+                type="text"
+                placeholder="Search essays, author, systems (Press '/' to focus)..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className={styles.searchInput}
+              />
+              {search && (
+                <button
+                  type="button"
+                  onClick={() => setSearch("")}
+                  className={styles.clearSearchBtn}
+                  aria-label="Clear filter"
+                >
+                  [CLEAR ×]
+                </button>
+              )}
+            </div>
+
+            {/* Tag Pills */}
+            <div className={styles.tagFilters} role="tablist">
+              {ALL_TAGS.map((tag) => (
+                <button
+                  key={tag}
+                  type="button"
+                  role="tab"
+                  aria-selected={activeTag === tag}
+                  onClick={() => setActiveTag(tag)}
+                  className={`${styles.filterPill} ${
+                    activeTag === tag ? styles.filterPillActive : ""
+                  }`}
+                >
+                  [{tag.toUpperCase()}]
+                </button>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── 02. Curated Essays Grid ─────────────────────────────────────────── */}
+        <section className={styles.entriesSection} aria-label="Curated Essays">
+          {filteredEntries.length === 0 ? (
+            <div className={styles.emptyState}>
+              <span className={styles.emptyPrompt}>[NO DISPATCHES FOUND]</span>
+              <p className={styles.emptyText}>
+                No articles match &quot;{search}&quot; under &quot;{activeTag}&quot;.
+              </p>
               <button
+                type="button"
+                onClick={() => {
+                  setSearch("");
+                  setActiveTag("All");
+                }}
                 className={styles.resetBtn}
-                onClick={() => { setSearch(""); setActiveTag("All"); }}
               >
-                Reset filters
+                Reset Filter
               </button>
             </div>
           ) : (
-            filtered.map((entry) => (
-              <article key={entry.id} className={styles.card}>
-                <div className={styles.cardTop}>
-                  <div className={styles.cardMeta}>
-                    <span className={styles.cardType}>{entry.type}</span>
-                    <span className={styles.cardDot} aria-hidden="true" />
-                    <span className={styles.cardIssue}>{entry.issue}</span>
+            <div className={styles.entriesGrid}>
+              {filteredEntries.map((entry) => (
+                <article key={entry.id} className={styles.entryCard}>
+                  {/* Top Meta */}
+                  <div className={styles.cardHeader}>
+                    <div className={styles.headerBadges}>
+                      <span className={styles.entryNum}>[{entry.num}]</span>
+                      <span className={styles.issueBadge}>{entry.issue}</span>
+                      <span className={styles.typeBadge}>[{entry.type}]</span>
+                    </div>
+                    <div className={styles.dateMeta}>
+                      <span>{entry.date}</span>
+                      <span>·</span>
+                      <span>{entry.readTime}</span>
+                    </div>
                   </div>
-                  <span className={styles.cardReadTime}>{entry.readTime}</span>
-                </div>
 
-                <h2 className={styles.cardTitle}>{entry.title}</h2>
-                <p className={styles.cardExcerpt}>{entry.excerpt}</p>
-
-                <div className={styles.cardTags}>
-                  {entry.tags.map((tag) => (
-                    <button
-                      key={tag}
-                      className={`${styles.cardTag} ${activeTag === tag ? styles.cardTagActive : ""}`}
-                      onClick={() => setActiveTag(tag)}
-                    >
-                      {tag}
-                    </button>
-                  ))}
-                </div>
-
-                <div className={styles.cardFooter}>
-                  <div className={styles.cardAuthorBlock}>
-                    <span className={styles.cardAuthor}>{entry.author}</span>
-                    <span className={styles.cardDate}>{entry.date}</span>
+                  {/* Title & Excerpt */}
+                  <div className={styles.cardBody}>
+                    <h2 className={styles.entryTitle}>{entry.title}</h2>
+                    <p className={styles.entryExcerpt}>{entry.excerpt}</p>
                   </div>
-                  <Link href="/" className={styles.cardReadBtn}>
-                    Read →
-                  </Link>
-                </div>
-              </article>
-            ))
+
+                  {/* Tags */}
+                  <div className={styles.tagRow}>
+                    {entry.tags.map((t) => (
+                      <span key={t} className={styles.entryTag}>
+                        [{t}]
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Footer */}
+                  <div className={styles.cardFooter}>
+                    <span className={styles.authorName}>By {entry.author}</span>
+                    <span className={styles.readLink}>
+                      <span>Read essay</span>
+                      <span>→</span>
+                    </span>
+                  </div>
+                </article>
+              ))}
+            </div>
           )}
-        </div>
-      </section>
+        </section>
+
+        {/* ── 03. Editorial Dispatch Notice ───────────────────────────────────── */}
+        <section className={styles.editorialSection}>
+          <div className={styles.editorialCard}>
+            <div className={styles.editorialLeft}>
+              <div className={styles.editorialIndex}>
+                <span>[03]</span>
+                <span>EDITORIAL SUBMISSION DESK</span>
+              </div>
+              <h3 className={styles.editorialTitle}>
+                Publish a peer-reviewed research note or technical essay.
+              </h3>
+              <p className={styles.editorialDesc}>
+                The Advait Hall of Flames accepts technical manuscripts, distributed systems
+                benchmarks, and essays exploring computation aesthetics. Submissions are
+                anonymously reviewed by division chairs and bound into semester print editions.
+              </p>
+            </div>
+
+            <div className={styles.editorialActions}>
+              <a
+                href="mailto:research@advait.collective"
+                className={styles.primaryDispatchBtn}
+              >
+                <span>Submit Manuscript</span>
+                <span>↗</span>
+              </a>
+              <Link href="/projects" className={styles.secondaryExploreBtn}>
+                Explore Active Repositories →
+              </Link>
+            </div>
+          </div>
+        </section>
+      </div>
     </main>
   );
 }

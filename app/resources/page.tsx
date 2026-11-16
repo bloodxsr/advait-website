@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, useMemo, useEffect, useRef } from "react";
+import Link from "next/link";
 import styles from "./resources.module.css";
 
 interface ResourceItem {
   id: string;
+  num: string;
   title: string;
   desc: string;
   recommender: string;
@@ -23,22 +25,25 @@ interface SubmissionItem {
 const DEFAULT_RESOURCES: ResourceItem[] = [
   {
     id: "1",
+    num: "01",
     title: "The Missing Semester of Your CS Education",
     desc: "Crucial practical computing tools, shell automation, and systems debugging rarely taught in university courses.",
-    recommender: "Aditya",
+    recommender: "Aditya Ray",
     topic: "Systems",
     url: "https://missing.csail.mit.edu/",
   },
   {
     id: "2",
+    num: "02",
     title: "Designing Data-Intensive Applications",
-    desc: "The definitive guide to distributed architectures, consensus algorithms, replication, and data storage fundamentals.",
+    desc: "The definitive guide to distributed architectures, consensus algorithms, replication logs, and storage engines.",
     recommender: "Devin Reyes",
     topic: "Architecture",
     url: "https://dataintensive.net/",
   },
   {
     id: "3",
+    num: "03",
     title: "Stanford CS231n: Deep Learning for Computer Vision",
     desc: "Comprehensive neural network foundations, backpropagation calculus, and deep generative vision pipelines.",
     recommender: "Lyra Chen",
@@ -47,22 +52,25 @@ const DEFAULT_RESOURCES: ResourceItem[] = [
   },
   {
     id: "4",
+    num: "04",
     title: "Crafting Interpreters & Compiler Engineering",
-    desc: "A hands-on journey through scanning, parsing, bytecode VMs, and garbage collection mechanisms.",
+    desc: "A hands-on journey through scanning, parsing, AST generation, bytecode VMs, and garbage collection mechanisms.",
     recommender: "Mira Chen",
     topic: "Research",
     url: "https://craftinginterpreters.com/",
   },
   {
     id: "5",
+    num: "05",
     title: "Zero-Knowledge Proofs: MOOC & Cryptographic Foundations",
-    desc: "Modern zk-SNARK constructions, arithmetic circuits, and cryptographic verifier protocols.",
+    desc: "Modern zk-SNARK constructions, arithmetic circuits, R1CS constraints, and cryptographic verifier protocols.",
     recommender: "Siddharth Rao",
     topic: "Research",
     url: "https://zk-learning.org/",
   },
   {
     id: "6",
+    num: "06",
     title: "Operating Systems: Three Easy Pieces (OSTEP)",
     desc: "Virtualization, concurrency, and persistence in operating systems with clean, readable prose and runnable code.",
     recommender: "Bivash Kumar",
@@ -71,6 +79,7 @@ const DEFAULT_RESOURCES: ResourceItem[] = [
   },
   {
     id: "7",
+    num: "07",
     title: "Refactoring UI & Systems Design",
     desc: "Practical UI/UX design heuristics for developers building polished developer tools and software interfaces.",
     recommender: "Isha Verma",
@@ -79,8 +88,9 @@ const DEFAULT_RESOURCES: ResourceItem[] = [
   },
   {
     id: "8",
+    num: "08",
     title: "The Architecture of Open Source Applications (AOSA)",
-    desc: "In-depth case studies on real-world open source systems, from git to LLVM and nginx.",
+    desc: "In-depth case studies on real-world open source systems, from git and LLVM to nginx and Berkeley DB.",
     recommender: "Ananya Sharma",
     topic: "Open Source",
     url: "https://aosabook.org/",
@@ -92,33 +102,32 @@ const DEFAULT_SUBMISSIONS: SubmissionItem[] = [
     id: "sub-1",
     title: "MIT 6.824: Distributed Systems Engineering",
     topic: "Systems",
-    date: "Nov 12, 2026",
+    date: "NOV 12, 2026",
     status: "Pending",
   },
   {
     id: "sub-2",
     title: "Rust for Systems Programmers (Trifecta Labs)",
     topic: "Systems",
-    date: "Oct 29, 2026",
+    date: "OCT 29, 2026",
     status: "Approved",
   },
   {
     id: "sub-3",
     title: "WebGPU Explainer & WGSL Fundamentals",
     topic: "AI",
-    date: "Oct 15, 2026",
+    date: "OCT 15, 2026",
     status: "Approved",
   },
 ];
 
 const TOPICS = [
   "All",
-  "AI",
   "Systems",
+  "Architecture",
+  "AI",
   "Research",
   "Design",
-  "Architecture",
-  "Community",
   "Open Source",
 ];
 
@@ -168,7 +177,7 @@ export default function ResourcesPage() {
       id: `sub-${Date.now()}`,
       title: newTitle.trim(),
       topic: newTopic,
-      date: "Just now",
+      date: "JUST NOW",
       status: "Pending",
     };
 
@@ -206,274 +215,307 @@ export default function ResourcesPage() {
   return (
     <main className={styles.page}>
       <div className={styles.container}>
-        {/* ── Page Header (matching wireframe) ─────────────────────────────── */}
-        <section className={styles.hero}>
-          <div className={styles.heroLeft}>
-            <span className={styles.eyebrow}>Curated Vault · Open Scholarship</span>
-            <h1 className={styles.title}>Educational Resources</h1>
-            <p className={styles.subtitle}>
-              Recommended by members, approved by admins.
+        {/* ── 00. Monumental Swiss Header ─────────────────────────────────────── */}
+        <header className={styles.header}>
+          <div className={styles.headerTop}>
+            <div className={styles.headerIndex}>
+              <span>[00]</span>
+              <span>CURATED VAULT / OPEN SCHOLARSHIP</span>
+            </div>
+            <div className={styles.headerMeta}>
+              <span>8 CORE TEXTS</span>
+              <span>·</span>
+              <span>PEER APPROVED</span>
+              <span>·</span>
+              <span>DIR / 2026</span>
+            </div>
+          </div>
+
+          <div className={styles.titleRow}>
+            <div className={styles.titleWrap}>
+              <h1 className={styles.title}>RESEARCH VAULT</h1>
+              <span className={styles.registered}>®</span>
+            </div>
+            <span className={styles.versionTag}>/V.01</span>
+            <span className={styles.yearTag}>(2026)</span>
+          </div>
+
+          <div className={styles.headerSummaryRow}>
+            <p className={styles.headerSummary}>
+              <span className={styles.monoIndex}>{`{1}`}</span>
+              An open technical syllabus curated by the Advait collective. Spanning
+              distributed systems engineering, low-level compilers, cryptographic zero-knowledge
+              foundations, neural radiance fields, and software design craft.
             </p>
-          </div>
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className={styles.recommendBtn}
-          >
-            Recommend a resource
-          </button>
-        </section>
-
-        {/* ── Controls Section (Search Bar + Topic Filter Pills) ──────────── */}
-        <section className={styles.controlsSection}>
-          <div className={styles.searchWrap}>
-            <svg
-              className={styles.searchIcon}
-              viewBox="0 0 24 24"
-              width="17"
-              height="17"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <circle cx="11" cy="11" r="8" />
-              <path d="M21 21l-4.35-4.35" />
-            </svg>
-            <input
-              ref={searchInputRef}
-              type="text"
-              className={styles.searchInput}
-              placeholder="Search entries, authors, tags..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-            {search ? (
-              <button
-                className={styles.clearSearchBtn}
-                onClick={() => setSearch("")}
-                aria-label="Clear search"
-              >
-                ×
-              </button>
-            ) : (
-              <span className={styles.searchHint} title="Press / to search">
-                /
-              </span>
-            )}
-          </div>
-
-          <div className={styles.filterRow}>
-            {TOPICS.map((topic) => (
-              <button
-                key={topic}
-                onClick={() => setActiveTopic(topic)}
-                className={`${styles.filterPill} ${
-                  activeTopic === topic ? styles.filterPillActive : ""
-                }`}
-              >
-                {topic}
-              </button>
-            ))}
-          </div>
-
-          <div className={styles.resultsMeta}>
-            <span>
-              {filteredResources.length}{" "}
-              {filteredResources.length === 1 ? "resource" : "resources"} found
-              {activeTopic !== "All" && ` in ${activeTopic}`}
-              {search && ` for "${search}"`}
-            </span>
-          </div>
-        </section>
-
-        {/* ── Main Resources Grid (Expansive 2-Column Layout) ─────────────── */}
-        <div className={styles.resourceCard}>
-          <div className={styles.resourceList}>
-            {filteredResources.length === 0 ? (
-              <div className={styles.emptyState}>
-                <h3 className={styles.emptyTitle}>No matching resources found</h3>
-                <p className={styles.emptyDesc}>
-                  No resources match &quot;{search}&quot;
-                  {activeTopic !== "All" ? ` under ${activeTopic}` : ""}. Try
-                  clearing your search or topic filter.
-                </p>
-                <button
-                  onClick={() => {
-                    setSearch("");
-                    setActiveTopic("All");
-                  }}
-                  className={styles.resetBtn}
-                >
-                  Clear search &amp; filters
-                </button>
+            <div className={styles.statsRoster}>
+              <div className={styles.statBox}>
+                <span className={styles.statNum}>{DEFAULT_RESOURCES.length}</span>
+                <span className={styles.statLabel}>Core Syllabi</span>
               </div>
-            ) : (
-              filteredResources.map((res) => (
-                <article key={res.id} className={styles.resourceRow}>
-                  <div className={styles.resourceInfo}>
-                    <h2 className={styles.resourceTitle}>{res.title}</h2>
-                    <p className={styles.resourceMeta}>
-                      {res.desc} · Recommended by{" "}
-                      <span className={styles.resourceRecommender}>
-                        {res.recommender}
-                      </span>
-                    </p>
+              <div className={styles.statBox}>
+                <span className={styles.statNum}>{submissions.length}</span>
+                <span className={styles.statLabel}>Submissions</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsModalOpen(true)}
+                className={styles.headerRecommendBtn}
+              >
+                + Propose Resource ↗
+              </button>
+            </div>
+          </div>
+        </header>
+
+        {/* ── 01. Search & Topic Filter ───────────────────────────────────────── */}
+        <section className={styles.controlsSection}>
+          <div className={styles.controlsRow}>
+            {/* Search Input */}
+            <div className={styles.searchWrap}>
+              <span className={styles.searchPrompt}>[SEARCH] ›</span>
+              <input
+                ref={searchInputRef}
+                type="text"
+                placeholder="Search syllabi, topic, recommender (Press '/' to focus)..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className={styles.searchInput}
+              />
+              {search && (
+                <button
+                  type="button"
+                  onClick={() => setSearch("")}
+                  className={styles.clearSearchBtn}
+                  aria-label="Clear filter"
+                >
+                  [CLEAR ×]
+                </button>
+              )}
+            </div>
+
+            {/* Topic Filter Pills */}
+            <div className={styles.topicFilters} role="tablist">
+              {TOPICS.map((topic) => (
+                <button
+                  key={topic}
+                  type="button"
+                  role="tab"
+                  aria-selected={activeTopic === topic}
+                  onClick={() => setActiveTopic(topic)}
+                  className={`${styles.filterPill} ${
+                    activeTopic === topic ? styles.filterPillActive : ""
+                  }`}
+                >
+                  [{topic.toUpperCase()}]
+                </button>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── 02. Curated Syllabi Grid ────────────────────────────────────────── */}
+        <section className={styles.resourcesSection} aria-label="Curated Syllabi">
+          {filteredResources.length === 0 ? (
+            <div className={styles.emptyState}>
+              <span className={styles.emptyPrompt}>[NO TEXTS FOUND]</span>
+              <p className={styles.emptyText}>
+                No educational resources match &quot;{search}&quot;.
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setSearch("");
+                  setActiveTopic("All");
+                }}
+                className={styles.resetBtn}
+              >
+                Reset Filter
+              </button>
+            </div>
+          ) : (
+            <div className={styles.resourcesGrid}>
+              {filteredResources.map((item) => (
+                <article key={item.id} className={styles.resourceCard}>
+                  {/* Top Meta */}
+                  <div className={styles.cardHeader}>
+                    <div className={styles.headerBadges}>
+                      <span className={styles.cardNum}>[{item.num}]</span>
+                      <span className={styles.topicBadge}>[{item.topic}]</span>
+                    </div>
+                    <span className={styles.recommenderTag}>
+                      Rec. by {item.recommender}
+                    </span>
                   </div>
-                  <div className={styles.resourceActions}>
-                    <span className={styles.topicBadge}>{res.topic}</span>
+
+                  {/* Title & Desc */}
+                  <div className={styles.cardBody}>
+                    <h2 className={styles.resourceTitle}>{item.title}</h2>
+                    <p className={styles.resourceDesc}>{item.desc}</p>
+                  </div>
+
+                  {/* Footer Action */}
+                  <div className={styles.cardFooter}>
+                    <span className={styles.licenseHint}>[VERIFIED OPEN ACCESS]</span>
                     <a
-                      href={res.url}
+                      href={item.url}
                       target="_blank"
                       rel="noreferrer"
-                      className={styles.openLink}
+                      className={styles.accessBtn}
                     >
-                      Open ↗
+                      <span>Access Syllabus</span>
+                      <span>↗</span>
                     </a>
                   </div>
                 </article>
-              ))
-            )}
-          </div>
-        </div>
-
-        {/* ── Your Submissions Section Card (matching wireframe) ────────────── */}
-        <div className={styles.submissionsCard}>
-          <div className={styles.submissionsHeader}>
-            <div className={styles.submissionsHeadingGroup}>
-              <h3 className={styles.submissionsTitle}>Your submissions</h3>
-              <p className={styles.submissionsNotice}>
-                New resources appear here as Pending until an admin approves them.
-              </p>
+              ))}
             </div>
+          )}
+        </section>
 
-            <div className={styles.statusFilterGroup}>
-              {(["All", "Pending", "Approved", "Rejected"] as const).map(
-                (st) => (
-                  <button
-                    key={st}
-                    onClick={() => setSubmissionsStatus(st)}
-                    className={`${styles.statusPill} ${
-                      submissionsStatus === st ? styles.statusPillActive : ""
-                    }`}
-                  >
-                    {st}
-                  </button>
-                )
-              )}
+        {/* ── 03. Community Submissions Docket ────────────────────────────────── */}
+        <section className={styles.submissionsSection}>
+          <div className={styles.sectionHeader}>
+            <div className={styles.sectionIndex}>
+              <span>[02]</span>
+              <span>COMMUNITY RECOMMENDATIONS DOCKET</span>
+            </div>
+            <div className={styles.statusFilters}>
+              {(["All", "Pending", "Approved", "Rejected"] as const).map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => setSubmissionsStatus(s)}
+                  className={`${styles.statusFilterBtn} ${
+                    submissionsStatus === s ? styles.statusFilterActive : ""
+                  }`}
+                >
+                  [{s.toUpperCase()}]
+                </button>
+              ))}
             </div>
           </div>
 
-          <div className={styles.submissionsList}>
-            {filteredSubmissions.length === 0 ? (
-              <p className={styles.emptyNotice}>
-                No submissions found for the selected filter.
-              </p>
-            ) : (
-              filteredSubmissions.map((sub) => (
-                <div key={sub.id} className={styles.submissionRow}>
-                  <div>
-                    <span className={styles.submissionTitle}>{sub.title}</span>
-                    <div className={styles.submissionMeta}>
-                      {sub.topic} · Submitted {sub.date}
-                    </div>
-                  </div>
+          <div className={styles.submissionsTable}>
+            <div className={styles.subTableHeader}>
+              <span>RECOMMENDED RESOURCE</span>
+              <span>DOMAIN TOPIC</span>
+              <span>SUBMISSION DATE</span>
+              <span>AUDIT STATUS</span>
+            </div>
+
+            <div className={styles.subTableBody}>
+              {filteredSubmissions.map((sub) => (
+                <div key={sub.id} className={styles.subRow}>
+                  <span className={styles.subTitle}>{sub.title}</span>
+                  <span className={styles.subTopic}>[{sub.topic}]</span>
+                  <span className={styles.subDate}>{sub.date}</span>
                   <span
                     className={`${styles.statusBadge} ${
-                      sub.status === "Pending"
-                        ? styles.statusPending
-                        : sub.status === "Approved"
+                      sub.status === "Approved"
                         ? styles.statusApproved
-                        : styles.statusRejected
+                        : sub.status === "Rejected"
+                        ? styles.statusRejected
+                        : styles.statusPending
                     }`}
                   >
-                    <span className={styles.statusDot} />
-                    {sub.status}
+                    [{sub.status.toUpperCase()}]
                   </span>
                 </div>
-              ))
-            )}
+              ))}
+            </div>
           </div>
-        </div>
+        </section>
       </div>
 
-      {/* ── Modal Dialog: Recommend a Resource ────────────────────────────── */}
+      {/* ── Propose Resource Modal ─────────────────────────────────────────── */}
       {isModalOpen && (
-        <div
-          className={styles.modalOverlay}
-          onClick={() => setIsModalOpen(false)}
-        >
-          <div
-            className={styles.modalDialog}
-            onClick={(e) => e.stopPropagation()}
-          >
+        <div className={styles.modalOverlay} onClick={() => setIsModalOpen(false)}>
+          <div className={styles.modalCard} onClick={(e) => e.stopPropagation()}>
             <div className={styles.modalHeader}>
-              <h2 className={styles.modalTitle}>Recommend a resource</h2>
+              <div className={styles.modalIndex}>
+                <span>[PROPOSE]</span>
+                <span>EDUCATIONAL DISPATCH</span>
+              </div>
               <button
-                className={styles.closeBtn}
+                type="button"
                 onClick={() => setIsModalOpen(false)}
+                className={styles.closeModalBtn}
               >
-                ×
+                [×]
               </button>
             </div>
 
+            <h3 className={styles.modalTitle}>Recommend a Technical Text</h3>
+            <p className={styles.modalSubtitle}>
+              Propose high-leverage papers, interactive textbooks, or lecture courses for review.
+            </p>
+
             <form onSubmit={handleRecommendSubmit} className={styles.modalForm}>
-              <div className={styles.formGroup}>
-                <label className={styles.formLabel}>Resource Title *</label>
+              <div className={styles.field}>
+                <label className={styles.label} htmlFor="res-title">
+                  RESOURCE TITLE
+                </label>
                 <input
+                  id="res-title"
                   type="text"
-                  required
-                  placeholder="e.g. Distributed Systems Engineering"
+                  placeholder="e.g. Distributed Systems 6.824"
                   value={newTitle}
                   onChange={(e) => setNewTitle(e.target.value)}
-                  className={styles.formInput}
+                  className={styles.input}
+                  required
                 />
               </div>
 
-              <div className={styles.formGroup}>
-                <label className={styles.formLabel}>Resource URL</label>
+              <div className={styles.field}>
+                <label className={styles.label} htmlFor="res-url">
+                  PUBLIC URL
+                </label>
                 <input
+                  id="res-url"
                   type="url"
                   placeholder="https://..."
                   value={newUrl}
                   onChange={(e) => setNewUrl(e.target.value)}
-                  className={styles.formInput}
+                  className={styles.input}
+                  required
                 />
               </div>
 
-              <div className={styles.formGroup}>
-                <label className={styles.formLabel}>Topic</label>
+              <div className={styles.field}>
+                <label className={styles.label} htmlFor="res-topic">
+                  DOMAIN TOPIC
+                </label>
                 <select
+                  id="res-topic"
                   value={newTopic}
                   onChange={(e) => setNewTopic(e.target.value)}
-                  className={styles.formSelect}
+                  className={styles.select}
                 >
-                  <option value="Systems">Systems</option>
-                  <option value="AI / ML">AI / ML</option>
-                  <option value="Architecture">Architecture</option>
-                  <option value="Compilers">Compilers</option>
-                  <option value="Security">Security</option>
+                  {TOPICS.filter((t) => t !== "All").map((t) => (
+                    <option key={t} value={t}>
+                      {t}
+                    </option>
+                  ))}
                 </select>
               </div>
 
-              <div className={styles.formGroup}>
-                <label className={styles.formLabel}>Short Description</label>
+              <div className={styles.field}>
+                <label className={styles.label} htmlFor="res-desc">
+                  REASON FOR INCLUSION (OPTIONAL)
+                </label>
                 <textarea
-                  placeholder="Why do you recommend this resource?"
+                  id="res-desc"
+                  rows={2}
+                  placeholder="Why is this text essential for collective members?"
                   value={newDesc}
                   onChange={(e) => setNewDesc(e.target.value)}
-                  className={styles.formTextarea}
+                  className={styles.textarea}
                 />
               </div>
 
               <div className={styles.modalActions}>
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className={styles.cancelBtn}
-                >
-                  Cancel
-                </button>
-                <button type="submit" className={styles.submitBtn}>
-                  Submit for review
+                <button type="submit" className={styles.submitModalBtn}>
+                  Submit to Peer Review Docket →
                 </button>
               </div>
             </form>
