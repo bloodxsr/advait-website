@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { GLYPH_PATHS, GLYPH_VIEWBOX } from "./AdvaitGlyphs";
 import styles from "./ArchitecturalHero.module.css";
@@ -16,37 +15,15 @@ const SET_ITEMS: Array<{ id: string; glyph: "A" | "D" | "V" | "I" | "T" }> = [
 ];
 
 export function ArchitecturalHero() {
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const heroRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!heroRef.current) return;
-      const rect = heroRef.current.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      const y = ((e.clientY - rect.top) / rect.height) * 2 - 1;
-      setMousePos({ x, y });
-    };
-
-    const heroEl = heroRef.current;
-    heroEl?.addEventListener("mousemove", handleMouseMove);
-    return () => heroEl?.removeEventListener("mousemove", handleMouseMove);
-  }, []);
-
   const scrollToContent = () => {
     const target = document.getElementById("manifesto");
     target?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
-    <section ref={heroRef} className={styles.hero} aria-label="Advait Platform Hero">
+    <section className={styles.hero} aria-label="Advait Platform Hero">
       {/* ── Vertical Scrolling Marquee with Repetition (from CRL reference) ── */}
-      <div
-        className={styles.monumentalLayer}
-        style={{
-          transform: `translate3d(${mousePos.x * -16}px, ${mousePos.y * -8}px, 0)`,
-        }}
-      >
+      <div className={styles.monumentalLayer}>
         <div className={styles.marqueeTrack}>
           {/* Group 1 */}
           <div className={styles.marqueeGroup}>

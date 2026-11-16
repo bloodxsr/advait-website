@@ -90,14 +90,14 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
     >
       <div className={styles.stage}>
         {/* Kinetic Stencil Wordmark: Color Fill -> Horizontal Lockup -> Turn -90° & Zoom In into Scroll Animation */}
-        <div className={styles.lettersRow}>
+        <div
+          className={`${styles.lettersRow} ${
+            isZooming ? styles.lettersRowZooming : ""
+          }`}
+        >
           <div
             className={`${styles.glyphWrap} ${
-              isZooming
-                ? styles.glyphZoomIn
-                : assembled
-                ? styles.assembled
-                : styles.spreadA1
+              assembled ? styles.assembled : styles.spreadA1
             }`}
           >
             <StencilGlyph
@@ -109,11 +109,7 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
 
           <div
             className={`${styles.glyphWrap} ${
-              isZooming
-                ? styles.glyphZoomIn
-                : assembled
-                ? styles.assembled
-                : styles.spreadD
+              assembled ? styles.assembled : styles.spreadD
             }`}
           >
             <StencilGlyph
@@ -125,11 +121,7 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
 
           <div
             className={`${styles.glyphWrap} ${
-              isZooming
-                ? styles.glyphZoomIn
-                : assembled
-                ? styles.assembled
-                : styles.spreadV
+              assembled ? styles.assembled : styles.spreadV
             }`}
           >
             <StencilGlyph
@@ -141,11 +133,7 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
 
           <div
             className={`${styles.glyphWrap} ${
-              isZooming
-                ? styles.glyphZoomIn
-                : assembled
-                ? styles.assembled
-                : styles.spreadA2
+              assembled ? styles.assembled : styles.spreadA2
             }`}
           >
             <StencilGlyph
@@ -157,11 +145,7 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
 
           <div
             className={`${styles.glyphWrap} ${
-              isZooming
-                ? styles.glyphZoomIn
-                : assembled
-                ? styles.assembled
-                : styles.spreadI
+              assembled ? styles.assembled : styles.spreadI
             }`}
           >
             <StencilGlyph
@@ -173,11 +157,7 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
 
           <div
             className={`${styles.glyphWrap} ${
-              isZooming
-                ? styles.glyphZoomIn
-                : assembled
-                ? styles.assembled
-                : styles.spreadT
+              assembled ? styles.assembled : styles.spreadT
             }`}
           >
             <StencilGlyph
@@ -189,11 +169,7 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
 
           <div
             className={`${styles.glyphWrap} ${
-              isZooming
-                ? styles.glyphZoomIn
-                : assembled
-                ? styles.assembled
-                : styles.spreadDot
+              assembled ? styles.assembled : styles.spreadDot
             }`}
           >
             <StencilGlyph
