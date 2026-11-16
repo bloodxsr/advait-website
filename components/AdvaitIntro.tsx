@@ -97,7 +97,7 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
                 : assembled
                 ? styles.assembled
                 : styles.spreadA1
-            } ${isVertical ? styles.verticalWhite : ""}`}
+            } ${isVertical ? styles.verticalBlack : ""}`}
           >
             <StencilGlyph
               glyph="A"
@@ -113,7 +113,7 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
                 : assembled
                 ? styles.assembled
                 : styles.spreadD
-            } ${isVertical ? styles.verticalWhite : ""}`}
+            } ${isVertical ? styles.verticalBlack : ""}`}
           >
             <StencilGlyph
               glyph="D"
@@ -129,7 +129,7 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
                 : assembled
                 ? styles.assembled
                 : styles.spreadV
-            } ${isVertical ? styles.verticalWhite : ""}`}
+            } ${isVertical ? styles.verticalBlack : ""}`}
           >
             <StencilGlyph
               glyph="V"
@@ -145,7 +145,7 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
                 : assembled
                 ? styles.assembled
                 : styles.spreadA2
-            } ${isVertical ? styles.verticalWhite : ""}`}
+            } ${isVertical ? styles.verticalBlack : ""}`}
           >
             <StencilGlyph
               glyph="A"
@@ -161,7 +161,7 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
                 : assembled
                 ? styles.assembled
                 : styles.spreadI
-            } ${isVertical ? styles.verticalWhite : ""}`}
+            } ${isVertical ? styles.verticalBlack : ""}`}
           >
             <StencilGlyph
               glyph="I"
@@ -177,7 +177,7 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
                 : assembled
                 ? styles.assembled
                 : styles.spreadT
-            } ${isVertical ? styles.verticalWhite : ""}`}
+            } ${isVertical ? styles.verticalBlack : ""}`}
           >
             <StencilGlyph
               glyph="T"
@@ -193,7 +193,7 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
                 : assembled
                 ? styles.assembled
                 : styles.spreadDot
-            } ${isVertical ? styles.verticalWhite : ""}`}
+            } ${isVertical ? styles.verticalBlack : ""}`}
           >
             <StencilGlyph
               glyph="Dot"

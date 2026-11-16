@@ -48,7 +48,7 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  color: #000000;
+  color: #ffffff;
   will-change: transform, opacity, color;
   transition:
     transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
@@ -105,38 +105,38 @@
   transform: translate3d(0, 0, 0) rotate(0deg) !important;
 }
 
-/* Phase 3: Orientation Turn of 90° Anti-Clockwise into Vertical Alignment & Color Morph to White */
-.verticalWhite {
-  color: #ffffff !important;
+/* Phase 3: Orientation Turn of 90° Anti-Clockwise into Vertical Alignment & Color Morph to Black */
+.verticalBlack {
+  color: #000000 !important;
 }
 
 .verticalA1 {
-  transform: translate3d(0, -32vh, 0) rotate(-90deg) scale(2.2) !important;
+  transform: translate3d(0, -32vh, 0) rotate(-90deg) scale(3.2) !important;
 }
 
 .verticalD {
-  transform: translate3d(0, -19vh, 0) rotate(-90deg) scale(2.2) !important;
+  transform: translate3d(0, -19vh, 0) rotate(-90deg) scale(3.2) !important;
 }
 
 .verticalV {
-  transform: translate3d(0, -6vh, 0) rotate(-90deg) scale(2.2) !important;
+  transform: translate3d(0, -6vh, 0) rotate(-90deg) scale(3.2) !important;
 }
 
 .verticalA2 {
-  transform: translate3d(0, 7vh, 0) rotate(-90deg) scale(2.2) !important;
+  transform: translate3d(0, 7vh, 0) rotate(-90deg) scale(3.2) !important;
 }
 
 .verticalI {
-  transform: translate3d(0, 20vh, 0) rotate(-90deg) scale(2.2) !important;
+  transform: translate3d(0, 20vh, 0) rotate(-90deg) scale(3.2) !important;
 }
 
 .verticalT {
-  transform: translate3d(0, 33vh, 0) rotate(-90deg) scale(2.2) !important;
+  transform: translate3d(0, 33vh, 0) rotate(-90deg) scale(3.2) !important;
 }
 
 .verticalDot {
   opacity: 0 !important;
-  transform: translate3d(0, 42vh, 0) rotate(-90deg) scale(2.2) !important;
+  transform: translate3d(0, 42vh, 0) rotate(-90deg) scale(3.2) !important;
   pointer-events: none;
 }
 
@@ -152,7 +152,7 @@
   padding: 0 max(32px, 4vw);
   font-family: var(--font-mono);
   font-size: 11px;
-  color: rgba(0, 0, 0, 0.55);
+  color: rgba(255, 255, 255, 0.7);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   pointer-events: none;
@@ -162,7 +162,7 @@
 
 .skipHint {
   font-size: 10.5px;
-  color: rgba(0, 0, 0, 0.45);
+  color: rgba(255, 255, 255, 0.55);
 }
 
 @keyframes fadeInMeta {
