@@ -121,11 +121,11 @@
   box-shadow: 0 0 8px rgba(48, 209, 88, 0.7);
 }
 
-/* ── 3 Swiss Editorial Link Columns ──────────────────────────────────────── */
+/* ── 2 Swiss Editorial Link Columns ──────────────────────────────────────── */
 .columnsGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 48px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 60px;
 }
 
 .column {

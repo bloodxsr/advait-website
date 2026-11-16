@@ -42,7 +42,7 @@ export function Footer() {
           </div>
         </div>
 
-        {/* ── 3 Swiss Editorial Link Columns ──────────────────────────────── */}
+        {/* ── 2 Swiss Editorial Link Columns ──────────────────────────────── */}
         <div className={styles.columnsGrid}>
           {/* Column 01: Systems & Artifacts */}
           <div className={styles.column}>
@@ -56,15 +56,19 @@ export function Footer() {
                 <span className={styles.linkArrow}>↗</span>
               </Link>
               <Link className={styles.navLink} href="/resources">
-                <span>Educational Resources</span>
+                <span>Research Vault &amp; Syllabi</span>
                 <span className={styles.linkArrow}>↗</span>
               </Link>
-              <Link className={styles.navLink} href="/leaderboard">
-                <span>Developer Leaderboard</span>
+              <Link className={styles.navLink} href="/hall-of-builders">
+                <span>Hall of Builders (Leaderboard)</span>
                 <span className={styles.linkArrow}>↗</span>
               </Link>
               <Link className={styles.navLink} href="/hall-of-flames">
                 <span>Hall of Flames</span>
+                <span className={styles.linkArrow}>↗</span>
+              </Link>
+              <Link className={styles.navLink} href="/team">
+                <span>Stewardship &amp; Team Roster</span>
                 <span className={styles.linkArrow}>↗</span>
               </Link>
               <Link className={styles.navLink} href="/dashboard">
@@ -74,54 +78,24 @@ export function Footer() {
             </nav>
           </div>
 
-          {/* Column 02: Working Groups */}
+          {/* Column 02: Community & Access */}
           <div className={styles.column}>
             <div className={styles.colHeader}>
               <span className={styles.colNum}>[02]</span>
-              <span>WORKING DIVISIONS</span>
-            </div>
-            <nav className={styles.linkList} aria-label="Divisions links">
-              <Link className={styles.navLink} href="/team">
-                <span>RED — Research &amp; Engineering</span>
-                <span className={styles.linkTag}>[Kernel]</span>
-              </Link>
-              <Link className={styles.navLink} href="/team">
-                <span>OPS — Outreach &amp; Sponsorships</span>
-                <span className={styles.linkTag}>[Grants]</span>
-              </Link>
-              <Link className={styles.navLink} href="/team">
-                <span>EVED — Events &amp; Ventures</span>
-                <span className={styles.linkTag}>[Salons]</span>
-              </Link>
-              <Link className={styles.navLink} href="/team">
-                <span>Creatives &amp; Social Media</span>
-                <span className={styles.linkTag}>[Design]</span>
-              </Link>
-              <Link className={styles.navLink} href="/team">
-                <span>GameVeda — Game Dev Division</span>
-                <span className={styles.linkTag}>[3D]</span>
-              </Link>
-            </nav>
-          </div>
-
-          {/* Column 03: Community & Access */}
-          <div className={styles.column}>
-            <div className={styles.colHeader}>
-              <span className={styles.colNum}>[03]</span>
-              <span>ACCESS &amp; CALENDAR</span>
+              <span>ACCESS &amp; NETWORK</span>
             </div>
             <nav className={styles.linkList} aria-label="Community links">
               <Link className={styles.navLink} href="/events">
-                <span>Events &amp; Salons</span>
+                <span>Events &amp; Socials</span>
                 <span className={styles.linkArrow}>↗</span>
               </Link>
-              <Link className={styles.navLink} href="/login">
+              <Link className={styles.navLink} href="/login?mode=signin">
                 <span>Member Sign In</span>
                 <span className={styles.linkArrow}>→</span>
               </Link>
-              <Link className={styles.navLink} href="/social">
-                <span>Social Network</span>
-                <span className={styles.linkArrow}>↗</span>
+              <Link className={styles.navLink} href="/login?mode=join">
+                <span>Join Collective</span>
+                <span className={styles.linkArrow}>→</span>
               </Link>
               <a
                 className={styles.navLink}
@@ -130,6 +104,15 @@ export function Footer() {
                 rel="noreferrer"
               >
                 <span>GitHub Collective</span>
+                <span className={styles.linkArrow}>↗</span>
+              </a>
+              <a
+                className={styles.navLink}
+                href="https://instagram.com"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <span>Instagram Channel</span>
                 <span className={styles.linkArrow}>↗</span>
               </a>
               <Link className={styles.navLink} href="/admin">
