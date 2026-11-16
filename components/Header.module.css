@@ -31,6 +31,13 @@
     box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+:global(body[data-intro-active="true"]) .header {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
 /* ── Dynamic Island Pill on Scroll (Kept 100% Intact with Swiss Aesthetics) ── */
 .scrolled {
   top: 14px;

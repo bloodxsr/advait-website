@@ -6,7 +6,6 @@
 
 .main {
   position: relative;
-  z-index: 1;
   background: #96958f;
   color: #000000;
   min-height: 100vh;

@@ -4,37 +4,24 @@ import { useEffect, useState, useRef } from "react";
 import { StencilGlyph } from "./AdvaitGlyphs";
 import styles from "./AdvaitIntro.module.css";
 
-// In-memory session flag: survives Next.js client-side navigation, resets on browser refresh
-let hasPlayedThisSession = false;
-
 interface AdvaitIntroProps {
   onComplete?: () => void;
 }
 
 export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
-  // If already played, immediately skip mounting
-  const [isVisible, setIsVisible] = useState(() => !hasPlayedThisSession);
   const [fillProgress, setFillProgress] = useState(0);
   const [assembled, setAssembled] = useState(false);
   const [isZooming, setIsZooming] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const animFrameRef = useRef<number | null>(null);
 
   useEffect(() => {
-    if (hasPlayedThisSession) {
-      document.body.removeAttribute("data-intro-active");
-      onComplete?.();
-      return;
-    }
-
-    // Mark as played so it will not run again during in-app page transitions
-    hasPlayedThisSession = true;
-
     // 00. Set body attribute to ensure navbar & hero text are hidden during intro fill
     document.body.setAttribute("data-intro-active", "true");
 
     // 01. Phase 1: Color filling animation from bottom (0%) to top (100%)
-    const startTime = performance.now() + 200;
+    const startTime = performance.now() + 150;
     const fillDuration = 2200;
 
     const stepFill = (now: number) => {
@@ -59,18 +46,18 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
           setIsZooming(true);
           // Reveal landing page text concurrently with zoom-in
           document.body.removeAttribute("data-intro-active");
-        }, 3800);
+        }, 3600);
 
         // 04. Phase 4: Smooth transition out into the background vertical marquee
         setTimeout(() => {
           setIsExiting(true);
-        }, 5100);
+        }, 4900);
 
         // 05. Phase 5: Unmount intro overlay
         setTimeout(() => {
           setIsVisible(false);
           onComplete?.();
-        }, 5900);
+        }, 5700);
       }
     };
 
