@@ -111,32 +111,32 @@
 }
 
 .verticalA1 {
-  transform: translate3d(0, -32vh, 0) rotate(-90deg) scale(3.2) !important;
+  transform: translate3d(0, -32vh, 0) rotate(-90deg) scale(4.8) !important;
 }
 
 .verticalD {
-  transform: translate3d(0, -19vh, 0) rotate(-90deg) scale(3.2) !important;
+  transform: translate3d(0, -19vh, 0) rotate(-90deg) scale(4.8) !important;
 }
 
 .verticalV {
-  transform: translate3d(0, -6vh, 0) rotate(-90deg) scale(3.2) !important;
+  transform: translate3d(0, -6vh, 0) rotate(-90deg) scale(4.8) !important;
 }
 
 .verticalA2 {
-  transform: translate3d(0, 7vh, 0) rotate(-90deg) scale(3.2) !important;
+  transform: translate3d(0, 7vh, 0) rotate(-90deg) scale(4.8) !important;
 }
 
 .verticalI {
-  transform: translate3d(0, 20vh, 0) rotate(-90deg) scale(3.2) !important;
+  transform: translate3d(0, 20vh, 0) rotate(-90deg) scale(4.8) !important;
 }
 
 .verticalT {
-  transform: translate3d(0, 33vh, 0) rotate(-90deg) scale(3.2) !important;
+  transform: translate3d(0, 33vh, 0) rotate(-90deg) scale(4.8) !important;
 }
 
 .verticalDot {
   opacity: 0 !important;
-  transform: translate3d(0, 42vh, 0) rotate(-90deg) scale(3.2) !important;
+  transform: translate3d(0, 42vh, 0) rotate(-90deg) scale(4.8) !important;
   pointer-events: none;
 }
 

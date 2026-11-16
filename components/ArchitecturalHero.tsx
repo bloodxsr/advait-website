@@ -5,22 +5,23 @@ import Link from "next/link";
 import { GLYPH_PATHS, GLYPH_VIEWBOX } from "./AdvaitGlyphs";
 import styles from "./ArchitecturalHero.module.css";
 
-// 2 identical sets of ADVAIT for seamless infinite vertical downward scrolling
+// 2 identical sets ordered so that as the track scrolls downwards,
+// the letters arrive and read seamlessly as: A -> D -> V -> A -> I -> T
 const MARQUEE_ITEMS: Array<{ id: string; glyph: "A" | "D" | "V" | "I" | "T" }> = [
-  // Set 1
-  { id: "s1-a1", glyph: "A" },
-  { id: "s1-d", glyph: "D" },
-  { id: "s1-v", glyph: "V" },
-  { id: "s1-a2", glyph: "A" },
-  { id: "s1-i", glyph: "I" },
+  // Set 1 (Downward motion reveals: A -> D -> V -> A -> I -> T)
   { id: "s1-t", glyph: "T" },
-  // Set 2 (seamless continuation)
-  { id: "s2-a1", glyph: "A" },
-  { id: "s2-d", glyph: "D" },
-  { id: "s2-v", glyph: "V" },
-  { id: "s2-a2", glyph: "A" },
-  { id: "s2-i", glyph: "I" },
+  { id: "s1-i", glyph: "I" },
+  { id: "s1-a2", glyph: "A" },
+  { id: "s1-v", glyph: "V" },
+  { id: "s1-d", glyph: "D" },
+  { id: "s1-a1", glyph: "A" },
+  // Set 2 (seamless continuous repeat)
   { id: "s2-t", glyph: "T" },
+  { id: "s2-i", glyph: "I" },
+  { id: "s2-a2", glyph: "A" },
+  { id: "s2-v", glyph: "V" },
+  { id: "s2-d", glyph: "D" },
+  { id: "s2-a1", glyph: "A" },
 ];
 
 export function ArchitecturalHero() {

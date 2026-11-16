@@ -45,15 +45,16 @@
   0% {
     transform: translate3d(0, -50%, 0);
   }
+
   100% {
     transform: translate3d(0, 0%, 0);
   }
 }
 
-/* Monumental size: rotated 90° anti-clockwise for every single letter */
+/* Monumental full-screen size: rotated 90° anti-clockwise for every single letter */
 .marqueeLetter {
-  width: clamp(340px, 48vw, 760px);
-  height: clamp(340px, 48vw, 760px);
+  width: clamp(520px, 82vw, 1200px);
+  height: clamp(520px, 82vw, 1200px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -61,8 +62,8 @@
 }
 
 .marqueeLetterI {
-  width: clamp(340px, 48vw, 760px);
-  height: clamp(180px, 25vw, 400px);
+  width: clamp(520px, 82vw, 1200px);
+  height: clamp(260px, 42vw, 620px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -306,12 +307,12 @@
   }
 
   .marqueeLetter {
-    width: 80vw;
-    height: 35vh;
+    width: 94vw;
+    height: 94vw;
   }
 
   .marqueeLetterI {
-    width: 60vw;
-    height: 35vh;
+    width: 94vw;
+    height: 52vw;
   }
 }
