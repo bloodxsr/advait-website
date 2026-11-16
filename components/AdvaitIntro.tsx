@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { StencilGlyph } from "./AdvaitGlyphs";
 import styles from "./AdvaitIntro.module.css";
 
 interface AdvaitIntroProps {
@@ -8,35 +9,58 @@ interface AdvaitIntroProps {
 }
 
 export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
+  const [fillProgress, setFillProgress] = useState(0);
   const [assembled, setAssembled] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
+  const animFrameRef = useRef<number | null>(null);
 
   useEffect(() => {
-    // Phase 1: Trigger smooth slide-in towards center after brief initial render
-    const assembleTimer = setTimeout(() => {
-      setAssembled(true);
-    }, 100);
+    // 01. Phase 1: Color filling animation from bottom (0%) to top (100%)
+    // Starting with 15% ghost outline, wiping up solid black over 1.4s (matching CRL shader)
+    const startTime = performance.now() + 150;
+    const fillDuration = 1350;
 
-    // Phase 2: Start exit transition after letters assemble and lock in
+    const stepFill = (now: number) => {
+      const elapsed = now - startTime;
+      if (elapsed < 0) {
+        animFrameRef.current = requestAnimationFrame(stepFill);
+        return;
+      }
+      const progress = Math.min(1, elapsed / fillDuration);
+      setFillProgress(progress);
+
+      if (progress < 1) {
+        animFrameRef.current = requestAnimationFrame(stepFill);
+      } else {
+        // 02. Phase 2: Once filled, smoothly glide inwards to lock into ADVAIT.
+        setTimeout(() => {
+          setAssembled(true);
+        }, 120);
+      }
+    };
+
+    animFrameRef.current = requestAnimationFrame(stepFill);
+
+    // 03. Phase 3: Transition out after letters have locked in
     const exitTimer = setTimeout(() => {
       setIsExiting(true);
-    }, 1800);
+    }, 2800);
 
-    // Phase 3: Unmount overlay and trigger onComplete callback
+    // 04. Phase 4: Unmount overlay
     const doneTimer = setTimeout(() => {
       setIsVisible(false);
       onComplete?.();
-    }, 2400);
+    }, 3400);
 
     return () => {
-      clearTimeout(assembleTimer);
+      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
       clearTimeout(exitTimer);
       clearTimeout(doneTimer);
     };
   }, [onComplete]);
 
-  // Allow clicking anywhere to skip intro immediately
+  // Click anywhere to skip
   const handleSkip = () => {
     setIsExiting(true);
     setTimeout(() => {
@@ -52,60 +76,94 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
       className={`${styles.overlay} ${isExiting ? styles.overlayExiting : ""}`}
       onClick={handleSkip}
       role="banner"
-      aria-label="Advait introduction animation"
+      aria-label="Advait kinetic stencil introduction"
     >
       <div className={styles.stage}>
-        {/* Kinetic Assembling Wordmark */}
+        {/* Kinetic Stencil Wordmark with vertical color fill and horizontal glide */}
         <div className={styles.lettersRow}>
-          <span
-            className={`${styles.letter} ${
+          <div
+            className={`${styles.glyphWrap} ${
               assembled ? styles.assembled : styles.spreadA1
             }`}
           >
-            A
-          </span>
-          <span
-            className={`${styles.letter} ${
+            <StencilGlyph
+              glyph="A"
+              fillProgress={fillProgress}
+              className={styles.glyphSvg}
+            />
+          </div>
+
+          <div
+            className={`${styles.glyphWrap} ${
               assembled ? styles.assembled : styles.spreadD
             }`}
           >
-            D
-          </span>
-          <span
-            className={`${styles.letter} ${
+            <StencilGlyph
+              glyph="D"
+              fillProgress={fillProgress}
+              className={styles.glyphSvg}
+            />
+          </div>
+
+          <div
+            className={`${styles.glyphWrap} ${
               assembled ? styles.assembled : styles.spreadV
             }`}
           >
-            V
-          </span>
-          <span
-            className={`${styles.letter} ${
+            <StencilGlyph
+              glyph="V"
+              fillProgress={fillProgress}
+              className={styles.glyphSvg}
+            />
+          </div>
+
+          <div
+            className={`${styles.glyphWrap} ${
               assembled ? styles.assembled : styles.spreadA2
             }`}
           >
-            A
-          </span>
-          <span
-            className={`${styles.letter} ${
+            <StencilGlyph
+              glyph="A"
+              fillProgress={fillProgress}
+              className={styles.glyphSvg}
+            />
+          </div>
+
+          <div
+            className={`${styles.glyphWrap} ${
               assembled ? styles.assembled : styles.spreadI
             }`}
           >
-            I
-          </span>
-          <span
-            className={`${styles.letter} ${
+            <StencilGlyph
+              glyph="I"
+              fillProgress={fillProgress}
+              className={styles.glyphSvgI}
+            />
+          </div>
+
+          <div
+            className={`${styles.glyphWrap} ${
               assembled ? styles.assembled : styles.spreadT
             }`}
           >
-            T
-          </span>
-          <span
-            className={`${styles.letter} ${styles.dot} ${
+            <StencilGlyph
+              glyph="T"
+              fillProgress={fillProgress}
+              className={styles.glyphSvg}
+            />
+          </div>
+
+          <div
+            className={`${styles.glyphWrap} ${
               assembled ? styles.assembled : styles.spreadDot
             }`}
           >
-            .
-          </span>
+            <StencilGlyph
+              glyph="Dot"
+              fillProgress={fillProgress}
+              className={styles.glyphSvgDot}
+            />
+          </div>
         </div>
 
         {/* Minimal Bottom Label */}
@@ -117,4 +175,3 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
     </div>
   );
 }
-

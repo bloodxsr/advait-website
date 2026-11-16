@@ -18,41 +18,53 @@
   user-select: none;
 }
 
-/* ── Monumental Giant Background Typography ──────────────────────────────── */
+/* ── Monumental Giant Stencil Background Typography ──────────────────────── */
 .monumentalLayer {
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   pointer-events: none;
   z-index: 1;
   overflow: hidden;
   opacity: 0.95;
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .giantLetterTrack {
   display: flex;
   width: 100%;
-  height: 100%;
-  align-items: stretch;
+  height: 85%;
+  align-items: center;
   justify-content: space-between;
-  padding: 0 1vw;
+  padding: 0 1.5vw;
+  box-sizing: border-box;
 }
 
-.giantLetter {
-  font-family: var(--font-space), var(--font-brand), sans-serif;
-  font-weight: 900;
-  font-size: clamp(140px, 24vw, 380px);
-  line-height: 0.85;
-  color: #000000;
+.giantLetterWrap {
+  flex: 1;
+  max-width: 17vw;
+  height: clamp(160px, 26vw, 420px);
   display: flex;
   align-items: center;
   justify-content: center;
-  letter-spacing: -0.06em;
-  transform-origin: center;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.giantLetterWrapI {
+  flex: 0.6;
+  max-width: 10vw;
+  height: clamp(160px, 26vw, 420px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.giantLetterSvg {
+  width: 100%;
+  height: 100%;
+  fill: #000000;
+  display: block;
 }
 
 /* ── Foreground Swiss Editorial Grid ─────────────────────────────────────── */
@@ -79,29 +91,27 @@
 .identityBlock {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 10px;
 }
 
-.brandLabel {
-  font-family: var(--font-space), var(--font-brand), sans-serif;
-  font-size: 19px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  color: #000000;
+.brandRow {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 6px;
+  color: #000000;
 }
 
 .registered {
+  font-family: var(--font-space), var(--font-brand), sans-serif;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
+  color: #000000;
 }
 
 .brandDesc {
   margin: 0;
   font-size: 13px;
-  color: rgba(0, 0, 0, 0.7);
+  color: rgba(0, 0, 0, 0.75);
   max-width: 380px;
   line-height: 1.5;
 }
@@ -121,22 +131,27 @@
   color: rgba(0, 0, 0, 0.65);
 }
 
-/* ── Middle Typographic Banner (Iconic /V.01 & (2026)) ───────────────────── */
+/* ── Middle Typographic Banner (Iconic Stencil Brand, /V.01 & (2026)) ─────── */
 .middleBanner {
   display: grid;
-  grid-template-columns: 1fr 1.2fr 1.2fr;
+  grid-template-columns: 1.3fr 1fr 1fr;
   align-items: baseline;
   gap: 20px;
-  padding: 40px 0;
+  padding: 30px 0;
 }
 
-.midBrand {
-  font-family: var(--font-space), var(--font-brand), sans-serif;
-  font-size: clamp(32px, 5.2vw, 68px);
-  font-weight: 700;
-  letter-spacing: -0.04em;
+.midBrandWrap {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
   color: #000000;
-  line-height: 1;
+}
+
+.midRegistered {
+  font-family: var(--font-space), var(--font-brand), sans-serif;
+  font-size: clamp(14px, 2vw, 24px);
+  font-weight: 800;
+  color: #000000;
 }
 
 .midVersion {
@@ -246,7 +261,7 @@
   .middleBanner {
     grid-template-columns: 1fr;
     gap: 12px;
-    padding: 24px 0;
+    padding: 20px 0;
   }
 
   .midYear {
@@ -263,4 +278,3 @@
     text-align: left;
   }
 }
-

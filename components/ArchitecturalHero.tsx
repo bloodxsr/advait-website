@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { AdvaitWordmark, GLYPH_PATHS, GLYPH_VIEWBOX } from "./AdvaitGlyphs";
 import styles from "./ArchitecturalHero.module.css";
 
 export function ArchitecturalHero() {
@@ -29,20 +30,44 @@ export function ArchitecturalHero() {
 
   return (
     <section ref={heroRef} className={styles.hero} aria-label="Advait Platform Hero">
-      {/* ── Monumental Giant Background Typography (from CRL video) ──────── */}
+      {/* ── Monumental Giant Stencil Background Typography (from CRL video) ── */}
       <div
         className={styles.monumentalLayer}
         style={{
-          transform: `translate3d(${mousePos.x * -14}px, ${mousePos.y * -8}px, 0)`,
+          transform: `translate3d(${mousePos.x * -16}px, ${mousePos.y * -10}px, 0)`,
         }}
       >
         <div className={styles.giantLetterTrack}>
-          <span className={styles.giantLetter}>A</span>
-          <span className={styles.giantLetter}>D</span>
-          <span className={styles.giantLetter}>V</span>
-          <span className={styles.giantLetter}>A</span>
-          <span className={styles.giantLetter}>I</span>
-          <span className={styles.giantLetter}>T</span>
+          <div className={styles.giantLetterWrap}>
+            <svg viewBox={GLYPH_VIEWBOX.A} className={styles.giantLetterSvg}>
+              <path d={GLYPH_PATHS.A} />
+            </svg>
+          </div>
+          <div className={styles.giantLetterWrap}>
+            <svg viewBox={GLYPH_VIEWBOX.D} className={styles.giantLetterSvg}>
+              <path d={GLYPH_PATHS.D} />
+            </svg>
+          </div>
+          <div className={styles.giantLetterWrap}>
+            <svg viewBox={GLYPH_VIEWBOX.V} className={styles.giantLetterSvg}>
+              <path d={GLYPH_PATHS.V} />
+            </svg>
+          </div>
+          <div className={styles.giantLetterWrap}>
+            <svg viewBox={GLYPH_VIEWBOX.A} className={styles.giantLetterSvg}>
+              <path d={GLYPH_PATHS.A} />
+            </svg>
+          </div>
+          <div className={styles.giantLetterWrapI}>
+            <svg viewBox={GLYPH_VIEWBOX.I} className={styles.giantLetterSvg}>
+              <path d={GLYPH_PATHS.I} />
+            </svg>
+          </div>
+          <div className={styles.giantLetterWrap}>
+            <svg viewBox={GLYPH_VIEWBOX.T} className={styles.giantLetterSvg}>
+              <path d={GLYPH_PATHS.T} />
+            </svg>
+          </div>
         </div>
       </div>
 
@@ -51,8 +76,9 @@ export function ArchitecturalHero() {
         {/* Top Row: Identity & Primary Manifesto */}
         <div className={styles.topRow}>
           <div className={styles.identityBlock}>
-            <div className={styles.brandLabel}>
-              ADVAIT <span className={styles.registered}>®</span>
+            <div className={styles.brandRow}>
+              <AdvaitWordmark height={26} />
+              <span className={styles.registered}>®</span>
             </div>
             <p className={styles.brandDesc}>
               Association of Developers and Visionaries in AI &amp; Tech. An
@@ -73,10 +99,11 @@ export function ArchitecturalHero() {
           </div>
         </div>
 
-        {/* Middle Typographic Banner (Iconic /V.01 & (2026)) */}
+        {/* Middle Typographic Banner (Iconic Stencil Brand, /V.01 & (2026)) ─── */}
         <div className={styles.middleBanner}>
-          <div className={styles.midBrand}>
-            ADVAIT <span className={styles.registered}>®</span>
+          <div className={styles.midBrandWrap}>
+            <AdvaitWordmark height="clamp(38px, 6.2vw, 84px)" />
+            <span className={styles.midRegistered}>®</span>
           </div>
           <div className={styles.midVersion}>/V.01</div>
           <div className={styles.midYear}>(2026)</div>
@@ -129,4 +156,3 @@ export function ArchitecturalHero() {
     </section>
   );
 }
-
