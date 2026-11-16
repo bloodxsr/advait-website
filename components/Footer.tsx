@@ -86,7 +86,7 @@ export function Footer() {
             </div>
             <nav className={styles.linkList} aria-label="Community links">
               <Link className={styles.navLink} href="/events">
-                <span>Events &amp; Socials</span>
+                <span>Advait&apos;s Social</span>
                 <span className={styles.linkArrow}>↗</span>
               </Link>
               <Link className={styles.navLink} href="/login?mode=signin">

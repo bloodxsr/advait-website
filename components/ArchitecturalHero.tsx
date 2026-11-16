@@ -126,7 +126,7 @@ export function ArchitecturalHero() {
               <span className={styles.dirNum}>[4]</span> Stewardship &amp; team roster ↗
             </Link>
             <Link href="/events" className={styles.dirItem}>
-              <span className={styles.dirNum}>[5]</span> Salons, events &amp; socials ↗
+              <span className={styles.dirNum}>[5]</span> Advait&apos;s social ↗
             </Link>
             <Link href="/hall-of-flames" className={styles.dirItem}>
               <span className={styles.dirNum}>[6]</span> Hall of flames selected work ↗

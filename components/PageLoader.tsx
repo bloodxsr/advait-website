@@ -35,8 +35,8 @@ const ROUTE_DIRECTORY: Record<
   },
   "/events": {
     num: "05",
-    title: "SALONS & COMMUNITY",
-    tag: "GATHERINGS & NETWORK",
+    title: "ADVAIT'S SOCIAL",
+    tag: "SALONS, GATHERINGS & NETWORK",
   },
   "/resources": {
     num: "06",

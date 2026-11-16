@@ -243,7 +243,7 @@ export default function EventsPage() {
 
           <div className={styles.titleRow}>
             <div className={styles.titleWrap}>
-              <h1 className={styles.title}>EVENTS &amp; SOCIALS</h1>
+              <h1 className={styles.title}>ADVAIT&apos;S SOCIAL</h1>
               <span className={styles.registered}>®</span>
             </div>
             <span className={styles.versionTag}>/V.01</span>
