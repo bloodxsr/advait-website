@@ -300,14 +300,14 @@ button { font: inherit; cursor: pointer; }
 .ios-list-item:last-child { border-bottom: none; }
 .ios-list-item:hover { background: var(--fill-quaternary); }
 
-/* ── Intro Preloader Header Shield ───────────────────────── */
+/* ── Intro Preloader Header & Hero Text Shield ───────────── */
 body[data-intro-active="true"] header,
 body[data-intro-active="true"] [class*="Header_header"],
-body[data-intro-active="true"] [class*="Header-module"] {
+body[data-intro-active="true"] [class*="Header-module"],
+body[data-intro-active="true"] [class*="ArchitecturalHero_editorialGrid"] {
   opacity: 0 !important;
   visibility: hidden !important;
   pointer-events: none !important;
-  display: none !important;
 }
 @media (max-width: 800px) {
   .site-header { gap: 16px; }

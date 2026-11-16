@@ -11,18 +11,18 @@ interface AdvaitIntroProps {
 export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
   const [fillProgress, setFillProgress] = useState(0);
   const [assembled, setAssembled] = useState(false);
-  const [isVertical, setIsVertical] = useState(false);
+  const [isZooming, setIsZooming] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const animFrameRef = useRef<number | null>(null);
 
   useEffect(() => {
-    // 00. Set body attribute to ensure navbar is 100% hidden during preloader
+    // 00. Set body attribute to ensure navbar & hero text are hidden during intro fill
     document.body.setAttribute("data-intro-active", "true");
 
     // 01. Phase 1: Color filling animation from bottom (0%) to top (100%)
     const startTime = performance.now() + 150;
-    const fillDuration = 1300;
+    const fillDuration = 1200;
 
     const stepFill = (now: number) => {
       const elapsed = now - startTime;
@@ -39,24 +39,25 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
         // 02. Phase 2: Once filled, glide inward into tight horizontal lockup ADVAIT.
         setTimeout(() => {
           setAssembled(true);
-        }, 100);
+        }, 120);
 
-        // 03. Phase 3: Turn orientation from horizontal alignment to vertical alignment
+        // 03. Phase 3: Zoom In transition getting bigger & placing in the behind
         setTimeout(() => {
-          setIsVertical(true);
-        }, 1200);
+          setIsZooming(true);
+          // Reveal landing page text concurrently with zoom-in
+          document.body.removeAttribute("data-intro-active");
+        }, 1100);
 
         // 04. Phase 4: Smooth transition out into the background vertical marquee
         setTimeout(() => {
           setIsExiting(true);
-          document.body.removeAttribute("data-intro-active");
-        }, 2200);
+        }, 1800);
 
         // 05. Phase 5: Unmount intro overlay
         setTimeout(() => {
           setIsVisible(false);
           onComplete?.();
-        }, 2850);
+        }, 2450);
       }
     };
 
@@ -88,16 +89,16 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
       aria-label="Advait kinetic stencil introduction"
     >
       <div className={styles.stage}>
-        {/* Kinetic Stencil Wordmark: Color Fill -> Horizontal Lockup -> Turn to Vertical Alignment */}
+        {/* Kinetic Stencil Wordmark: Color Fill -> Horizontal Lockup -> Turn -90° & Zoom In into Scroll Animation */}
         <div className={styles.lettersRow}>
           <div
             className={`${styles.glyphWrap} ${
-              isVertical
-                ? styles.verticalA1
+              isZooming
+                ? styles.glyphZoomIn
                 : assembled
                 ? styles.assembled
                 : styles.spreadA1
-            } ${isVertical ? styles.verticalBlack : ""}`}
+            }`}
           >
             <StencilGlyph
               glyph="A"
@@ -108,12 +109,12 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
 
           <div
             className={`${styles.glyphWrap} ${
-              isVertical
-                ? styles.verticalD
+              isZooming
+                ? styles.glyphZoomIn
                 : assembled
                 ? styles.assembled
                 : styles.spreadD
-            } ${isVertical ? styles.verticalBlack : ""}`}
+            }`}
           >
             <StencilGlyph
               glyph="D"
@@ -124,12 +125,12 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
 
           <div
             className={`${styles.glyphWrap} ${
-              isVertical
-                ? styles.verticalV
+              isZooming
+                ? styles.glyphZoomIn
                 : assembled
                 ? styles.assembled
                 : styles.spreadV
-            } ${isVertical ? styles.verticalBlack : ""}`}
+            }`}
           >
             <StencilGlyph
               glyph="V"
@@ -140,12 +141,12 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
 
           <div
             className={`${styles.glyphWrap} ${
-              isVertical
-                ? styles.verticalA2
+              isZooming
+                ? styles.glyphZoomIn
                 : assembled
                 ? styles.assembled
                 : styles.spreadA2
-            } ${isVertical ? styles.verticalBlack : ""}`}
+            }`}
           >
             <StencilGlyph
               glyph="A"
@@ -156,12 +157,12 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
 
           <div
             className={`${styles.glyphWrap} ${
-              isVertical
-                ? styles.verticalI
+              isZooming
+                ? styles.glyphZoomIn
                 : assembled
                 ? styles.assembled
                 : styles.spreadI
-            } ${isVertical ? styles.verticalBlack : ""}`}
+            }`}
           >
             <StencilGlyph
               glyph="I"
@@ -172,12 +173,12 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
 
           <div
             className={`${styles.glyphWrap} ${
-              isVertical
-                ? styles.verticalT
+              isZooming
+                ? styles.glyphZoomIn
                 : assembled
                 ? styles.assembled
                 : styles.spreadT
-            } ${isVertical ? styles.verticalBlack : ""}`}
+            }`}
           >
             <StencilGlyph
               glyph="T"
@@ -188,12 +189,12 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
 
           <div
             className={`${styles.glyphWrap} ${
-              isVertical
-                ? styles.verticalDot
+              isZooming
+                ? styles.glyphZoomIn
                 : assembled
                 ? styles.assembled
                 : styles.spreadDot
-            } ${isVertical ? styles.verticalBlack : ""}`}
+            }`}
           >
             <StencilGlyph
               glyph="Dot"
