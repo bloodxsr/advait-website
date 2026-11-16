@@ -1,121 +1,163 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
 import styles from "./Footer.module.css";
 
 export function Footer() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const pathname = usePathname();
-
-  useEffect(() => {
-    setIsLoggedIn(document.cookie.includes("advait_session="));
-  }, [pathname]);
-
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  if (isLoggedIn) return null;
-
   return (
-    <footer className={styles.footer}>
-      <div className={styles.footerInner}>
-        {/* Brand & Mission Statement */}
-        <div className={styles.brandCol}>
-          <Link className={styles.brand} href="/">
-            Advait
-          </Link>
-          <p className={styles.brandDesc}>
-            Association of Developers and Visionaries in AI &amp; Tech. An independent collective building open architectures, research artifacts, and enduring technology.
-          </p>
-
-          <div className={styles.statusIndicator}>
-            <span className={styles.statusDot} />
-            <span>Advait Network · Online v0.4.2</span>
+    <footer className={styles.footer} role="contentinfo" aria-label="Advait Footer">
+      <div className={styles.container}>
+        {/* ── Top Architectural Brand Statement ───────────────────────────── */}
+        <div className={styles.topSection}>
+          <div className={styles.brandBlock}>
+            <Link className={styles.brand} href="/" aria-label="Advait Home">
+              <span>ADVAIT</span>
+              <span className={styles.registered}>®</span>
+            </Link>
+            <p className={styles.brandDesc}>
+              Association of Developers and Visionaries in AI &amp; Tech. An
+              independent collective building open architectures, autonomous
+              systems, and enduring research. Selected for craft over volume or trend.
+            </p>
           </div>
 
-          <a className={styles.contactEmail} href="mailto:hello@advait.collective">
-            <span>Direct desk: hello@advait.collective</span>
-            <span>↗</span>
-          </a>
-        </div>
-
-        {/* Organized Navigation Columns */}
-        <div className={styles.linkColumns}>
-          {/* Column 1: Member-Only Artifacts & Club Features */}
-          <div className={styles.column}>
-            <span className={styles.colHeader}>Club Artifacts</span>
-
-            <Link className={styles.navLink} href="/projects">
-              <span>Our Projects</span>
-            </Link>
-
-            <Link className={styles.navLink} href="/hall-of-flames">
-              <span>Hall of Flames</span>
-            </Link>
-
-            <Link className={styles.navLink} href="/leaderboard">
-              <span>Leaderboard</span>
-            </Link>
-
-            <Link className={styles.navLink} href="/resources">
-              <span>Educational Resources</span>
-            </Link>
-
-            <Link className={styles.navLink} href="/dashboard">
-              <span>Dashboard</span>
-            </Link>
-          </div>
-
-          {/* Column 2: Public Community */}
-          <div className={styles.column}>
-            <span className={styles.colHeader}>Community</span>
-
-            <Link className={styles.navLink} href="/#vision">
-              <span>Our Vision</span>
-            </Link>
-
-            <Link className={styles.navLink} href="/events">
-              <span>News &amp; Events</span>
-            </Link>
-
-            <Link className={styles.navLink} href="/team">
-              <span>Meet our Team</span>
-            </Link>
-
-            <Link className={styles.navLink} href="/social">
-              <span>Social Links</span>
-            </Link>
-          </div>
-
-          {/* Column 3: Membership & Access */}
-          <div className={styles.column}>
-            <span className={styles.colHeader}>Access</span>
-
-            <Link className={styles.navLink} href="/login">
-              <span>Sign in</span>
-            </Link>
-
-            <Link className={styles.navLink} href="/login">
-              <span>Join Collective</span>
-            </Link>
-
-            <Link className={styles.navLink} href="/admin">
-              <span>Admin Portal</span>
-            </Link>
+          <div className={styles.inquiryBlock}>
+            <span className={styles.inquiryLabel}>COMMUNICATIONS &amp; GRANTS DESK</span>
+            <a
+              className={styles.inquiryEmail}
+              href="mailto:hello@advait.collective"
+              title="Send email to Advait"
+            >
+              <span>hello@advait.collective</span>
+              <span>↗</span>
+            </a>
+            <div className={styles.statusPill}>
+              <span className={styles.statusDot} />
+              <span>Advait Network · 2026 Season · Online v0.4.2</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Bottom Bar */}
-      <div className={styles.bottomBar}>
-        <span>© 2026 Advait Collective. All rights reserved.</span>
-        <button type="button" className={styles.backToTop} onClick={scrollToTop}>
-          <span>Back to top</span>
-          <span>↑</span>
-        </button>
+        {/* ── 3 Swiss Editorial Link Columns ──────────────────────────────── */}
+        <div className={styles.columnsGrid}>
+          {/* Column 01: Systems & Artifacts */}
+          <div className={styles.column}>
+            <div className={styles.colHeader}>
+              <span className={styles.colNum}>[01]</span>
+              <span>SYSTEMS &amp; REGISTRY</span>
+            </div>
+            <nav className={styles.linkList} aria-label="Systems links">
+              <Link className={styles.navLink} href="/projects">
+                <span>Our Projects</span>
+                <span className={styles.linkArrow}>↗</span>
+              </Link>
+              <Link className={styles.navLink} href="/resources">
+                <span>Educational Resources</span>
+                <span className={styles.linkArrow}>↗</span>
+              </Link>
+              <Link className={styles.navLink} href="/leaderboard">
+                <span>Developer Leaderboard</span>
+                <span className={styles.linkArrow}>↗</span>
+              </Link>
+              <Link className={styles.navLink} href="/hall-of-flames">
+                <span>Hall of Flames</span>
+                <span className={styles.linkArrow}>↗</span>
+              </Link>
+              <Link className={styles.navLink} href="/dashboard">
+                <span>Member Dashboard</span>
+                <span className={styles.linkArrow}>↗</span>
+              </Link>
+            </nav>
+          </div>
+
+          {/* Column 02: Working Groups */}
+          <div className={styles.column}>
+            <div className={styles.colHeader}>
+              <span className={styles.colNum}>[02]</span>
+              <span>WORKING DIVISIONS</span>
+            </div>
+            <nav className={styles.linkList} aria-label="Divisions links">
+              <Link className={styles.navLink} href="/team">
+                <span>RED — Research &amp; Engineering</span>
+                <span className={styles.linkTag}>[Kernel]</span>
+              </Link>
+              <Link className={styles.navLink} href="/team">
+                <span>OPS — Outreach &amp; Sponsorships</span>
+                <span className={styles.linkTag}>[Grants]</span>
+              </Link>
+              <Link className={styles.navLink} href="/team">
+                <span>EVED — Events &amp; Ventures</span>
+                <span className={styles.linkTag}>[Salons]</span>
+              </Link>
+              <Link className={styles.navLink} href="/team">
+                <span>Creatives &amp; Social Media</span>
+                <span className={styles.linkTag}>[Design]</span>
+              </Link>
+              <Link className={styles.navLink} href="/team">
+                <span>GameVeda — Game Dev Division</span>
+                <span className={styles.linkTag}>[3D]</span>
+              </Link>
+            </nav>
+          </div>
+
+          {/* Column 03: Community & Access */}
+          <div className={styles.column}>
+            <div className={styles.colHeader}>
+              <span className={styles.colNum}>[03]</span>
+              <span>ACCESS &amp; CALENDAR</span>
+            </div>
+            <nav className={styles.linkList} aria-label="Community links">
+              <Link className={styles.navLink} href="/events">
+                <span>Events &amp; Salons</span>
+                <span className={styles.linkArrow}>↗</span>
+              </Link>
+              <Link className={styles.navLink} href="/login">
+                <span>Member Sign In</span>
+                <span className={styles.linkArrow}>→</span>
+              </Link>
+              <Link className={styles.navLink} href="/social">
+                <span>Social Network</span>
+                <span className={styles.linkArrow}>↗</span>
+              </Link>
+              <a
+                className={styles.navLink}
+                href="https://github.com"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <span>GitHub Collective</span>
+                <span className={styles.linkArrow}>↗</span>
+              </a>
+              <Link className={styles.navLink} href="/admin">
+                <span>Admin Portal</span>
+                <span className={styles.linkTag}>[Auth]</span>
+              </Link>
+            </nav>
+          </div>
+        </div>
+
+        {/* ── Bottom Bar ─────────────────────────────────────────────────── */}
+        <div className={styles.bottomBar}>
+          <div className={styles.legalInfo}>
+            <span>ADVAIT COLLECTIVE © 2026 / V.01</span>
+            <span className={styles.divider}>·</span>
+            <span>ALL ARTIFACTS VERIFIED OPEN SOURCE</span>
+          </div>
+
+          <button
+            type="button"
+            onClick={scrollToTop}
+            className={styles.backToTop}
+            aria-label="Scroll back to top of page"
+          >
+            <span>Scroll to top</span>
+            <span>↑</span>
+          </button>
+        </div>
       </div>
     </footer>
   );

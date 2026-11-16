@@ -6,24 +6,24 @@ import { usePathname, useRouter } from "next/navigation";
 import styles from "./Header.module.css";
 
 const publicLinks = [
-  { href: "/projects", label: "Projects", tag: "Artifacts" },
-  { href: "/hall-of-flames", label: "Hall of Flames", tag: "Archive" },
-  { href: "/leaderboard", label: "Leaderboard", tag: "Rankings" },
-  { href: "/events", label: "Events", tag: "Gatherings" },
-  { href: "/resources", label: "Resources", tag: "Library" },
-  { href: "/team", label: "Meet our Team", tag: "Stewardship" },
+  { href: "/projects", label: "Projects", tag: "Artifacts", num: "01" },
+  { href: "/hall-of-flames", label: "Hall of Flames", tag: "Archive", num: "02" },
+  { href: "/leaderboard", label: "Leaderboard", tag: "Rankings", num: "03" },
+  { href: "/events", label: "Events", tag: "Gatherings", num: "04" },
+  { href: "/resources", label: "Resources", tag: "Library", num: "05" },
+  { href: "/team", label: "Meet our Team", tag: "Stewardship", num: "06" },
 ];
 
 const allLinks = [
-  { href: "/projects", label: "Projects", tag: "Artifacts" },
-  { href: "/hall-of-flames", label: "Hall of Flames", tag: "Archive" },
-  { href: "/leaderboard", label: "Leaderboard", tag: "Rankings" },
-  { href: "/events", label: "Events", tag: "Gatherings" },
-  { href: "/resources", label: "Resources", tag: "Library" },
-  { href: "/team", label: "Meet our Team", tag: "Stewardship" },
-  { href: "/dashboard", label: "Dashboard", tag: "Personal" },
-  { href: "/social", label: "Social Links", tag: "Network" },
-  { href: "/admin", label: "Admin Portal", tag: "Admin" },
+  { href: "/projects", label: "Projects", tag: "Artifacts", num: "01" },
+  { href: "/hall-of-flames", label: "Hall of Flames", tag: "Archive", num: "02" },
+  { href: "/leaderboard", label: "Leaderboard", tag: "Rankings", num: "03" },
+  { href: "/events", label: "Events", tag: "Gatherings", num: "04" },
+  { href: "/resources", label: "Resources", tag: "Library", num: "05" },
+  { href: "/team", label: "Meet our Team", tag: "Stewardship", num: "06" },
+  { href: "/dashboard", label: "Dashboard", tag: "Personal", num: "07" },
+  { href: "/social", label: "Social Links", tag: "Network", num: "08" },
+  { href: "/admin", label: "Admin Portal", tag: "Admin", num: "09" },
 ];
 
 export function Header() {
@@ -87,17 +87,18 @@ export function Header() {
       className={`${styles.header} ${scrolled ? styles.scrolled : ""}`}
     >
       <div className={styles.inner}>
-        {/* Brand */}
+        {/* Brand — Swiss Stencil Branding */}
         <Link
           className={styles.brand}
           href="/"
           aria-label="Advait Home"
           onClick={() => setMenuOpen(false)}
         >
-          Advait
+          <span>ADVAIT</span>
+          <span className={styles.brandRegistered}>®</span>
         </Link>
 
-        {/* Center Tagline (fades out as navbar shrinks) */}
+        {/* Center Tagline (fades out smoothly as capsule shrinks) */}
         <span className={styles.descriptor}>
           Association of Developers and Visionaries in AI &amp; Tech.
         </span>
@@ -150,7 +151,7 @@ export function Header() {
         </div>
       </div>
 
-      {/* Dropdown Menu (Anchored beneath the capsule / bar) */}
+      {/* Dropdown Menu (Anchored beneath capsule / bar) */}
       <div
         className={`${styles.dropdown} ${menuOpen ? styles.dropdownOpen : ""}`}
         role="menu"
@@ -163,16 +164,16 @@ export function Header() {
               aria-hidden="true"
             />
             <span className={styles.dropdownTitle}>
-              {isLoggedIn ? "All Collective Pages" : "Explore Advait"}
+              {isLoggedIn ? "All Collective Directory" : "Explore Advait / 2026"}
             </span>
           </div>
           <span className={styles.dropdownBadge}>
-            {isLoggedIn ? "Active" : "Directory"}
+            {isLoggedIn ? "Verified Member" : "Directory Index"}
           </span>
         </div>
 
         <div className={styles.menuLinks}>
-          {navLinks.map((link, index) => {
+          {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
               <Link
@@ -182,28 +183,20 @@ export function Header() {
                 role="menuitem"
                 onClick={() => setMenuOpen(false)}
               >
-                <span className={styles.itemNumber}>0{index + 1}</span>
+                <span className={styles.itemNumber}>{link.num}</span>
                 <span className={styles.itemLabel}>{link.label}</span>
-                <span className={styles.itemTag}>{link.tag}</span>
-                <span className={styles.itemArrow} aria-hidden="true">
-                  ↗
-                </span>
+                <span className={styles.itemTag}>[{link.tag}]</span>
+                <span className={styles.itemArrow}>↗</span>
               </Link>
             );
           })}
         </div>
 
-        {isLoggedIn && (
-          <div className={styles.dropdownFooter}>
-            <button
-              type="button"
-              className={styles.dropdownActionBtn}
-              onClick={handleSignOut}
-            >
-              Sign out
-            </button>
-          </div>
-        )}
+        <div className={styles.dropdownFooter}>
+          <span className={styles.dropdownFooterText}>
+            Advait Collective · Autonomous Systems &amp; Open Architecture
+          </span>
+        </div>
       </div>
     </header>
   );

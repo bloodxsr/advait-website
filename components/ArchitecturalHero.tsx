@@ -2,8 +2,26 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { AdvaitWordmark, GLYPH_PATHS, GLYPH_VIEWBOX } from "./AdvaitGlyphs";
+import { GLYPH_PATHS, GLYPH_VIEWBOX } from "./AdvaitGlyphs";
 import styles from "./ArchitecturalHero.module.css";
+
+// 2 identical sets of ADVAIT for seamless infinite vertical downward scrolling
+const MARQUEE_ITEMS: Array<{ id: string; glyph: "A" | "D" | "V" | "I" | "T" }> = [
+  // Set 1
+  { id: "s1-a1", glyph: "A" },
+  { id: "s1-d", glyph: "D" },
+  { id: "s1-v", glyph: "V" },
+  { id: "s1-a2", glyph: "A" },
+  { id: "s1-i", glyph: "I" },
+  { id: "s1-t", glyph: "T" },
+  // Set 2 (seamless continuation)
+  { id: "s2-a1", glyph: "A" },
+  { id: "s2-d", glyph: "D" },
+  { id: "s2-v", glyph: "V" },
+  { id: "s2-a2", glyph: "A" },
+  { id: "s2-i", glyph: "I" },
+  { id: "s2-t", glyph: "T" },
+];
 
 export function ArchitecturalHero() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -30,44 +48,32 @@ export function ArchitecturalHero() {
 
   return (
     <section ref={heroRef} className={styles.hero} aria-label="Advait Platform Hero">
-      {/* ── Monumental Giant Stencil Background Typography (from CRL video) ── */}
+      {/* ── Vertical Scrolling Marquee with Repetition (from CRL reference) ── */}
       <div
         className={styles.monumentalLayer}
         style={{
-          transform: `translate3d(${mousePos.x * -16}px, ${mousePos.y * -10}px, 0)`,
+          transform: `translate3d(${mousePos.x * -16}px, ${mousePos.y * -8}px, 0)`,
         }}
       >
-        <div className={styles.giantLetterTrack}>
-          <div className={styles.giantLetterWrap}>
-            <svg viewBox={GLYPH_VIEWBOX.A} className={styles.giantLetterSvg}>
-              <path d={GLYPH_PATHS.A} />
-            </svg>
-          </div>
-          <div className={styles.giantLetterWrap}>
-            <svg viewBox={GLYPH_VIEWBOX.D} className={styles.giantLetterSvg}>
-              <path d={GLYPH_PATHS.D} />
-            </svg>
-          </div>
-          <div className={styles.giantLetterWrap}>
-            <svg viewBox={GLYPH_VIEWBOX.V} className={styles.giantLetterSvg}>
-              <path d={GLYPH_PATHS.V} />
-            </svg>
-          </div>
-          <div className={styles.giantLetterWrap}>
-            <svg viewBox={GLYPH_VIEWBOX.A} className={styles.giantLetterSvg}>
-              <path d={GLYPH_PATHS.A} />
-            </svg>
-          </div>
-          <div className={styles.giantLetterWrapI}>
-            <svg viewBox={GLYPH_VIEWBOX.I} className={styles.giantLetterSvg}>
-              <path d={GLYPH_PATHS.I} />
-            </svg>
-          </div>
-          <div className={styles.giantLetterWrap}>
-            <svg viewBox={GLYPH_VIEWBOX.T} className={styles.giantLetterSvg}>
-              <path d={GLYPH_PATHS.T} />
-            </svg>
-          </div>
+        <div className={styles.marqueeTrack}>
+          {MARQUEE_ITEMS.map((item) => (
+            <div
+              key={item.id}
+              className={
+                item.glyph === "I"
+                  ? styles.marqueeLetterI
+                  : styles.marqueeLetter
+              }
+            >
+              <svg
+                viewBox={GLYPH_VIEWBOX[item.glyph]}
+                className={styles.marqueeSvg}
+                preserveAspectRatio="xMidYMid meet"
+              >
+                <path d={GLYPH_PATHS[item.glyph]} />
+              </svg>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -77,7 +83,7 @@ export function ArchitecturalHero() {
         <div className={styles.topRow}>
           <div className={styles.identityBlock}>
             <div className={styles.brandRow}>
-              <AdvaitWordmark height={26} />
+              <span className={styles.brandTitle}>ADVAIT</span>
               <span className={styles.registered}>®</span>
             </div>
             <p className={styles.brandDesc}>
@@ -99,10 +105,10 @@ export function ArchitecturalHero() {
           </div>
         </div>
 
-        {/* Middle Typographic Banner (Iconic Stencil Brand, /V.01 & (2026)) ─── */}
+        {/* Middle Typographic Banner (Iconic ADVAIT ®, /V.01 & (2026)) ──────── */}
         <div className={styles.middleBanner}>
           <div className={styles.midBrandWrap}>
-            <AdvaitWordmark height="clamp(38px, 6.2vw, 84px)" />
+            <span className={styles.midBrand}>ADVAIT</span>
             <span className={styles.midRegistered}>®</span>
           </div>
           <div className={styles.midVersion}>/V.01</div>

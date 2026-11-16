@@ -1,5 +1,6 @@
 /* ==========================================================================
-   Header.module.css — iOS Navigation Bar
+   Header.module.css — Swiss Architectural Editorial Dynamic Island Navbar
+   Smoothly morphs from full top bar to centered floating capsule on scroll
    ========================================================================== */
 
 .header {
@@ -10,38 +11,38 @@
   z-index: 50;
   width: 100%;
   height: 56px;
-  background: rgba(0, 0, 0, 0.72);
+  background: rgba(18, 18, 20, 0.78);
   -webkit-backdrop-filter: blur(40px) saturate(180%);
   backdrop-filter: blur(40px) saturate(180%);
   border-top: 1px solid transparent;
   border-left: 1px solid transparent;
   border-right: 1px solid transparent;
-  border-bottom: 1px solid transparent;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 0;
   box-sizing: border-box;
 
   transition:
-    width 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    top 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    height 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    border-radius 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    border-color 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    background 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    box-shadow 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    width 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    top 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    height 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    border-radius 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* iOS Dynamic Island / pill mode on scroll */
+/* ── Dynamic Island Pill on Scroll (Kept 100% Intact with Swiss Aesthetics) ── */
 .scrolled {
   top: 14px;
-  width: min(360px, calc(100% - 24px));
-  height: 46px;
+  width: min(390px, calc(100% - 24px));
+  height: 48px;
   border-radius: 999px;
-  background: rgba(28, 28, 30, 0.88);
-  border-color: rgba(84, 84, 88, 0.5);
+  background: rgba(18, 18, 20, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow:
-    0 2px 20px rgba(0, 0, 0, 0.5),
-    0 8px 40px rgba(0, 0, 0, 0.35),
-    inset 0 0.5px 0 rgba(255, 255, 255, 0.12);
+    0 4px 24px rgba(0, 0, 0, 0.55),
+    0 12px 48px -12px rgba(0, 0, 0, 0.7),
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.18);
   -webkit-backdrop-filter: blur(50px) saturate(200%);
   backdrop-filter: blur(50px) saturate(200%);
 }
@@ -55,42 +56,55 @@
   width: 100%;
   max-width: var(--max);
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 28px;
   box-sizing: border-box;
-  transition: padding 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: padding 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .scrolled .inner {
-  padding: 0 8px 0 16px;
+  padding: 0 10px 0 20px;
   max-width: 100%;
 }
 
-/* Brand — SF Pro feel */
+/* ── Brand Label ─────────────────────────────────────────────────────────── */
 .brand {
-  font-family: var(--font-brand), var(--font-system), sans-serif;
-  font-size: 17px;
-  font-weight: 700;
-  letter-spacing: -0.025em;
+  font-family: var(--font-space), var(--font-brand), sans-serif;
+  font-size: 16.5px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
   color: #ffffff;
   display: inline-flex;
-  align-items: center;
+  align-items: baseline;
+  gap: 3px;
   white-space: nowrap;
   text-decoration: none;
-  transition: opacity 0.2s ease, font-size 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: opacity 0.2s ease, font-size 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.scrolled .brand { font-size: 15.5px; }
-.brand:hover { opacity: 0.75; }
+.brandRegistered {
+  font-size: 11px;
+  font-weight: 700;
+  opacity: 0.8;
+}
 
-/* Descriptor fades out */
+.scrolled .brand {
+  font-size: 15px;
+}
+
+.brand:hover {
+  opacity: 0.8;
+}
+
+/* ── Descriptor Tagline ──────────────────────────────────────────────────── */
 .descriptor {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  color: rgba(235, 235, 245, 0.5);
+  color: rgba(235, 235, 245, 0.55);
   font-family: var(--font-mono);
   font-size: 10.5px;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   white-space: nowrap;
   pointer-events: none;
   transition: opacity 0.3s ease, transform 0.3s ease;
@@ -101,51 +115,55 @@
   transform: translateX(-50%) scale(0.9);
 }
 
-/* Actions */
+/* ── Actions ─────────────────────────────────────────────────────────────── */
 .actions {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 8px;
 }
 
-/* Menu Button — iOS "more" pill */
+/* Menu Button */
 .menuBtn {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  height: 30px;
-  padding: 0 11px;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
   border-radius: 999px;
-  font-family: var(--font-system), sans-serif;
-  font-size: 12px;
-  font-weight: 500;
-  color: rgba(235, 235, 245, 0.8);
-  background: rgba(118, 118, 128, 0.24);
-  border: 1px solid rgba(84, 84, 88, 0.5);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: all 0.2s ease;
 }
 
 .menuBtn:hover {
-  background: rgba(118, 118, 128, 0.36);
+  background: rgba(255, 255, 255, 0.18);
   color: #ffffff;
 }
 
 .menuBtnActive {
-  background: rgba(118, 118, 128, 0.42);
-  border-color: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
+  background: #ffffff;
+  border-color: #ffffff;
+  color: #000000;
 }
 
 .menuBars {
   display: flex;
   flex-direction: column;
-  gap: 2.5px;
-  width: 11px;
-  height: 9px;
+  justify-content: center;
+  gap: 3.5px;
+  width: 13px;
+  height: 12px;
 }
 
-.bar1, .bar2 {
+.bar1,
+.bar2 {
   display: block;
   width: 100%;
   height: 1.5px;
@@ -160,7 +178,7 @@
   height: 1.5px;
   background: currentColor;
   border-radius: 1px;
-  transform: translateY(2px) rotate(45deg);
+  transform: translateY(2.5px) rotate(45deg);
 }
 
 .barOpen2 {
@@ -169,275 +187,248 @@
   height: 1.5px;
   background: currentColor;
   border-radius: 1px;
-  transform: translateY(-2px) rotate(-45deg);
+  transform: translateY(-2.5px) rotate(-45deg);
 }
 
-.menuLabel { letter-spacing: -0.01em; }
+.menuLabel {
+  letter-spacing: 0.02em;
+}
 
-/* iOS Sign in button — ghost */
+/* Sign In Button */
 .signInBtn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 30px;
-  padding: 0 13px;
+  height: 32px;
+  padding: 0 14px;
   border-radius: 999px;
-  font-family: var(--font-system), sans-serif;
-  font-size: 12px;
-  font-weight: 500;
-  color: #0a84ff;
-  background: rgba(10, 132, 255, 0.1);
-  border: 1px solid rgba(10, 132, 255, 0.25);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   text-decoration: none;
   white-space: nowrap;
   transition: all 0.2s ease;
 }
 
 .signInBtn:hover {
-  background: rgba(10, 132, 255, 0.18);
-  color: #ffffff;
+  background: rgba(255, 255, 255, 0.16);
+  border-color: #ffffff;
 }
 
-/* iOS Join button — solid blue */
+/* Join Button */
 .joinBtn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 30px;
-  padding: 0 14px;
+  height: 32px;
+  padding: 0 16px;
   border-radius: 999px;
-  font-family: var(--font-system), sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  background: #0a84ff;
-  color: #ffffff;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  background: #ffffff;
+  color: #000000;
   text-decoration: none;
   white-space: nowrap;
-  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: all 0.2s ease;
 }
 
-.scrolled .joinBtn { display: none; }
+.scrolled .joinBtn {
+  display: none;
+}
 
 .joinBtn:hover {
-  background: #0071e3;
-  transform: scale(0.97);
+  background: #e5e5e5;
+  transform: translateY(-1px);
 }
 
-/* Sign out */
+/* Sign Out Button */
 .signOutBtn {
   display: inline-flex;
   align-items: center;
-  height: 30px;
-  padding: 0 12px;
+  height: 32px;
+  padding: 0 14px;
   border-radius: 999px;
-  font-family: var(--font-system), sans-serif;
-  font-size: 11.5px;
-  font-weight: 500;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
   color: #ff453a;
-  background: rgba(255, 69, 58, 0.1);
-  border: 1px solid rgba(255, 69, 58, 0.22);
+  background: rgba(255, 69, 58, 0.12);
+  border: 1px solid rgba(255, 69, 58, 0.3);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .signOutBtn:hover {
-  background: rgba(255, 69, 58, 0.18);
+  background: rgba(255, 69, 58, 0.24);
   color: #ffffff;
 }
 
 /* ==========================================================================
-   iOS Dropdown Sheet
+   Swiss Editorial Dropdown Sheet
    ========================================================================== */
 
 .dropdown {
   position: absolute;
   top: calc(100% + 10px);
-  right: 24px;
-  width: 300px;
-  background: rgba(28, 28, 30, 0.95);
-  -webkit-backdrop-filter: blur(50px) saturate(200%);
-  backdrop-filter: blur(50px) saturate(200%);
-  border: 1px solid rgba(84, 84, 88, 0.6);
-  border-radius: 20px;
-  padding: 12px;
-  box-shadow:
-    0 4px 24px rgba(0, 0, 0, 0.6),
-    0 16px 56px rgba(0, 0, 0, 0.5),
-    inset 0 0.5px 0 rgba(255, 255, 255, 0.1);
+  right: 28px;
+  width: min(380px, calc(100vw - 32px));
+  background: rgba(18, 18, 20, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 18px;
+  padding: 16px;
+  backdrop-filter: blur(40px) saturate(190%);
+  -webkit-backdrop-filter: blur(40px) saturate(190%);
+  box-shadow: 0 24px 64px -12px rgba(0, 0, 0, 0.8);
   box-sizing: border-box;
+
   opacity: 0;
   visibility: hidden;
-  transform: translateY(-6px) scale(0.96);
-  transform-origin: top right;
-  transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   pointer-events: none;
+  transform: translateY(-8px) scale(0.97);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .scrolled .dropdown {
-  right: auto;
-  left: 50%;
-  transform: translateX(-50%) translateY(-6px) scale(0.96);
-  transform-origin: top center;
+  right: 0;
+  top: calc(100% + 8px);
 }
 
 .dropdownOpen {
   opacity: 1;
   visibility: visible;
-  transform: translateY(0) scale(1);
   pointer-events: auto;
+  transform: translateY(0) scale(1);
 }
 
-.scrolled .dropdownOpen {
-  transform: translateX(-50%) translateY(0) scale(1);
-}
-
-/* Dropdown header */
 .dropdownHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 4px 8px 10px;
-  border-bottom: 1px solid rgba(84, 84, 88, 0.5);
-  margin-bottom: 6px;
+  padding: 8px 10px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .dropdownStatus {
   display: flex;
   align-items: center;
-  gap: 7px;
-}
-
-.dotPublic {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgba(235, 235, 245, 0.4);
+  gap: 8px;
 }
 
 .dotActive {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: #30d158;
-  box-shadow: 0 0 7px #30d158;
+}
+
+.dotPublic {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #0a84ff;
 }
 
 .dropdownTitle {
-  font-size: 12px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
   font-weight: 600;
   color: #ffffff;
-  letter-spacing: -0.01em;
-}
-
-.dropdownBadge {
-  font-size: 10px;
-  font-family: var(--font-mono);
-  color: rgba(235, 235, 245, 0.35);
-  text-transform: uppercase;
   letter-spacing: 0.04em;
 }
 
-/* Menu links — iOS grouped list style */
+.dropdownBadge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.6);
+}
+
 .menuLinks {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
+  padding: 10px 0;
 }
 
 .menuItem {
-  display: flex;
+  display: grid;
+  grid-template-columns: 28px 1fr auto auto;
   align-items: center;
-  gap: 10px;
-  padding: 9px 10px;
-  border-radius: 12px;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
   text-decoration: none;
-  color: rgba(235, 235, 245, 0.85);
   transition: all 0.15s ease;
 }
 
 .menuItem:hover {
-  background: rgba(118, 118, 128, 0.22);
-  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .menuItemActive {
-  background: rgba(118, 118, 128, 0.28);
-  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .itemNumber {
   font-family: var(--font-mono);
-  font-size: 10px;
-  color: rgba(235, 235, 245, 0.3);
-  min-width: 16px;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.45);
 }
 
 .itemLabel {
-  font-size: 13px;
-  font-weight: 500;
-  color: inherit;
-  flex: 1;
-}
-
-.itemTag {
-  font-size: 10px;
-  font-family: var(--font-mono);
-  color: rgba(235, 235, 245, 0.35);
-  background: rgba(118, 118, 128, 0.2);
-  padding: 2px 7px;
-  border-radius: 6px;
-}
-
-.itemArrow {
-  font-size: 11px;
-  color: rgba(235, 235, 245, 0.3);
-  transition: all 0.15s ease;
-}
-
-.menuItem:hover .itemArrow {
-  color: rgba(235, 235, 245, 0.7);
-  transform: translate(1px, -1px);
-}
-
-/* Footer */
-.dropdownFooter {
-  margin-top: 8px;
-  padding-top: 8px;
-  border-top: 1px solid rgba(84, 84, 88, 0.45);
-}
-
-.dropdownActionBtn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  width: 100%;
-  height: 36px;
-  border-radius: 12px;
-  font-family: var(--font-system), sans-serif;
-  font-size: 12.5px;
-  font-weight: 500;
-  text-decoration: none;
-  cursor: pointer;
-  background: rgba(118, 118, 128, 0.18);
-  border: 1px solid rgba(84, 84, 88, 0.45);
-  color: rgba(235, 235, 245, 0.75);
-  transition: all 0.15s ease;
-}
-
-.dropdownActionBtn:hover {
-  background: rgba(118, 118, 128, 0.3);
+  font-family: var(--font-space), var(--font-brand), sans-serif;
+  font-size: 14.5px;
+  font-weight: 600;
   color: #ffffff;
 }
 
-/* ── Responsive ──────────────────────────────────────────── */
-@media (max-width: 768px) {
-  .descriptor { display: none; }
-  .scrolled { width: calc(100% - 20px); }
+.itemTag {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.itemArrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+  transition: transform 0.15s ease;
+}
+
+.menuItem:hover .itemArrow {
+  transform: translate(2px, -2px);
+  color: #ffffff;
+}
+
+.dropdownFooter {
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.dropdownFooterText {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+@media (max-width: 600px) {
+  .inner {
+    padding: 0 16px;
+  }
 
   .dropdown {
-    right: 10px;
-    width: calc(100vw - 28px);
-    max-width: 300px;
+    right: 12px;
+    width: calc(100vw - 24px);
   }
 }

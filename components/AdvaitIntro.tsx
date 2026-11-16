@@ -11,15 +11,18 @@ interface AdvaitIntroProps {
 export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
   const [fillProgress, setFillProgress] = useState(0);
   const [assembled, setAssembled] = useState(false);
+  const [isVertical, setIsVertical] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const animFrameRef = useRef<number | null>(null);
 
   useEffect(() => {
+    // 00. Set body attribute to ensure navbar is 100% hidden during preloader
+    document.body.setAttribute("data-intro-active", "true");
+
     // 01. Phase 1: Color filling animation from bottom (0%) to top (100%)
-    // Starting with 15% ghost outline, wiping up solid black over 1.4s (matching CRL shader)
     const startTime = performance.now() + 150;
-    const fillDuration = 1350;
+    const fillDuration = 1300;
 
     const stepFill = (now: number) => {
       const elapsed = now - startTime;
@@ -33,40 +36,46 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
       if (progress < 1) {
         animFrameRef.current = requestAnimationFrame(stepFill);
       } else {
-        // 02. Phase 2: Once filled, smoothly glide inwards to lock into ADVAIT.
+        // 02. Phase 2: Once filled, glide inward into tight horizontal lockup ADVAIT.
         setTimeout(() => {
           setAssembled(true);
-        }, 120);
+        }, 100);
+
+        // 03. Phase 3: Turn orientation from horizontal alignment to vertical alignment
+        setTimeout(() => {
+          setIsVertical(true);
+        }, 1200);
+
+        // 04. Phase 4: Smooth transition out into the background vertical marquee
+        setTimeout(() => {
+          setIsExiting(true);
+          document.body.removeAttribute("data-intro-active");
+        }, 2200);
+
+        // 05. Phase 5: Unmount intro overlay
+        setTimeout(() => {
+          setIsVisible(false);
+          onComplete?.();
+        }, 2850);
       }
     };
 
     animFrameRef.current = requestAnimationFrame(stepFill);
 
-    // 03. Phase 3: Transition out after letters have locked in
-    const exitTimer = setTimeout(() => {
-      setIsExiting(true);
-    }, 2800);
-
-    // 04. Phase 4: Unmount overlay
-    const doneTimer = setTimeout(() => {
-      setIsVisible(false);
-      onComplete?.();
-    }, 3400);
-
     return () => {
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
-      clearTimeout(exitTimer);
-      clearTimeout(doneTimer);
+      document.body.removeAttribute("data-intro-active");
     };
   }, [onComplete]);
 
-  // Click anywhere to skip
+  // Click anywhere to skip intro immediately
   const handleSkip = () => {
+    document.body.removeAttribute("data-intro-active");
     setIsExiting(true);
     setTimeout(() => {
       setIsVisible(false);
       onComplete?.();
-    }, 300);
+    }, 250);
   };
 
   if (!isVisible) return null;
@@ -79,11 +88,15 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
       aria-label="Advait kinetic stencil introduction"
     >
       <div className={styles.stage}>
-        {/* Kinetic Stencil Wordmark with vertical color fill and horizontal glide */}
+        {/* Kinetic Stencil Wordmark: Color Fill -> Horizontal Lockup -> Turn to Vertical Alignment */}
         <div className={styles.lettersRow}>
           <div
             className={`${styles.glyphWrap} ${
-              assembled ? styles.assembled : styles.spreadA1
+              isVertical
+                ? styles.verticalA1
+                : assembled
+                ? styles.assembled
+                : styles.spreadA1
             }`}
           >
             <StencilGlyph
@@ -95,7 +108,11 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
 
           <div
             className={`${styles.glyphWrap} ${
-              assembled ? styles.assembled : styles.spreadD
+              isVertical
+                ? styles.verticalD
+                : assembled
+                ? styles.assembled
+                : styles.spreadD
             }`}
           >
             <StencilGlyph
@@ -107,7 +124,11 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
 
           <div
             className={`${styles.glyphWrap} ${
-              assembled ? styles.assembled : styles.spreadV
+              isVertical
+                ? styles.verticalV
+                : assembled
+                ? styles.assembled
+                : styles.spreadV
             }`}
           >
             <StencilGlyph
@@ -119,7 +140,11 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
 
           <div
             className={`${styles.glyphWrap} ${
-              assembled ? styles.assembled : styles.spreadA2
+              isVertical
+                ? styles.verticalA2
+                : assembled
+                ? styles.assembled
+                : styles.spreadA2
             }`}
           >
             <StencilGlyph
@@ -131,7 +156,11 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
 
           <div
             className={`${styles.glyphWrap} ${
-              assembled ? styles.assembled : styles.spreadI
+              isVertical
+                ? styles.verticalI
+                : assembled
+                ? styles.assembled
+                : styles.spreadI
             }`}
           >
             <StencilGlyph
@@ -143,7 +172,11 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
 
           <div
             className={`${styles.glyphWrap} ${
-              assembled ? styles.assembled : styles.spreadT
+              isVertical
+                ? styles.verticalT
+                : assembled
+                ? styles.assembled
+                : styles.spreadT
             }`}
           >
             <StencilGlyph
@@ -155,7 +188,11 @@ export function AdvaitIntro({ onComplete }: AdvaitIntroProps) {
 
           <div
             className={`${styles.glyphWrap} ${
-              assembled ? styles.assembled : styles.spreadDot
+              isVertical
+                ? styles.verticalDot
+                : assembled
+                ? styles.assembled
+                : styles.spreadDot
             }`}
           >
             <StencilGlyph
